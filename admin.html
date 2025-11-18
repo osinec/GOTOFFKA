@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VibeShorts | Админ-панель</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         :root {
             --primary: #8B5CF6;
             --primary-light: #A78BFA;
-            --accent: #06B6D4;
+            --accent: #FFB347;
             --success: #10B981;
             --warning: #F59E0B;
             --error: #EF4444;
@@ -25,7 +26,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
         }
         
         body {
@@ -73,6 +74,7 @@
             color: var(--light);
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .nav-btn.active {
@@ -100,6 +102,7 @@
             font-size: 1.8rem;
             margin-bottom: 20px;
             color: var(--primary-light);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .form-group {
@@ -111,6 +114,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .form-input, .form-textarea {
@@ -121,6 +125,7 @@
             border-radius: 8px;
             color: var(--light);
             font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .form-textarea {
@@ -137,6 +142,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .btn:hover {
@@ -184,6 +190,7 @@
         .video-item-title {
             font-weight: 600;
             font-size: 1.1rem;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .video-item-actions {
@@ -199,6 +206,7 @@
             color: var(--light);
             cursor: pointer;
             font-size: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .action-btn.edit {
@@ -223,11 +231,29 @@
             color: #333;
             font-size: 16px;
             line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .ql-editor.ql-blank::before {
             color: #999;
             font-style: normal;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        /* УПРОЩЕННАЯ ПАНЕЛЬ ИНСТРУМЕНТОВ */
+        .ql-toolbar.ql-snow {
+            border: 1px solid #ccc;
+            border-bottom: none;
+            background: #f8f9fa;
+            padding: 8px;
+        }
+        
+        .ql-toolbar.ql-snow .ql-formats {
+            margin-right: 15px;
+        }
+        
+        .ql-toolbar.ql-snow button {
+            margin-right: 5px;
         }
         
         /* КАСТОМНЫЕ СТИЛИ ДЛЯ РЕДАКТОРА */
@@ -241,6 +267,11 @@
             font-size: 1.1rem;
             line-height: 1.6;
             color: #8B5CF6;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .quote-block p {
+            margin: 0 !important;
         }
         
         .important-block {
@@ -250,6 +281,7 @@
             padding: 20px;
             margin: 15px 0;
             border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .success-block {
@@ -259,15 +291,17 @@
             padding: 20px;
             margin: 15px 0;
             border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .info-block {
-            background: rgba(6, 182, 212, 0.1);
+            background: rgba(255, 179, 71, 0.15);
             border: 1px solid var(--accent);
             border-left: 4px solid var(--accent);
             padding: 20px;
             margin: 15px 0;
             border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         /* СТИЛИ ДЛЯ ПРЕДПРОСМОТРА (как на основном сайте) */
@@ -283,6 +317,7 @@
             font-size: 1.3rem;
             margin-bottom: 15px;
             color: var(--primary-light);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .preview-content {
@@ -292,6 +327,7 @@
             min-height: 300px;
             font-size: 1.2rem;
             line-height: 1.8;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .preview-content .article-text {
@@ -312,15 +348,17 @@
             border-radius: 4px;
             font-weight: 600;
             border-left: 3px solid var(--primary);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .highlight-accent {
-            background: linear-gradient(120deg, rgba(6, 182, 212, 0.3) 0%, rgba(6, 182, 212, 0.1) 100%);
+            background: linear-gradient(120deg, rgba(255, 179, 71, 0.3) 0%, rgba(255, 179, 71, 0.1) 100%);
             color: var(--accent);
             padding: 2px 6px;
             border-radius: 4px;
             font-weight: 600;
             border-left: 3px solid var(--accent);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .highlight-success {
@@ -330,6 +368,7 @@
             border-radius: 4px;
             font-weight: 600;
             border-left: 3px solid var(--success);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .highlight-warning {
@@ -339,6 +378,7 @@
             border-radius: 4px;
             font-weight: 600;
             border-left: 3px solid var(--warning);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .highlight-error {
@@ -348,13 +388,14 @@
             border-radius: 4px;
             font-weight: 600;
             border-left: 3px solid var(--error);
+            font-family: 'Montserrat', sans-serif;
         }
         
-        .text-primary { color: var(--primary-light); font-weight: 600; }
-        .text-accent { color: var(--accent); font-weight: 600; }
-        .text-success { color: var(--success); font-weight: 600; }
-        .text-warning { color: var(--warning); font-weight: 600; }
-        .text-error { color: var(--error); font-weight: 600; }
+        .text-primary { color: var(--primary-light); font-weight: 600; font-family: 'Montserrat', sans-serif; }
+        .text-accent { color: var(--accent); font-weight: 600; font-family: 'Montserrat', sans-serif; }
+        .text-success { color: var(--success); font-weight: 600; font-family: 'Montserrat', sans-serif; }
+        .text-warning { color: var(--warning); font-weight: 600; font-family: 'Montserrat', sans-serif; }
+        .text-error { color: var(--error); font-weight: 600; font-family: 'Montserrat', sans-serif; }
         
         .article-subtitle {
             font-size: 1.8rem;
@@ -363,6 +404,7 @@
             margin: 40px 0 20px 0;
             border-left: 4px solid var(--primary);
             padding-left: 20px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         /* ЦИТАТА КАК В TELEGRAM */
@@ -375,6 +417,7 @@
             font-style: italic;
             font-size: 1.3rem;
             line-height: 1.6;
+            font-family: 'Montserrat', sans-serif;
         }
         
         /* ЦВЕТНЫЕ РАМКИ */
@@ -385,6 +428,7 @@
             padding: 20px;
             margin: 25px 0;
             border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .success-note {
@@ -394,15 +438,17 @@
             padding: 20px;
             margin: 25px 0;
             border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .info-note {
-            background: rgba(6, 182, 212, 0.1);
+            background: rgba(255, 179, 71, 0.15);
             border: 1px solid var(--accent);
             border-left: 4px solid var(--accent);
             padding: 20px;
             margin: 25px 0;
             border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
         }
 
         /* ПАНЕЛЬ БЫСТРЫХ СТИЛЕЙ */
@@ -426,6 +472,7 @@
             text-align: center;
             transition: all 0.3s ease;
             font-size: 0.9rem;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .style-btn:hover {
@@ -457,6 +504,7 @@
             font-size: 2rem;
             margin-bottom: 20px;
             color: var(--primary-light);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .message {
@@ -464,6 +512,7 @@
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .message.success {
@@ -481,6 +530,7 @@
             margin-top: 20px;
             color: var(--primary-light);
             text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .editor-tips {
@@ -489,23 +539,27 @@
             padding: 15px;
             margin: 20px 0;
             border-radius: 0 8px 8px 0;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .tip-title {
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--primary-light);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .tip-list {
             list-style: none;
             padding-left: 0;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .tip-list li {
             margin-bottom: 8px;
             padding-left: 20px;
             position: relative;
+            font-family: 'Montserrat', sans-serif;
         }
         
         .tip-list li:before {
@@ -513,6 +567,34 @@
             color: var(--primary);
             position: absolute;
             left: 0;
+        }
+
+        /* СТИЛИ ДЛЯ ВЫДЕЛЕНИЯ ОТДЕЛЬНЫХ СЛОВ */
+        .word-highlight {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 0 2px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .word-highlight.primary {
+            background: linear-gradient(120deg, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0.1) 100%);
+            color: var(--primary-light);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .word-highlight.accent {
+            background: linear-gradient(120deg, rgba(255, 179, 71, 0.3) 0%, rgba(255, 179, 71, 0.1) 100%);
+            color: var(--accent);
+            border-left: 3px solid var(--accent);
+        }
+        
+        .word-highlight.success {
+            background: linear-gradient(120deg, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.1) 100%);
+            color: var(--success);
+            border-left: 3px solid var(--success);
         }
 
         @media (max-width: 768px) {
@@ -595,19 +677,17 @@
                     <div class="editor-tips">
                         <div class="tip-title">Подсказки по форматированию:</div>
                         <ul class="tip-list">
-                            <li>Используйте кнопки выше для базового форматирования</li>
-                            <li>Ниже - готовые стили для красивого оформления</li>
-                            <li>Все стили автоматически отобразятся на сайте</li>
+                            <li>Выделяйте текст и используйте кнопки ниже для стилизации</li>
+                            <li>Цитата создает отдельный блок - нельзя писать текст рядом</li>
+                            <li>Выделение слов работает для отдельных слов и фраз</li>
                         </ul>
                     </div>
                     
                     <!-- ПАНЕЛЬ БЫСТРЫХ СТИЛЕЙ -->
                     <div class="style-palette">
-                        <div class="style-btn primary" onclick="applyStyle('highlight-primary')">Фиолетовый фон</div>
-                        <div class="style-btn accent" onclick="applyStyle('highlight-accent')">Голубой фон</div>
-                        <div class="style-btn success" onclick="applyStyle('highlight-success')">Зеленый фон</div>
-                        <div class="style-btn warning" onclick="applyStyle('highlight-warning')">Оранжевый фон</div>
-                        <div class="style-btn error" onclick="applyStyle('highlight-error')">Красный фон</div>
+                        <div class="style-btn primary" onclick="highlightSelection('primary')">Фиолетовое слово</div>
+                        <div class="style-btn accent" onclick="highlightSelection('accent')">Золотое слово</div>
+                        <div class="style-btn success" onclick="highlightSelection('success')">Зеленое слово</div>
                         <div class="style-btn primary" onclick="insertQuote()">Цитата Telegram</div>
                         <div class="style-btn warning" onclick="insertNote('important-note', 'Важно:')">Блок "Важно"</div>
                         <div class="style-btn success" onclick="insertNote('success-note', 'Успех:')">Блок "Успех"</div>
@@ -655,88 +735,13 @@
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // Регистрируем кастомные форматы для Quill
-        const BlockEmbed = Quill.import('blots/block/embed');
-        
-        class QuoteBlot extends BlockEmbed {
-            static create(value) {
-                const node = super.create();
-                node.innerHTML = value;
-                node.classList.add('quote-block');
-                return node;
-            }
-            
-            static value(node) {
-                return node.innerHTML;
-            }
-        }
-        
-        QuoteBlot.blotName = 'quote';
-        QuoteBlot.tagName = 'div';
-        
-        class ImportantBlot extends BlockEmbed {
-            static create(value) {
-                const node = super.create();
-                node.innerHTML = `<strong>Важно:</strong> ${value}`;
-                node.classList.add('important-block');
-                return node;
-            }
-            
-            static value(node) {
-                return node.innerHTML.replace('<strong>Важно:</strong> ', '');
-            }
-        }
-        
-        ImportantBlot.blotName = 'important';
-        ImportantBlot.tagName = 'div';
-        
-        class SuccessBlot extends BlockEmbed {
-            static create(value) {
-                const node = super.create();
-                node.innerHTML = `<strong>Успех:</strong> ${value}`;
-                node.classList.add('success-block');
-                return node;
-            }
-            
-            static value(node) {
-                return node.innerHTML.replace('<strong>Успех:</strong> ', '');
-            }
-        }
-        
-        SuccessBlot.blotName = 'success';
-        SuccessBlot.tagName = 'div';
-        
-        class InfoBlot extends BlockEmbed {
-            static create(value) {
-                const node = super.create();
-                node.innerHTML = `<strong>Совет:</strong> ${value}`;
-                node.classList.add('info-block');
-                return node;
-            }
-            
-            static value(node) {
-                return node.innerHTML.replace('<strong>Совет:</strong> ', '');
-            }
-        }
-        
-        InfoBlot.blotName = 'info';
-        InfoBlot.tagName = 'div';
-
-        Quill.register(QuoteBlot);
-        Quill.register(ImportantBlot);
-        Quill.register(SuccessBlot);
-        Quill.register(InfoBlot);
-
-        // Инициализация редактора
+        // Упрощенная конфигурация Quill - только нужные инструменты
         const quill = new Quill('#editor', {
             theme: 'snow',
             modules: {
                 toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link', 'blockquote'],
-                    [{ 'color': [] }, { 'background': [] }],
                     ['clean']
                 ]
             },
@@ -760,7 +765,7 @@
                 article: {
                     title: "Искусство визуального повествования",
                     content: `<div class="article-text">
-                        <p>В современном цифровом мире <span class="highlight-primary">короткие видео</span> стали мощным инструментом для передачи эмоций, идей и историй.</p>
+                        <p>В современном цифровом мире <span class="word-highlight primary">короткие видео</span> стали мощным инструментом для передачи <span class="word-highlight accent">эмоций</span>, идей и историй.</p>
                         <div class="important-note">
                             <strong>Важно:</strong> Первые <span class="text-warning">3 секунды</span> видео критически важны.
                         </div>
@@ -768,7 +773,7 @@
                             "Видео — это не просто движущиеся картинки. Это возможность создать эмоциональную связь со зрителем за считанные секунды."
                         </div>
                         <h3 class="article-subtitle">Сила краткости</h3>
-                        <p>Короткие видео обладают уникальной способностью захватывать внимание зрителя с первых же кадров.</p>
+                        <p>Короткие видео обладают <span class="word-highlight success">уникальной способностью</span> захватывать внимание зрителя с первых же кадров.</p>
                     </div>`
                 }
             }
@@ -778,14 +783,20 @@
         let videos = JSON.parse(localStorage.getItem('vibeShortsVideos')) || defaultVideos;
         
         // ФУНКЦИИ ДЛЯ РЕДАКТОРА
-        function applyStyle(styleClass) {
+        function highlightSelection(type) {
             const range = quill.getSelection();
-            if (range) {
+            if (range && range.length > 0) {
                 const selectedText = quill.getText(range.index, range.length);
-                if (selectedText.trim() !== '') {
-                    // Используем встроенное форматирование фона
-                    quill.formatText(range.index, range.length, 'background', styleClass);
-                }
+                
+                // Создаем span с классом выделения
+                const highlightedText = `<span class="word-highlight ${type}">${selectedText}</span>`;
+                
+                // Заменяем выделенный текст
+                quill.deleteText(range.index, range.length);
+                quill.insertEmbed(range.index, 'text', highlightedText, 'user');
+                
+                // Перемещаем курсор после выделенного текста
+                quill.setSelection(range.index + highlightedText.length, 0);
             }
             updatePreview();
         }
@@ -794,12 +805,22 @@
             const range = quill.getSelection();
             const selectedText = range ? quill.getText(range.index, range.length) : 'Ваша цитата здесь...';
             
+            // Создаем цитату как отдельный блок
+            const quoteHTML = `<div class="article-quote">${selectedText}</div>`;
+            
+            // Если есть выделение, удаляем его
             if (range) {
                 quill.deleteText(range.index, range.length);
             }
             
+            // Вставляем цитату как отдельный блок
             const index = range ? range.index : quill.getLength();
-            quill.insertEmbed(index, 'quote', selectedText);
+            quill.insertText(index, '\n'); // Добавляем перенос перед цитатой
+            quill.insertEmbed(index + 1, 'text', quoteHTML, 'user');
+            quill.insertText(index + 2, '\n'); // Добавляем перенос после цитаты
+            
+            // Перемещаем курсор после цитаты
+            quill.setSelection(index + 3, 0);
             updatePreview();
         }
         
@@ -807,27 +828,18 @@
             const range = quill.getSelection();
             const selectedText = range ? quill.getText(range.index, range.length) : 'Ваш текст здесь...';
             
-            let blotType;
-            switch(noteClass) {
-                case 'important-note':
-                    blotType = 'important';
-                    break;
-                case 'success-note':
-                    blotType = 'success';
-                    break;
-                case 'info-note':
-                    blotType = 'info';
-                    break;
-                default:
-                    blotType = 'important';
-            }
+            const noteHTML = `<div class="${noteClass}"><strong>${title}</strong> ${selectedText}</div>`;
             
             if (range) {
                 quill.deleteText(range.index, range.length);
             }
             
             const index = range ? range.index : quill.getLength();
-            quill.insertEmbed(index, blotType, selectedText);
+            quill.insertText(index, '\n');
+            quill.insertEmbed(index + 1, 'text', noteHTML, 'user');
+            quill.insertText(index + 2, '\n');
+            
+            quill.setSelection(index + 3, 0);
             updatePreview();
         }
         
@@ -840,18 +852,11 @@
             content = content.replace(/class="success-block"/g, 'class="success-note"');
             content = content.replace(/class="info-block"/g, 'class="info-note"');
             
-            // Конвертируем inline стили в классы highlight
-            content = content.replace(/background-color:\s*highlight-primary[^"]*"/g, 'class="highlight-primary"');
-            content = content.replace(/background-color:\s*highlight-accent[^"]*"/g, 'class="highlight-accent"');
-            content = content.replace(/background-color:\s*highlight-success[^"]*"/g, 'class="highlight-success"');
-            content = content.replace(/background-color:\s*highlight-warning[^"]*"/g, 'class="highlight-warning"');
-            content = content.replace(/background-color:\s*highlight-error[^"]*"/g, 'class="highlight-error"');
-            
             // Оборачиваем в article-text для правильного отображения
             document.getElementById('articlePreview').innerHTML = `<div class="article-text">${content}</div>`;
         }
         
-        // ФУНКЦИИ АДМИН-ПАНЕЛИ
+        // ОСТАЛЬНЫЕ ФУНКЦИИ АДМИН-ПАНЕЛИ (без изменений)
         function checkPassword() {
             const password = document.getElementById('adminPassword').value;
             const loginSection = document.getElementById('loginSection');
@@ -919,17 +924,11 @@
             const url = document.getElementById('videoUrl').value;
             const articleTitle = document.getElementById('articleTitle').value;
             
-            // Конвертируем контент редактора в финальный HTML
             let content = quill.root.innerHTML;
             content = content.replace(/class="quote-block"/g, 'class="article-quote"');
             content = content.replace(/class="important-block"/g, 'class="important-note"');
             content = content.replace(/class="success-block"/g, 'class="success-note"');
             content = content.replace(/class="info-block"/g, 'class="info-note"');
-            content = content.replace(/background-color:\s*highlight-primary[^"]*"/g, 'class="highlight-primary"');
-            content = content.replace(/background-color:\s*highlight-accent[^"]*"/g, 'class="highlight-accent"');
-            content = content.replace(/background-color:\s*highlight-success[^"]*"/g, 'class="highlight-success"');
-            content = content.replace(/background-color:\s*highlight-warning[^"]*"/g, 'class="highlight-warning"');
-            content = content.replace(/background-color:\s*highlight-error[^"]*"/g, 'class="highlight-error"');
             
             const articleContent = `<div class="article-text">${content}</div>`;
             
@@ -962,7 +961,6 @@
             document.getElementById('videoUrl').value = video.videoUrl;
             document.getElementById('articleTitle').value = video.article.title;
             
-            // Конвертируем финальный HTML обратно в редактор
             let content = video.article.content.replace('<div class="article-text">', '').replace('</div>', '');
             content = content.replace(/class="article-quote"/g, 'class="quote-block"');
             content = content.replace(/class="important-note"/g, 'class="important-block"');
@@ -994,11 +992,6 @@
             content = content.replace(/class="important-block"/g, 'class="important-note"');
             content = content.replace(/class="success-block"/g, 'class="success-note"');
             content = content.replace(/class="info-block"/g, 'class="info-note"');
-            content = content.replace(/background-color:\s*highlight-primary[^"]*"/g, 'class="highlight-primary"');
-            content = content.replace(/background-color:\s*highlight-accent[^"]*"/g, 'class="highlight-accent"');
-            content = content.replace(/background-color:\s*highlight-success[^"]*"/g, 'class="highlight-success"');
-            content = content.replace(/background-color:\s*highlight-warning[^"]*"/g, 'class="highlight-warning"');
-            content = content.replace(/background-color:\s*highlight-error[^"]*"/g, 'class="highlight-error"');
             
             const articleContent = `<div class="article-text">${content}</div>`;
             
