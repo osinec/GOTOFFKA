@@ -714,367 +714,381 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousel = document.getElementById('carousel');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const progressDots = document.getElementById('progressDots');
-            const articleTitle = document.getElementById('articleTitle');
-            const articleContent = document.getElementById('articleContent');
-            const passwordModal = document.getElementById('passwordModal');
-            const passwordInput = document.getElementById('passwordInput');
-            const passwordSubmit = document.getElementById('passwordSubmit');
-            const passwordError = document.getElementById('passwordError');
-            
-            // Настройки безопасности
-            const ADMIN_PASSWORD = "admin123"; // Пароль для доступа к админ-панели
-            const SECRET_CODE = ["0", "4", "5", "1"]; // Секретный код 0451
-            
-            let f12Pressed = false;
-            let codeSequence = [];
-            let codeTimeout = null;
-            
-            // АВТОМАТИЧЕСКАЯ ЗАГРУЗКА ДАННЫХ ИЗ АДМИН-ПАНЕЛИ
-            function loadVideosData() {
-                const savedVideos = localStorage.getItem('vibeShortsVideos');
-                if (savedVideos) {
-                    return JSON.parse(savedVideos);
-                }
-                // Видео по умолчанию (если админка не использовалась)
-                return [
-                    {
-                        id: 1,
-                        title: "Морской закат",
-                        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                        article: {
-                            title: "Искусство визуального повествования",
-                            content: `
-                                <div class="article-text">
-                                    <p>В современном цифровом мире <span class="highlight-primary">короткие видео</span> стали мощным инструментом для передачи эмоций, идей и историй.</p>
-                                    
-                                    <div class="important-note">
-                                        <strong>Важно:</strong> Первые <span class="text-warning">3 секунды</span> видео критически важны.
-                                    </div>
-                                    
-                                    <h3 class="article-subtitle">Сила краткости</h3>
-                                    <p>Короткие видео обладают уникальной способностью захватывать внимание зрителя с первых же кадров.</p>
-                                </div>
-                            `
-                        }
-                    },
-                    {
-                        id: 2,
-                        title: "Ночной город",
-                        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-                        article: {
-                            title: "Городская эстетика в цифровую эпоху",
-                            content: `
-                                <div class="article-text">
-                                    <p>Городские пейзажи всегда вдохновляли художников и фотографов. В эпоху цифровых технологий эта тема обрела новое звучание через <span class="highlight-accent">короткие видеоформаты</span>.</p>
-                                    
-                                    <div class="info-note">
-                                        <strong>Интересный факт:</strong> <span class="text-primary">Ночная съемка</span> требует особого подхода к освещению и настройкам камеры.
-                                    </div>
-                                    
-                                    <h3 class="article-subtitle">Неоновая поэзия</h3>
-                                    <p>Ночной город с его <span class="highlight-warning">неоновыми огнями</span> создает уникальную атмосферу, которую так сложно передать словами.</p>
-                                </div>
-                            `
-                        }
-                    },
-                    {
-                        id: 3,
-                        title: "Горные вершины",
-                        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-                        article: {
-                            title: "Природа как источник вдохновения",
-                            content: `
-                                <div class="article-text">
-                                    <p>Горные пейзажи обладают особой магией — они одновременно умиротворяют и вдохновляют на свершения. <span class="highlight-success">Видеосъемка в горах</span> требует особого подхода и подготовки.</p>
-                                    
-                                    <div class="success-note">
-                                        <strong>Успех:</strong> Правильно выбранный <span class="text-accent">ракурс съемки</span> может превратить обычный пейзаж в шедевр.
-                                    </div>
-                                    
-                                    <h3 class="article-subtitle">Высота и перспектива</h3>
-                                    <p>Съемка на высоте открывает <span class="highlight-primary">уникальные ракурсы</span> и возможности для создания захватывающего контента.</p>
-                                </div>
-                            `
-                        }
-                    }
-                ];
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressDots = document.getElementById('progressDots');
+        const articleTitle = document.getElementById('articleTitle');
+        const articleContent = document.getElementById('articleContent');
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordSubmit = document.getElementById('passwordSubmit');
+        const passwordError = document.getElementById('passwordError');
+        
+        // Настройки безопасности
+        const ADMIN_PASSWORD = "admin123"; // Пароль для доступа к админ-панели
+        const SECRET_CODE = ["0", "4", "5", "1"]; // Секретный код 0451
+        
+        let f12Pressed = false;
+        let codeSequence = [];
+        let codeTimeout = null;
+        
+        // АВТОМАТИЧЕСКАЯ ЗАГРУЗКА ДАННЫХ ИЗ АДМИН-ПАНЕЛИ
+        function loadVideosData() {
+            const savedVideos = localStorage.getItem('vibeShortsVideos');
+            if (savedVideos) {
+                return JSON.parse(savedVideos);
             }
-            
-            const videos = loadVideosData();
-            let currentIndex = 0;
-            let currentlyPlayingVideo = null;
-            
-            // Функции для карусели видео
-            function createVideoCards() {
-                const fragment = document.createDocumentFragment();
-                
-                videos.forEach((video, index) => {
-                    const videoCard = document.createElement('div');
-                    videoCard.className = 'video-card';
-                    videoCard.dataset.index = index;
-                    
-                    videoCard.innerHTML = `
-                        <div class="video-player-container">
-                            <video class="video-player" loop preload="metadata">
-                                <source src="${video.videoUrl}" type="video/mp4">
-                            </video>
-                            <div class="play-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
+            // Видео по умолчанию (если админка не использовалась)
+            return [
+                {
+                    id: 1,
+                    title: "Морской закат",
+                    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                    article: {
+                        title: "Искусство визуального повествования",
+                        content: `
+                            <div class="article-text">
+                                <p>В современном цифровом мире <span class="highlight-primary">короткие видео</span> стали мощным инструментом для передачи эмоций, идей и историй.</p>
+                                
+                                <div class="important-note">
+                                    <strong>Важно:</strong> Первые <span class="text-warning">3 секунды</span> видео критически важны.
                                 </div>
+                                
+                                <h3 class="article-subtitle">Сила краткости</h3>
+                                <p>Короткие видео обладают уникальной способностью захватывать внимание зрителя с первых же кадров.</p>
+                            </div>
+                        `
+                    }
+                },
+                {
+                    id: 2,
+                    title: "Ночной город",
+                    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                    article: {
+                        title: "Городская эстетика в цифровую эпоху",
+                        content: `
+                            <div class="article-text">
+                                <p>Городские пейзажи всегда вдохновляли художников и фотографов. В эпоху цифровых технологий эта тема обрела новое звучание через <span class="highlight-accent">короткие видеоформаты</span>.</p>
+                                
+                                <div class="info-note">
+                                    <strong>Интересный факт:</strong> <span class="text-primary">Ночная съемка</span> требует особого подхода к освещению и настройкам камеры.
+                                </div>
+                                
+                                <h3 class="article-subtitle">Неоновая поэзия</h3>
+                                <p>Ночной город с его <span class="highlight-warning">неоновыми огнями</span> создает уникальную атмосферу, которую так сложно передать словами.</p>
+                            </div>
+                        `
+                    }
+                },
+                {
+                    id: 3,
+                    title: "Горные вершины",
+                    videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+                    article: {
+                        title: "Природа как источник вдохновения",
+                        content: `
+                            <div class="article-text">
+                                <p>Горные пейзажи обладают особой магией — они одновременно умиротворяют и вдохновляют на свершения. <span class="highlight-success">Видеосъемка в горах</span> требует особого подхода и подготовки.</p>
+                                
+                                <div class="success-note">
+                                    <strong>Успех:</strong> Правильно выбранный <span class="text-accent">ракурс съемки</span> может превратить обычный пейзаж в шедевр.
+                                </div>
+                                
+                                <h3 class="article-subtitle">Высота и перспектива</h3>
+                                <p>Съемка на высоте открывает <span class="highlight-primary">уникальные ракурсы</span> и возможности для создания захватывающего контента.</p>
+                            </div>
+                        `
+                    }
+                }
+            ];
+        }
+        
+        const videos = loadVideosData();
+        let currentIndex = 0;
+        let currentlyPlayingVideo = null;
+        
+        // Функции для карусели видео
+        function createVideoCards() {
+            const fragment = document.createDocumentFragment();
+            
+            videos.forEach((video, index) => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                videoCard.dataset.index = index;
+                
+                videoCard.innerHTML = `
+                    <div class="video-player-container">
+                        <video class="video-player" loop preload="metadata">
+                            <source src="${video.videoUrl}" type="video/mp4">
+                        </video>
+                        <div class="play-overlay">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
                             </div>
                         </div>
-                        <div class="video-info">
-                            <div class="video-title">${video.title}</div>
-                        </div>
-                    `;
-                    
-                    const videoElement = videoCard.querySelector('.video-player');
-                    const playOverlay = videoCard.querySelector('.play-overlay');
-                    
-                    videoCard.addEventListener('click', () => toggleVideoPlayback(videoElement, playOverlay));
-                    videoElement.addEventListener('ended', () => playOverlay.classList.remove('hidden'));
-                    
-                    fragment.appendChild(videoCard);
-                });
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
+                    </div>
+                `;
                 
-                carousel.appendChild(fragment);
-                createProgressDots();
-                updateCarousel();
-                updateArticle();
+                const videoElement = videoCard.querySelector('.video-player');
+                const playOverlay = videoCard.querySelector('.play-overlay');
+                
+                videoCard.addEventListener('click', () => toggleVideoPlayback(videoElement, playOverlay));
+                videoElement.addEventListener('ended', () => playOverlay.classList.remove('hidden'));
+                
+                fragment.appendChild(videoCard);
+            });
+            
+            carousel.appendChild(fragment);
+            createProgressDots();
+            updateCarousel();
+            updateArticle();
+        }
+        
+        function createProgressDots() {
+            progressDots.innerHTML = '';
+            videos.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
+                dot.addEventListener('click', () => goToVideo(index));
+                progressDots.appendChild(dot);
+            });
+        }
+        
+        function toggleVideoPlayback(videoElement, playOverlay) {
+            if (currentlyPlayingVideo && currentlyPlayingVideo !== videoElement) {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo.currentTime = 0;
+                currentlyPlayingVideo.parentElement.querySelector('.play-overlay').classList.remove('hidden');
             }
             
-            function createProgressDots() {
-                progressDots.innerHTML = '';
-                videos.forEach((_, index) => {
-                    const dot = document.createElement('div');
-                    dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
-                    dot.addEventListener('click', () => goToVideo(index));
-                    progressDots.appendChild(dot);
+            if (videoElement.paused) {
+                videoElement.play().then(() => {
+                    playOverlay.classList.add('hidden');
+                    currentlyPlayingVideo = videoElement;
                 });
+            } else {
+                videoElement.pause();
+                playOverlay.classList.remove('hidden');
+                currentlyPlayingVideo = null;
             }
+        }
+        
+        function updateCarousel() {
+            const cards = carousel.children;
+            const dots = progressDots.children;
+            const totalCards = cards.length;
             
-            function toggleVideoPlayback(videoElement, playOverlay) {
-                if (currentlyPlayingVideo && currentlyPlayingVideo !== videoElement) {
-                    currentlyPlayingVideo.pause();
-                    currentlyPlayingVideo.currentTime = 0;
-                    currentlyPlayingVideo.parentElement.querySelector('.play-overlay').classList.remove('hidden');
-                }
+            for (let i = 0; i < totalCards; i++) {
+                const card = cards[i];
+                const position = (i - currentIndex + totalCards) % totalCards;
                 
-                if (videoElement.paused) {
-                    videoElement.play().then(() => {
-                        playOverlay.classList.add('hidden');
-                        currentlyPlayingVideo = videoElement;
-                    });
+                card.style.transform = '';
+                card.style.opacity = '1';
+                card.style.zIndex = '1';
+                card.style.pointerEvents = 'auto';
+                
+                if (position === 0) {
+                    card.style.transform = 'translateZ(0)';
+                    card.style.zIndex = '10';
+                } else if (position === 1) {
+                    card.style.transform = 'translateX(340px) translateZ(-120px) rotateY(-12deg)';
+                    card.style.opacity = '0.8';
+                    card.style.zIndex = '9';
+                } else if (position === totalCards - 1) {
+                    card.style.transform = 'translateX(-340px) translateZ(-120px) rotateY(12deg)';
+                    card.style.opacity = '0.8';
+                    card.style.zIndex = '9';
+                } else if (position === 2) {
+                    card.style.transform = 'translateX(680px) translateZ(-240px) rotateY(-24deg)';
+                    card.style.opacity = '0.4';
+                    card.style.zIndex = '8';
+                } else if (position === totalCards - 2) {
+                    card.style.transform = 'translateX(-680px) translateZ(-240px) rotateY(24deg)';
+                    card.style.opacity = '0.4';
+                    card.style.zIndex = '8';
                 } else {
-                    videoElement.pause();
-                    playOverlay.classList.remove('hidden');
-                    currentlyPlayingVideo = null;
+                    card.style.transform = 'translateZ(-360px)';
+                    card.style.opacity = '0';
+                    card.style.zIndex = '1';
+                    card.style.pointerEvents = 'none';
                 }
             }
             
-            function updateCarousel() {
-                const cards = carousel.children;
-                const dots = progressDots.children;
-                const totalCards = cards.length;
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = `dot ${i === currentIndex ? 'active' : ''}`;
+            }
+        }
+        
+        function updateArticle() {
+            const currentVideo = videos[currentIndex];
+            articleTitle.textContent = currentVideo.article.title;
+            articleContent.innerHTML = currentVideo.article.content;
+        }
+        
+        function goToVideo(index) {
+            if (currentlyPlayingVideo) {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo.currentTime = 0;
+                currentlyPlayingVideo.parentElement.querySelector('.play-overlay').classList.remove('hidden');
+                currentlyPlayingVideo = null;
+            }
+            
+            currentIndex = index;
+            updateCarousel();
+            updateArticle();
+        }
+        
+        function nextVideo() {
+            goToVideo((currentIndex + 1) % videos.length);
+        }
+        
+        function prevVideo() {
+            goToVideo((currentIndex - 1 + videos.length) % videos.length);
+        }
+        
+        // Функции для админ-панели
+        function openAdminPanel() {
+            window.open('admin.html', '_blank');
+        }
+        
+        function checkPassword() {
+            if (passwordInput.value === ADMIN_PASSWORD) {
+                passwordModal.classList.remove('active');
+                passwordInput.value = '';
+                passwordError.classList.remove('active');
+                openAdminPanel();
+            } else {
+                passwordError.classList.add('active');
+                passwordInput.value = '';
+                setTimeout(() => {
+                    passwordError.classList.remove('active');
+                }, 3000);
+            }
+        }
+        
+        function showPasswordModal() {
+            passwordModal.classList.add('active');
+            passwordInput.focus();
+        }
+        
+        function resetCodeSequence() {
+            codeSequence = [];
+            f12Pressed = false;
+            if (codeTimeout) {
+                clearTimeout(codeTimeout);
+                codeTimeout = null;
+            }
+            console.log('Код сброшен');
+        }
+        
+        function checkCodeSequence(key) {
+            console.log('Нажата клавиша:', key, 'F12 активирован:', f12Pressed);
+            
+            // Если нажат F12, активируем режим ввода кода
+            if (key === 'F12') {
+                // e.preventDefault(); // Убрали эту строку, так как нет параметра e
+                f12Pressed = true;
+                codeSequence = [];
+                console.log('F12 нажат, режим ввода кода активирован');
+                // Таймаут 10 секунд для ввода кода
+                codeTimeout = setTimeout(resetCodeSequence, 10000);
+                return;
+            }
+            
+            // Если F12 не нажат, игнорируем цифры
+            if (!f12Pressed) return;
+            
+            // Проверяем только цифры
+            if (key >= '0' && key <= '9') {
+                codeSequence.push(key);
+                console.log('Введена цифра:', key, 'Текущая последовательность:', codeSequence.join(''));
                 
-                for (let i = 0; i < totalCards; i++) {
-                    const card = cards[i];
-                    const position = (i - currentIndex + totalCards) % totalCards;
-                    
-                    card.style.transform = '';
-                    card.style.opacity = '1';
-                    card.style.zIndex = '1';
-                    card.style.pointerEvents = 'auto';
-                    
-                    if (position === 0) {
-                        card.style.transform = 'translateZ(0)';
-                        card.style.zIndex = '10';
-                    } else if (position === 1) {
-                        card.style.transform = 'translateX(340px) translateZ(-120px) rotateY(-12deg)';
-                        card.style.opacity = '0.8';
-                        card.style.zIndex = '9';
-                    } else if (position === totalCards - 1) {
-                        card.style.transform = 'translateX(-340px) translateZ(-120px) rotateY(12deg)';
-                        card.style.opacity = '0.8';
-                        card.style.zIndex = '9';
-                    } else if (position === 2) {
-                        card.style.transform = 'translateX(680px) translateZ(-240px) rotateY(-24deg)';
-                        card.style.opacity = '0.4';
-                        card.style.zIndex = '8';
-                    } else if (position === totalCards - 2) {
-                        card.style.transform = 'translateX(-680px) translateZ(-240px) rotateY(24deg)';
-                        card.style.opacity = '0.4';
-                        card.style.zIndex = '8';
+                // Проверяем совпадение с секретным кодом
+                if (codeSequence.length === SECRET_CODE.length) {
+                    if (codeSequence.join('') === SECRET_CODE.join('')) {
+                        // Код верный - показываем модальное окно с паролем
+                        console.log('Код верный! Открываем модальное окно');
+                        showPasswordModal();
+                        resetCodeSequence();
                     } else {
-                        card.style.transform = 'translateZ(-360px)';
-                        card.style.opacity = '0';
-                        card.style.zIndex = '1';
-                        card.style.pointerEvents = 'none';
+                        // Неверный код - сбрасываем
+                        console.log('Неверный код, сбрасываем');
+                        resetCodeSequence();
                     }
                 }
                 
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].className = `dot ${i === currentIndex ? 'active' : ''}`;
-                }
-            }
-            
-            function updateArticle() {
-                const currentVideo = videos[currentIndex];
-                articleTitle.textContent = currentVideo.article.title;
-                articleContent.innerHTML = currentVideo.article.content;
-            }
-            
-            function goToVideo(index) {
-                if (currentlyPlayingVideo) {
-                    currentlyPlayingVideo.pause();
-                    currentlyPlayingVideo.currentTime = 0;
-                    currentlyPlayingVideo.parentElement.querySelector('.play-overlay').classList.remove('hidden');
-                    currentlyPlayingVideo = null;
-                }
-                
-                currentIndex = index;
-                updateCarousel();
-                updateArticle();
-            }
-            
-            function nextVideo() {
-                goToVideo((currentIndex + 1) % videos.length);
-            }
-            
-            function prevVideo() {
-                goToVideo((currentIndex - 1 + videos.length) % videos.length);
-            }
-            
-            // Функции для админ-панели
-            function openAdminPanel() {
-                window.open('admin.html', '_blank');
-            }
-            
-            function checkPassword() {
-                if (passwordInput.value === ADMIN_PASSWORD) {
-                    passwordModal.classList.remove('active');
-                    passwordInput.value = '';
-                    passwordError.classList.remove('active');
-                    openAdminPanel();
-                } else {
-                    passwordError.classList.add('active');
-                    passwordInput.value = '';
-                    setTimeout(() => {
-                        passwordError.classList.remove('active');
-                    }, 3000);
-                }
-            }
-            
-            function showPasswordModal() {
-                passwordModal.classList.add('active');
-                passwordInput.focus();
-            }
-            
-            function resetCodeSequence() {
-                codeSequence = [];
-                f12Pressed = false;
+                // Сбрасываем таймер при каждом нажатии цифры
                 if (codeTimeout) {
                     clearTimeout(codeTimeout);
-                    codeTimeout = null;
+                    codeTimeout = setTimeout(resetCodeSequence, 10000);
+                }
+            }
+        }
+        
+        // Обработчики событий для карусели
+        nextBtn.addEventListener('click', nextVideo);
+        prevBtn.addEventListener('click', prevVideo);
+        
+        let startX = 0;
+        carousel.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        }, { passive: true });
+        
+        carousel.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            if (startX - endX > 50) nextVideo();
+            else if (endX - startX > 50) prevVideo();
+        }, { passive: true });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextVideo();
+            else if (e.key === 'ArrowLeft') prevVideo();
+            else if (e.key === ' ') {
+                e.preventDefault();
+                const activeCard = carousel.children[currentIndex];
+                if (activeCard) {
+                    const videoElement = activeCard.querySelector('.video-player');
+                    const playOverlay = activeCard.querySelector('.play-overlay');
+                    toggleVideoPlayback(videoElement, playOverlay);
                 }
             }
             
-            function checkCodeSequence(key) {
-                // Если нажат F12, активируем режим ввода кода
-                if (key === 'F10') {
-                    e.preventDefault();
-                    f12Pressed = true;
-                    codeSequence = [];
-                    // Таймаут 5 секунд для ввода кода
-                    codeTimeout = setTimeout(resetCodeSequence, 5000);
-                    return;
-                }
-                
-                // Если F12 не нажат, игнорируем цифры
-                if (!f12Pressed) return;
-                
-                // Проверяем только цифры
-                if (key >= '0' && key <= '9') {
-                    codeSequence.push(key);
-                    
-                    // Проверяем совпадение с секретным кодом
-                    if (codeSequence.length === SECRET_CODE.length) {
-                        if (codeSequence.join('') === SECRET_CODE.join('')) {
-                            // Код верный - показываем модальное окно с паролем
-                            showPasswordModal();
-                            resetCodeSequence();
-                        } else {
-                            // Неверный код - сбрасываем
-                            resetCodeSequence();
-                        }
-                    }
-                    
-                    // Сбрасываем таймер при каждом нажатии цифры
-                    if (codeTimeout) {
-                        clearTimeout(codeTimeout);
-                        codeTimeout = setTimeout(resetCodeSequence, 5000);
-                    }
-                }
-            }
-            
-            // Обработчики событий для карусели
-            nextBtn.addEventListener('click', nextVideo);
-            prevBtn.addEventListener('click', prevVideo);
-            
-            let startX = 0;
-            carousel.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            }, { passive: true });
-            
-            carousel.addEventListener('touchend', (e) => {
-                const endX = e.changedTouches[0].clientX;
-                if (startX - endX > 50) nextVideo();
-                else if (endX - startX > 50) prevVideo();
-            }, { passive: true });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight') nextVideo();
-                else if (e.key === 'ArrowLeft') prevVideo();
-                else if (e.key === ' ') {
-                    e.preventDefault();
-                    const activeCard = carousel.children[currentIndex];
-                    if (activeCard) {
-                        const videoElement = activeCard.querySelector('.video-player');
-                        const playOverlay = activeCard.querySelector('.play-overlay');
-                        toggleVideoPlayback(videoElement, playOverlay);
-                    }
-                }
-                
-                // Проверка комбинации клавиш для админ-панели
-                checkCodeSequence(e.key);
-            });
-            
-            // Обработчики событий для модального окна пароля
-            passwordSubmit.addEventListener('click', checkPassword);
-            passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
-            });
-            
-            // Закрытие модального окна при клике вне его
-            passwordModal.addEventListener('click', (e) => {
-                if (e.target === passwordModal) {
-                    passwordModal.classList.remove('active');
-                    passwordInput.value = '';
-                    passwordError.classList.remove('active');
-                }
-            });
-            
-            // Запуск
-            createVideoCards();
+            // Проверка комбинации клавиш для админ-панели
+            checkCodeSequence(e.key);
         });
-    </script>
+        
+        // Обработчики событий для модального окна пароля
+        passwordSubmit.addEventListener('click', checkPassword);
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+        
+        // Закрытие модального окна при клике вне его
+        passwordModal.addEventListener('click', (e) => {
+            if (e.target === passwordModal) {
+                passwordModal.classList.remove('active');
+                passwordInput.value = '';
+                passwordError.classList.remove('active');
+            }
+        });
+        
+        // Запуск
+        createVideoCards();
+        
+        // Добавим отладочную информацию в консоль
+        console.log('Сайт загружен. Для доступа к админ-панели:');
+        console.log('1. Нажмите F12');
+        console.log('2. Введите цифры 0451');
+        console.log('3. Введите пароль admin123');
+    });
+</script>
+    
 </body>
 </html>
