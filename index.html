@@ -144,7 +144,7 @@
             border-radius: 12px;
             margin: 0 calc(var(--card-margin) / 2);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.6s ease, box-shadow 0.6s ease, border-color 0.6s ease, width 0.6s ease, height 0.6s ease; /* Добавлены width/height для плавности */
+            transition: transform 0.6s ease, box-shadow 0.6s ease, border-color 0.6s ease, width 0.6s ease, height 0.6s ease;
             cursor: pointer;
             overflow: hidden;
             position: relative;
@@ -161,7 +161,7 @@
             z-index: 10;
         }
         
-        /* КОНТЕЙНЕР ДЛЯ ВИДЕО - ВАЖНО ДЛЯ ЛЕНИВОЙ ЗАГРУЗКИ */
+        /* КОНТЕЙНЕР ДЛЯ ВИДЕО */
         .video-player-container {
             width: 100%;
             height: 100%;
@@ -170,20 +170,27 @@
             overflow: hidden;
         }
 
-        /* Стиль для заглушки (div-заместитель) */
+        /* Стиль для заглушки (Placeholder) */
         .video-player-placeholder {
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #1a1a2e; /* Темный фон для заглушки */
+            background-color: #1a1a2e;
             color: var(--light);
             font-size: 0.9rem;
             position: absolute;
             top: 0;
             left: 0;
             z-index: 5;
+            padding: 20px;
+            text-align: center;
+        }
+        .video-player-placeholder i {
+             font-size: 1.5rem;
+             margin-bottom: 10px;
         }
         
         /* СКРЫВАЕМ НЕАКТИВНЫЙ ПЛЕЙЕР/АЙФРЕЙМ */
@@ -199,16 +206,110 @@
         }
 
         .play-overlay {
-            /* ... (Стили оверлея) ... */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 50;
+            transition: opacity 0.3s;
+        }
+
+        .play-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .play-icon {
+            font-size: 4rem;
+            color: var(--light);
+            opacity: 0.9;
         }
         
-        /* Навигация и Медиазапросы (без изменений) */
-        .nav-btn { /* ... */ z-index: 20; }
+        .video-source-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            background: var(--darker);
+            color: var(--accent);
+            border-radius: 6px;
+            font-size: 0.7rem;
+            z-index: 100;
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--light);
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--darker);
+        }
+
         .prev-btn { left: -60px; }
         .next-btn { right: -60px; }
-        @media (max-width: 950px) { /* ... */ }
-        @media (max-width: 650px) { /* ... */ }
+        
+        /* Progress Dots */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--glass-border);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dot.active {
+            background-color: var(--primary);
+            width: 12px;
+            height: 12px;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 950px) {
+            .carousel-section { max-width: 600px; }
+            .prev-btn { left: 0; }
+            .next-btn { right: 0; }
+        }
+        
+        @media (max-width: 650px) {
+            :root {
+                --card-width: 180px;
+                --card-height: 320px;
+                --center-card-width: 250px;
+                --center-card-height: 450px;
+                --card-margin: 10px;
+            }
+            .carousel-section { max-width: 100%; }
+            .nav-btn { display: none; }
+            .article-section { padding: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -250,11 +351,12 @@
 
     <script>
         /* ==================================== */
-        /* КОД JavaScript (ОПТИМИЗИРОВАН) */
+        /* КОД JavaScript (ОПТИМИЗИРОВАННЫЙ) */
         /* ==================================== */
         
         let videos = [];
-        let currentIndex = 0;
+        // currentIndex теперь указывает на позицию в массиве [N видео + N клонов]
+        let currentIndex = 0; 
         let currentlyPlayingVideo = null;
         let ytPlayers = {};
         let carouselElement;
@@ -287,11 +389,34 @@
         });
 
         // ====================================
-        // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (без изменений)
+        // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (анализ ссылок)
         // ====================================
-        function getYouTubeId(videoUrl) { /* ... */ return videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/) ? videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)[1] : null; }
-        function getVideoType(videoUrl) { /* ... */ return videoUrl.includes('youtube') || videoUrl.includes('youtu.be') ? 'youtube' : videoUrl.includes('vimeo') ? 'vimeo' : videoUrl.includes('vk') ? 'vk' : videoUrl.endsWith('.mp4') ? 'direct' : 'unsupported'; }
-        function createVKEmbed(videoUrl) { /* ... */ return videoUrl.match(/clip(-?\d+)_(\d+)/) || videoUrl.match(/video(-?\d+)_(\d+)/) ? `https://vk.com/video_ext.php?oid=${videoUrl.match(/clip(-?\d+)_(\d+)/)?.[1] || videoUrl.match(/video(-?\d+)_(\d+)/)?.[1]}&id=${videoUrl.match(/clip(-?\d+)_(\d+)/)?.[2] || videoUrl.match(/video(-?\d+)_(\d+)/)?.[2]}&hash=` : null; }
+        function getYouTubeId(videoUrl) {
+            const match = videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+            return match ? match[1] : null;
+        }
+        function getVideoType(videoUrl) {
+            if (!videoUrl) return 'unsupported';
+            if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) return 'youtube';
+            if (videoUrl.includes('vimeo.com')) return 'vimeo'; 
+            if (videoUrl.includes('vk.com') || videoUrl.includes('vk.ru') || videoUrl.includes('video_ext.php')) return 'vk';
+            if (videoUrl.endsWith('.mp4') || videoUrl.includes('mp4')) return 'direct';
+            return 'unsupported';
+        }
+        function createVKEmbed(videoUrl) {
+            let ownerId = null;
+            let videoId = null;
+            const clipMatch = videoUrl.match(/clip(-?\d+)_(\d+)/);
+            if (clipMatch) { ownerId = clipMatch[1]; videoId = clipMatch[2]; }
+            const videoMatch = videoUrl.match(/video(-?\d+)_(\d+)/);
+            if (videoMatch) { ownerId = videoMatch[1]; videoId = videoMatch[2]; }
+            if (ownerId && videoId) {
+                const finalOwnerId = ownerId.startsWith('-') ? ownerId : `-${ownerId}`;
+                // Используем минимальный набор параметров для лучшей совместимости
+                return `https://vk.com/video_ext.php?oid=${finalOwnerId}&id=${videoId}`;
+            }
+            return null;
+        }
         
         // ====================================
         // ФУНКЦИИ ЗАГРУЗКИ И СОЗДАНИЯ
@@ -308,6 +433,8 @@
                 loading.style.display = 'none';
                 
                 createVideoCards();
+                // Устанавливаем начальный индекс в середине массива клонов для бесконечного цикла
+                currentIndex = 0; 
                 updateCarousel(false);
                 updateArticle();
                 
@@ -322,7 +449,7 @@
             const fragment = document.createDocumentFragment();
             ytPlayers = {}; 
             
-            // Клонируем массив для циклического листания (N + N)
+            // Клонируем массив для циклического листания (N видео + N клонов)
             const allVideos = [...videos, ...videos];
 
             allVideos.forEach((video, index) => {
@@ -346,11 +473,12 @@
                     default: sourceName = 'Не поддерживается';
                 }
                 
-                // Создаем контейнер с заглушкой
+                // Создаем контейнер с заглушкой (Placeholder)
                 videoCard.innerHTML = `
                     <div class="video-player-container">
                         <div class="video-player-placeholder">
-                            ${sourceName} (Нажмите, чтобы загрузить)
+                            <i class="fas fa-video"></i>
+                            <span>${sourceName}</span> (Нажмите для загрузки и просмотра)
                         </div>
                         <div class="play-overlay">
                             <div class="play-icon"><i class="fas fa-play"></i></div>
@@ -383,6 +511,10 @@
                             // Остановка всех остальных
                             stopAllOtherVideos(realIndexCheck, videoType);
                         }
+                    } else {
+                        // Если кликнули на не-центрированную карточку, переключаемся на нее
+                        const targetIndex = index;
+                        goToVideo(targetIndex); 
                     }
                 });
                 
@@ -392,10 +524,10 @@
             carouselElement.appendChild(fragment);
             createProgressDots();
         }
-
+        
+        // --- ФУНКЦИЯ ЛЕНИВОЙ ЗАГРУЗКИ ---
         function loadActiveVideoContent(cardElement, realIndex, isReal) {
             const videoData = videos[realIndex];
-            const container = cardElement.querySelector('.video-player-container');
             const placeholder = cardElement.querySelector('.video-player-placeholder');
             const videoType = getVideoType(videoData.videoUrl);
 
@@ -408,22 +540,23 @@
                 case 'youtube':
                     const youtubeId = getYouTubeId(videoData.videoUrl);
                     const playerId = `${realIndex}-${isReal ? 'real' : 'clone'}`;
+                    // Важно: вставляем div, а YT API сам превратит его в iframe
                     contentHTML = `<div id="youtube-player-${playerId}" class="video-iframe"></div>`;
                     
                     if (typeof YT !== 'undefined' && YT.Player) {
-                        initYouTubePlayer(playerId, youtubeId, realIndex); // Передаем realIndex для логики паузы
+                        // Инициализируем плеер
+                        initYouTubePlayer(playerId, youtubeId, realIndex); 
                     }
                     break;
                 case 'vk':
                 case 'vimeo':
-                    const url = videoType === 'vk' ? createVKEmbed(videoData.videoUrl) : `https://player.vimeo.com/video/${videoData.videoUrl.match(/vimeo\.com\/(\d+)/)?.[1]}?title=0&byline=0&portrait=0`;
+                    const url = videoType === 'vk' ? createVKEmbed(videoData.videoUrl) : `https://player.vimeo.com/video/${videoData.videoUrl.match(/vimeo\.com\/(\d+)/)?.[1]}?title=0&byline=0&portrait=0&autoplay=0`;
                     contentHTML = `<iframe class="video-iframe" src="${url}" frameborder="0" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"></iframe>`;
                     break;
                 default:
-                    return; // Не загружаем, если не поддерживается
+                    return; 
             }
 
-            // Вставляем контент перед overlay
             placeholder.insertAdjacentHTML('beforebegin', contentHTML);
             placeholder.remove();
             cardElement.dataset.loaded = 'true';
@@ -458,7 +591,6 @@
 
             let accumulatedWidth = 0;
             for (let i = 0; i < currentIndex; i++) {
-                // Используем width + margin для расчета смещения
                 accumulatedWidth += (cards[i].offsetWidth + margin); 
             }
 
@@ -472,7 +604,7 @@
             // 4. Логика "прыжка" для циклической прокрутки
             if (currentIndex >= videos.length || currentIndex < 0) {
                 
-                // Ждем окончания анимации
+                // Ждем окончания анимации (0.6s)
                 setTimeout(() => {
                     carouselElement.style.transition = 'none';
                     let jumpIndex;
@@ -493,7 +625,7 @@
             
             updateArticle();
             updateProgressDots();
-            stopAllOtherVideos(currentIndex % videos.length, 'none'); // Гарантируем остановку
+            stopAllOtherVideos(currentIndex % videos.length, 'none'); 
         }
 
         // ====================================
@@ -501,7 +633,7 @@
         // ====================================
         
         function onYouTubeIframeAPIReady() {
-            // Инициализация теперь происходит в loadActiveVideoContent
+            // Фактическая инициализация теперь в loadActiveVideoContent
         }
 
         function initYouTubePlayer(playerId, videoId, realIndex) {
@@ -565,13 +697,15 @@
         
         function stopAllOtherVideos(activeIndex, activeType) {
             // 1. Остановка MP4 видео
-            if (currentlyPlayingVideo && parseInt(currentlyPlayingVideo.closest('.video-card').dataset.index) !== activeIndex && activeType !== 'direct') {
-                currentlyPlayingVideo.pause();
-                currentlyPlayingVideo.currentTime = 0;
-                const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
-                if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
-                currentlyPlayingVideo = null;
-            }
+            document.querySelectorAll('.video-card').forEach(card => {
+                const video = card.querySelector('.video-player');
+                const overlay = card.querySelector('.play-overlay');
+                if (video && !video.paused && parseInt(card.dataset.index) !== activeIndex) {
+                    video.pause();
+                    video.currentTime = 0;
+                    if (overlay) overlay.classList.remove('hidden');
+                }
+            });
             
             // 2. Остановка YouTube плееров
             for (const playerId in ytPlayers) {
@@ -605,13 +739,14 @@
             const articleTitle = document.getElementById('articleTitle');
             const articleContent = document.getElementById('articleContent');
             
+            // Получаем реальный индекс, очищенный от клонирования
             const realIndex = currentIndex % videos.length;
             
             if (videos.length > 0) {
                 const currentVideo = videos[realIndex];
                 articleTitle.textContent = currentVideo.article.title;
                 
-                // Удаление HTML-тэгов выделения (cleanup)
+                // Очистка статьи от старых HTML-тэгов выделения
                 let cleanedContent = currentVideo.article.content
                     .replace(/<div class="[^"]*article-text[^"]*">/g, '')
                     .replace(/<\/div>/g, '') 
@@ -619,7 +754,10 @@
                     .replace(/<\/span>/g, '')
                     .replace(/<div class="important-note">.*?<\/div>/gs, '')
                     .replace(/<div class="success-note">.*?<\/div>/gs, '')
-                    .replace(/<div class="article-quote">.*?<\/div>/gs, '');
+                    .replace(/<div class="article-quote">.*?<\/div>/gs, '')
+                    .replace(/<ul class="article-list">/g, '<ul>')
+                    .replace(/<span class="badge[^>]*>/g, '')
+                    .replace(/<\/span>/g, '');
 
                 articleContent.innerHTML = cleanedContent;
                 
@@ -636,15 +774,18 @@
             videos.forEach((_, index) => {
                 const dot = document.createElement('div');
                 dot.className = `dot ${index === realCurrentIndex ? 'active' : ''}`;
-                dot.addEventListener('click', () => goToVideo(index));
+                // При клике на точку, мы вычисляем нужный индекс в массиве [N+N]
+                dot.addEventListener('click', () => {
+                    const targetIndex = index + (currentIndex >= videos.length ? videos.length : 0);
+                    goToVideo(targetIndex);
+                });
                 progressDots.appendChild(dot);
             });
         }
         
-        function goToVideo(realIndex) {
+        function goToVideo(newIndex) {
             stopAllOtherVideos(currentIndex % videos.length, 'none');
-            // При переходе по точкам мы сразу устанавливаем реальный индекс в центральном блоке клонов
-            currentIndex = realIndex + (currentIndex >= videos.length ? videos.length : 0); 
+            currentIndex = newIndex;
             updateCarousel(true);
         }
 
