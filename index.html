@@ -663,6 +663,7 @@
         <div class="progress-dots" id="progressDots"></div>
     </div>
     
+    <!-- УВЕЛИЧЕННЫЙ РАЗДЕЛ ДЛЯ СТАТЬИ -->
     <section class="article-section">
         <div class="article-header">
             <h2 class="article-title" id="articleTitle"></h2>
@@ -765,45 +766,20 @@
             } else if (videoUrl.endsWith('.mp4') || videoUrl.includes('mp4')) {
                 return 'direct';
             } else {
-                return 'iframe'; // По умолчанию - пытаемся использовать iframe
+                return 'unsupported';
             }
         }
 
         // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ IFrame ВСТАВКИ VK
         function createVKEmbed(videoUrl) {
-            // Извлекаем ID видео из ссылки ВК. Форматы могут быть разными, но общий для встраивания:
-            // https://vk.com/video_ext.php?oid=-...&id=...&hash=...
-            
-            // Попробуем извлечь ID из ссылки типа https://vk.com/video-XXX_YYY
-            const matchVideoId = videoUrl.match(/video(-?\d+)_(\d+)/);
-            if (matchVideoId) {
-                const ownerId = matchVideoId[1];
-                const videoId = matchVideoId[2];
-                // Хэш нужен для публичного доступа, но без него может не работать. 
-                // Даем базовую ссылку, надеясь, что ВК сам подставит нужное.
-                return `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}&hash=&hd=1`;
-            }
-
-            // Попытка извлечь из ссылки на клип https://vk.com/clip-XXX_YYY
-            const matchClipId = videoUrl.match(/clip(-?\d+)_(\d+)/);
-            if (matchClipId) {
-                const ownerId = matchClipId[1];
-                const videoId = matchClipId[2];
-                return `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}&hash=&hd=1`;
-            }
-
-            // Если не нашли ID, можно попробовать использовать саму ссылку, но это редко работает.
-            return videoUrl; 
-        }
-        
-        // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ IFrame ВСТАВКИ VIMEO
-        function createVimeoEmbed(videoUrl) {
-            const match = videoUrl.match(/(?:vimeo\.com\/(?:video\/)?)([^"&?\/\s]+)/);
+            // Извлекаем ID видео из ссылки ВК
+            const match = videoUrl.match(/clip-(\d+)_(\d+)/);
             if (match) {
-                const videoId = match[1];
-                return `https://player.vimeo.com/video/${videoId}?autoplay=1&loop=0&autopause=1`;
+                const ownerId = match[1];
+                const videoId = match[2];
+                return `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}&hash=`;
             }
-            return videoUrl;
+            return null;
         }
 
         // ЗАГРУЗКА ДАННЫХ ИЗ JSON ФАЙЛА
@@ -857,7 +833,6 @@
                 const videoType = getVideoType(video.videoUrl);
                 let videoHTML = '';
                 let sourceName = '';
-                let iframeSrc = '';
                 
                 switch(videoType) {
                     case 'direct':
@@ -881,75 +856,53 @@
                     case 'youtube':
                         const youtubeId = video.videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
                         if (youtubeId) {
-                            iframeSrc = `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&controls=1&modestbranding=1&rel=0`;
+                            videoHTML = `
+                                <iframe class="video-iframe" 
+                                    src="https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&controls=1&modestbranding=1&rel=0" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                                <div class="play-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                            `;
                             sourceName = 'YouTube';
                         }
                         break;
-
-                    case 'vimeo':
-                        iframeSrc = createVimeoEmbed(video.videoUrl);
-                        sourceName = 'Vimeo';
-                        break;
                         
                     case 'vk':
-                        iframeSrc = createVKEmbed(video.videoUrl);
+                        // Для VK используем превью и кнопку для открытия в новом окне
+                        videoHTML = `
+                            <div class="video-unsupported" style="background: linear-gradient(135deg, var(--dark), var(--darker));">
+                                <i class="fab fa-vk" style="font-size: 4rem; color: #4A76A8; margin-bottom: 20px;"></i>
+                                <h3 style="margin-bottom: 10px; color: var(--primary-light);">Видео из ВКонтакте</h3>
+                                <p style="margin-bottom: 20px; opacity: 0.8; max-width: 250px;">Это видео доступно для просмотра в ВКонтакте</p>
+                                <button class="external-link-btn" onclick="window.open('${video.videoUrl}', '_blank')">
+                                    <i class="fas fa-external-link-alt"></i> Открыть в ВК
+                                </button>
+                            </div>
+                        `;
                         sourceName = 'VK';
-                        break;
-                    
-                    case 'iframe': // Общая попытка встраивания через iframe
-                        iframeSrc = video.videoUrl;
-                        sourceName = 'iFrame Embed';
                         break;
                         
                     default:
-                        // Неподдерживаемые видео, если видеоUrl был пуст или не удалось определить тип
                         videoHTML = `
                             <div class="video-unsupported">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 <p>Видео недоступно</p>
-                                <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Ссылка: ${video.videoUrl || 'Не указана'}</p>
-                                ${video.videoUrl ? `<button class="external-link-btn" onclick="window.open('${video.videoUrl}', '_blank')">
-                                    <i class="fas fa-external-link-alt"></i> Открыть в браузере
-                                </button>` : ''}
+                                <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Ссылка: ${video.videoUrl}</p>
                             </div>
                         `;
                         sourceName = 'Не поддерживается';
-                }
-
-                if (iframeSrc) {
-                    videoHTML = `
-                        <iframe class="video-iframe" 
-                            src="${iframeSrc}" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-                        <div class="play-overlay">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                // Если это VK и не iframe (для старого решения с кнопкой)
-                if (videoType === 'vk' && !iframeSrc) {
-                    videoHTML = `
-                        <div class="video-unsupported" style="background: linear-gradient(135deg, var(--dark), var(--darker));">
-                            <i class="fab fa-vk" style="font-size: 4rem; color: #4A76A8; margin-bottom: 20px;"></i>
-                            <h3 style="margin-bottom: 10px; color: var(--primary-light);">Видео из ВКонтакте</h3>
-                            <p style="margin-bottom: 20px; opacity: 0.8; max-width: 250px;">Это видео доступно для просмотра в ВКонтакте</p>
-                            <button class="external-link-btn" onclick="window.open('${video.videoUrl}', '_blank')">
-                                <i class="fas fa-external-link-alt"></i> Открыть в ВК
-                            </button>
-                        </div>
-                    `;
                 }
                 
                 videoCard.innerHTML = `
                     <div class="video-player-container">
                         ${videoHTML}
-                        ${sourceName && sourceName !== 'Не поддерживается' ? `<div class="video-source-badge">${sourceName}</div>` : ''}
+                        ${sourceName ? `<div class="video-source-badge">${sourceName}</div>` : ''}
                     </div>
                     <div class="video-info">
                         <div class="video-title">${video.title}</div>
@@ -980,37 +933,15 @@
                         });
                     }
                 }
-                // ДЛЯ IFRAME (YouTube, VK, Vimeo и др.) - УПРАВЛЕНИЕ ЧЕРЕЗ КЛИК НА OVERLAY
-                else if (iframeSrc) {
+                // ДЛЯ IFRAME (YouTube) - УПРАВЛЕНИЕ ЧЕРЕЗ КЛИК НА OVERLAY
+                else if (videoType === 'youtube') {
                     const playOverlay = videoCard.querySelector('.play-overlay');
                     const iframe = videoCard.querySelector('.video-iframe');
                     
                     if (playOverlay && iframe) {
-                        playOverlay.addEventListener('click', (e) => {
+                        videoCard.addEventListener('click', (e) => {
                             if (!e.target.closest('.video-source-badge') && !e.target.closest('.external-link-btn')) {
                                 playOverlay.classList.add('hidden');
-                                // Дополнительная логика для автозапуска, если платформа позволяет
-                                // (Для YouTube iframe src уже содержит enablejsapi=1)
-                                if (videoType === 'youtube' && iframe.contentWindow) {
-                                     // Отправка postMessage для запуска YouTube видео через API
-                                     iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                                }
-                                
-                                // Останавливаем предыдущее MP4 видео
-                                if (currentlyPlayingVideo && currentlyPlayingVideo.tagName === 'VIDEO') {
-                                    currentlyPlayingVideo.pause();
-                                    currentlyPlayingVideo.currentTime = 0;
-                                    const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
-                                    if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
-                                    currentlyPlayingVideo = null;
-                                }
-                                
-                                // Снимаем активный статус с других iframe overlay
-                                document.querySelectorAll('.play-overlay:not(.hidden)').forEach(overlay => {
-                                    if (overlay !== playOverlay) {
-                                        overlay.classList.remove('hidden');
-                                    }
-                                });
                             }
                         });
                     }
@@ -1126,34 +1057,22 @@
         }
         
         function goToVideo(index) {
-            // Останавливаем текущее MP4 видео
+            // Останавливаем текущее видео если оно MP4
             if (currentlyPlayingVideo && currentlyPlayingVideo.tagName === 'VIDEO') {
                 currentlyPlayingVideo.pause();
                 currentlyPlayingVideo.currentTime = 0;
                 const playOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
                 if (playOverlay) playOverlay.classList.remove('hidden');
-                currentlyPlayingVideo = null;
             }
             
-            // Скрываем overlay для iframe видео на предыдущей карточке, если он был скрыт (т.е. видео играло)
-            const prevCard = document.querySelector(`.video-card[data-index="${currentIndex}"]`);
-            if (prevCard) {
-                const prevPlayOverlay = prevCard.querySelector('.play-overlay');
-                const prevIframe = prevCard.querySelector('.video-iframe');
-
-                // Для YouTube: отправляем команду на остановку
-                if (prevIframe && prevPlayOverlay && !prevPlayOverlay.classList.contains('hidden')) {
-                     const prevVideoType = getVideoType(videos[currentIndex].videoUrl);
-                     if (prevVideoType === 'youtube' && prevIframe.contentWindow) {
-                         prevIframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
-                     }
-                }
-                
-                if (prevPlayOverlay) {
-                    prevPlayOverlay.classList.remove('hidden'); // Показываем оверлей обратно
-                }
+            // Скрываем overlay для iframe видео
+            const currentCard = document.querySelector(`.video-card[data-index="${currentIndex}"]`);
+            if (currentCard) {
+                const playOverlay = currentCard.querySelector('.play-overlay');
+                if (playOverlay) playOverlay.classList.remove('hidden');
             }
-
+            
+            currentlyPlayingVideo = null;
             currentIndex = index;
             updateCarousel();
             updateArticle();
