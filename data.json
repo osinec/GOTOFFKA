@@ -29,11 +29,11 @@
     },
     {
       "id": 4,
-      "title": "Видео из ВК",
+      "title": "Видео из ВКонтакте",
       "videoUrl": "https://vk.com/clip-230131323_456239077",
       "article": {
-        "title": "Пример статьи для ВК видео",
-        "content": "<div class=\"article-text\"><p><strong>Это любовь</strong></p><p><span class=\"highlight-blue-preview\">пап</span></p><p><span class=\"highlight-orange-preview\">Ну неее</span></p><div class=\"article-quote\">Жизнь боль</div><div class=\"important-note\"><strong>Важно:</strong> важно</div><h3 class=\"article-subtitle\">Заголовок</h3><p>Текст статьи...</p></div>"
+        "title": "Социальные сети и видеоконтент",
+        "content": "<div class=\"article-text\"><p><strong>Это любовь</strong></p><p><span class=\"highlight-blue-preview\">пап</span></p><p><span class=\"highlight-orange-preview\">Ну неее</span></p><div class=\"article-quote\">Жизнь боль</div><div class=\"important-note\"><strong>Важно:</strong> важно</div><h3 class=\"article-subtitle\">ВКонтакте как платформа</h3><p>ВКонтакте предоставляет уникальные возможности для распространения видеоконтента среди русскоязычной аудитории.</p></div>"
       }
     }
   ]
