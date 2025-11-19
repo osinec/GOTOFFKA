@@ -63,7 +63,7 @@
             align-items: center;
             position: relative;
             perspective: 1400px;
-            padding: 20px 0 80px; /* Увеличил отступ снизу для точек */
+            padding: 20px 0 80px;
             min-height: 600px;
             flex-direction: column;
         }
@@ -74,7 +74,7 @@
             height: 560px;
             transform-style: preserve-3d;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 30px; /* Отступ между каруселью и точками */
+            margin-bottom: 30px;
         }
         
         .video-card {
@@ -497,89 +497,193 @@
             font-size: 0.8rem;
         }
 
-        /* Стили для модального окна пароля */
-        .password-modal {
+        /* Стили для админ-панели */
+        .admin-panel {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(7, 7, 17, 0.9);
+            background: rgba(7, 7, 17, 0.95);
             z-index: 10000;
-            justify-content: center;
-            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
             backdrop-filter: blur(10px);
         }
         
-        .password-modal.active {
-            display: flex;
+        .admin-panel.active {
+            display: block;
         }
         
-        .password-container {
+        .admin-container {
+            max-width: 1000px;
+            margin: 0 auto;
             background: var(--dark);
-            padding: 40px;
-            border-radius: 20px;
+            border-radius: 15px;
+            padding: 30px;
             border: 1px solid var(--glass-border);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
         }
         
-        .password-title {
-            font-size: 1.8rem;
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .admin-title {
+            font-size: 2rem;
+            color: var(--primary-light);
             margin-bottom: 10px;
+        }
+        
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .admin-nav-btn {
+            padding: 10px 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-nav-btn.active {
+            background: var(--primary);
+        }
+        
+        .admin-section {
+            display: none;
+            margin-bottom: 30px;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
             color: var(--primary-light);
         }
         
-        .password-subtitle {
-            margin-bottom: 30px;
-            opacity: 0.8;
+        .form-group {
+            margin-bottom: 20px;
         }
         
-        .password-input {
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-input, .form-textarea {
             width: 100%;
-            padding: 15px;
-            background: var(--darker);
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--glass-border);
-            border-radius: 10px;
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .admin-btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
             color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .admin-btn:hover {
+            background: var(--primary-light);
+        }
+        
+        .video-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .video-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .video-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .video-item-title {
+            font-weight: 600;
             font-size: 1.1rem;
-            margin-bottom: 20px;
+        }
+        
+        .video-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            padding: 5px 8px;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--light);
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .close-admin {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
             text-align: center;
         }
         
-        .password-input:focus {
-            outline: none;
-            border-color: var(--primary);
+        .message.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10B981;
         }
         
-        .password-submit {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-        }
-        
-        .password-submit:hover {
-            background: var(--primary-light);
-            transform: translateY(-2px);
-        }
-        
-        .password-error {
-            color: var(--error);
-            margin-top: 15px;
-            display: none;
-        }
-        
-        .password-error.active {
-            display: block;
+        .message.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #EF4444;
         }
 
         /* Адаптивность */
@@ -613,6 +717,14 @@
             
             .article-subtitle {
                 font-size: 1.5rem;
+            }
+            
+            .admin-container {
+                padding: 20px;
+            }
+            
+            .video-list {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -652,14 +764,6 @@
                 flex-direction: column;
                 gap: 10px;
             }
-            
-            .password-container {
-                padding: 30px 25px;
-            }
-            
-            .password-title {
-                font-size: 1.5rem;
-            }
         }
     </style>
 </head>
@@ -696,40 +800,7 @@
         
         <div class="article-content" id="articleContent">
             <div class="article-text">
-                <p>В современном цифровом мире <span class="highlight-primary">короткие видео</span> стали мощным инструментом для передачи эмоций, идей и историй. Этот формат сочетает в себе <span class="text-accent">визуальную привлекательность</span>, динамику и лаконичность, что делает его идеальным для современного зрителя.</p>
-                
-                <div class="important-note">
-                    <strong>Важно:</strong> Первые <span class="text-warning">3 секунды</span> видео критически важны для удержания внимания зрителя.
-                </div>
-                
-                <h3 class="article-subtitle">Сила краткости</h3>
-                <p>Короткие видео, продолжительностью <span class="highlight-warning">от 15 до 60 секунд</span>, обладают уникальной способностью захватывать внимание зрителя с первых же кадров. В эпоху, когда время становится самым ценным ресурсом, <span class="text-primary">умение донести сообщение быстро и эффективно</span> становится настоящим искусством.</p>
-                
-                <div class="article-quote">
-                    "<span class="highlight-accent">Видео</span> — это не просто движущиеся картинки. Это возможность создать <span class="text-success">эмоциональную связь</span> со зрителем за считанные секунды."
-                </div>
-                
-                <h3 class="article-subtitle">Ключевые элементы успешного видео</h3>
-                <ul class="article-list">
-                    <li><span class="badge badge-primary">1</span> <strong>Сильный старт</strong> — <span class="highlight-error">первые 3 секунды</span> решают, останется ли зритель смотреть дальше</li>
-                    <li><span class="badge badge-accent">2</span> <strong>Эмоциональный резонанс</strong> — видео должно вызывать чувства: <span class="text-success">радость, удивление, ностальгию</span></li>
-                    <li><span class="badge badge-success">3</span> <strong>Визуальное качество</strong> — четкое изображение, продуманная цветовая палитра</li>
-                    <li><span class="badge badge-warning">4</span> <strong>Звуковое сопровождение</strong> — музыка и звуковые эффекты усиливают восприятие</li>
-                    <li><span class="badge badge-error">5</span> <strong>Четкий посыл</strong> — зритель должен понять основную идею без лишних объяснений</li>
-                </ul>
-
-                <div class="success-note">
-                    <strong>Успех:</strong> Видео, которые сочетают <span class="highlight-success">визуальную привлекательность</span> с <span class="text-accent">эмоциональным воздействием</span>, показывают наилучшие результаты.
-                </div>
-                
-                <h3 class="article-subtitle">Будущее короткого контента</h3>
-                <p>С развитием технологий и изменением потребительских привычек, <span class="highlight-primary">короткие видео продолжают набирать популярность</span>. Платформы социальных сетей постоянно внедряют новые функции для создания и распространения такого контента, что открывает <span class="text-warning">безграничные возможности для творцов</span>.</p>
-                
-                <div class="info-note">
-                    <strong>Совет:</strong> Используйте <span class="highlight-accent">аналитику просмотров</span> для понимания предпочтений вашей аудитории и улучшения контента.
-                </div>
-                
-                <p>Важно помнить, что технологии — это лишь инструмент. Настоящая магия происходит тогда, когда <span class="highlight-success">техническое совершенство</span> встречается с <span class="text-primary">человеческой креативностью и искренностью</span>.</p>
+                <p>Загрузка контента...</p>
             </div>
         </div>
     </section>
@@ -738,14 +809,56 @@
         <p>Используйте <span class="key-hint">← →</span> для навигации • <span class="key-hint">ПРОБЕЛ</span> для воспроизведения</p>
     </div>
 
-    <!-- Модальное окно для ввода пароля -->
-    <div class="password-modal" id="passwordModal">
-        <div class="password-container">
-            <h2 class="password-title">Доступ к админ-панели</h2>
-            <p class="password-subtitle">Введите пароль для продолжения</p>
-            <input type="password" class="password-input" id="passwordInput" placeholder="Введите пароль" autocomplete="off">
-            <button class="password-submit" id="passwordSubmit">Войти</button>
-            <p class="password-error" id="passwordError">Неверный пароль. Попробуйте снова.</p>
+    <!-- АДМИН-ПАНЕЛЬ (скрыта по умолчанию) -->
+    <div class="admin-panel" id="adminPanel">
+        <button class="close-admin" onclick="hideAdminPanel()">×</button>
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2 class="admin-title">VibeShorts Админ-панель</h2>
+                <p>Управление видео и статьями</p>
+            </div>
+            
+            <nav class="admin-nav">
+                <button class="admin-nav-btn active" onclick="showAdminSection('videosSection')">📹 Управление видео</button>
+                <button class="admin-nav-btn" onclick="showAdminSection('addVideoSection')">➕ Добавить видео</button>
+            </nav>
+            
+            <section id="videosSection" class="admin-section active">
+                <h3 class="section-title">Управление видео</h3>
+                <div id="videosList" class="video-list">
+                    <!-- Видео будут загружены здесь -->
+                </div>
+            </section>
+            
+            <section id="addVideoSection" class="admin-section">
+                <h3 class="section-title">Добавить новое видео</h3>
+                
+                <form id="videoForm">
+                    <div class="form-group">
+                        <label class="form-label">🎬 Название видео</label>
+                        <input type="text" id="videoTitle" class="form-input" required placeholder="Введите название видео">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🔗 URL видео</label>
+                        <input type="url" id="videoUrl" class="form-input" placeholder="https://example.com/video.mp4" required>
+                        <small style="opacity: 0.7;">Вставьте прямую ссылку на видеофайл (.mp4)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">📝 Заголовок статьи</label>
+                        <input type="text" id="articleTitle" class="form-input" required placeholder="Введите заголовок статьи">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">🖋️ Содержание статьи</label>
+                        <textarea id="articleContentAdmin" class="form-textarea" rows="10" required placeholder="Введите содержание статьи в формате HTML"></textarea>
+                        <small style="opacity: 0.7;">Можно использовать HTML-теги для форматирования</small>
+                    </div>
+                    
+                    <button type="submit" class="admin-btn">💾 Сохранить видео</button>
+                </form>
+            </section>
         </div>
     </div>
 
@@ -757,96 +870,99 @@
             const progressDots = document.getElementById('progressDots');
             const articleTitle = document.getElementById('articleTitle');
             const articleContent = document.getElementById('articleContent');
-            const passwordModal = document.getElementById('passwordModal');
-            const passwordInput = document.getElementById('passwordInput');
-            const passwordSubmit = document.getElementById('passwordSubmit');
-            const passwordError = document.getElementById('passwordError');
             
             // Настройки безопасности
-            const ADMIN_PASSWORD = "admin123"; // Пароль для доступа к админ-панели
-            const SECRET_CODE = ["0", "4", "5", "1"]; // Секретный код 0451
+            const ADMIN_PASSWORD = "admin123";
+            const SECRET_CODE = ["0", "4", "5", "1"];
             
             let f12Pressed = false;
             let codeSequence = [];
             let codeTimeout = null;
-            
-            // АВТОМАТИЧЕСКАЯ ЗАГРУЗКА ДАННЫХ ИЗ АДМИН-ПАНЕЛИ
+            let videos = [];
+            let currentIndex = 0;
+            let currentlyPlayingVideo = null;
+
+            // ЗАГРУЗКА ДАННЫХ
             function loadVideosData() {
                 const savedVideos = localStorage.getItem('vibeShortsVideos');
                 if (savedVideos) {
-                    return JSON.parse(savedVideos);
+                    videos = JSON.parse(savedVideos);
+                } else {
+                    // Видео по умолчанию
+                    videos = [
+                        {
+                            id: 1,
+                            title: "Морской закат",
+                            videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                            article: {
+                                title: "Искусство визуального повествования",
+                                content: `
+                                    <div class="article-text">
+                                        <p>В современном цифровом мире <span class="highlight-primary">короткие видео</span> стали мощным инструментом для передачи эмоций, идей и историй.</p>
+                                        
+                                        <div class="important-note">
+                                            <strong>Важно:</strong> Первые <span class="text-warning">3 секунды</span> видео критически важны.
+                                        </div>
+                                        
+                                        <h3 class="article-subtitle">Сила краткости</h3>
+                                        <p>Короткие видео обладают уникальной способностью захватывать внимание зрителя с первых же кадров.</p>
+                                    </div>
+                                `
+                            }
+                        },
+                        {
+                            id: 2,
+                            title: "Ночной город",
+                            videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                            article: {
+                                title: "Городская эстетика в цифровую эпоху",
+                                content: `
+                                    <div class="article-text">
+                                        <p>Городские пейзажи всегда вдохновляли художников и фотографов. В эпоху цифровых технологий эта тема обрела новое звучание через <span class="highlight-accent">короткие видеоформаты</span>.</p>
+                                        
+                                        <div class="info-note">
+                                            <strong>Интересный факт:</strong> <span class="text-primary">Ночная съемка</span> требует особого подхода к освещению и настройкам камеры.
+                                        </div>
+                                        
+                                        <h3 class="article-subtitle">Неоновая поэзия</h3>
+                                        <p>Ночной город с его <span class="highlight-warning">неоновыми огнями</span> создает уникальную атмосферу, которую так сложно передать словами.</p>
+                                    </div>
+                                `
+                            }
+                        },
+                        {
+                            id: 3,
+                            title: "Горные вершины",
+                            videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+                            article: {
+                                title: "Природа как источник вдохновения",
+                                content: `
+                                    <div class="article-text">
+                                        <p>Горные пейзажи обладают особой магией — они одновременно умиротворяют и вдохновляют на свершения. <span class="highlight-success">Видеосъемка в горах</span> требует особого подхода и подготовки.</p>
+                                        
+                                        <div class="success-note">
+                                            <strong>Успех:</strong> Правильно выбранный <span class="text-accent">ракурс съемки</span> может превратить обычный пейзаж в шедевр.
+                                        </div>
+                                        
+                                        <h3 class="article-subtitle">Высота и перспектива</h3>
+                                        <p>Съемка на высоте открывает <span class="highlight-primary">уникальные ракурсы</span> и возможности для создания захватывающего контента.</p>
+                                    </div>
+                                `
+                            }
+                        }
+                    ];
+                    localStorage.setItem('vibeShortsVideos', JSON.stringify(videos));
                 }
-                // Видео по умолчанию (если админка не использовалась)
-                return [
-                    {
-                        id: 1,
-                        title: "Морской закат",
-                        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                        article: {
-                            title: "Искусство визуального повествования",
-                            content: `
-                                <div class="article-text">
-                                    <p>В современном цифровом мире <span class="highlight-primary">короткие видео</span> стали мощным инструментом для передачи эмоций, идей и историй.</p>
-                                    
-                                    <div class="important-note">
-                                        <strong>Важно:</strong> Первые <span class="text-warning">3 секунды</span> видео критически важны.
-                                    </div>
-                                    
-                                    <h3 class="article-subtitle">Сила краткости</h3>
-                                    <p>Короткие видео обладают уникальной способностью захватывать внимание зрителя с первых же кадров.</p>
-                                </div>
-                            `
-                        }
-                    },
-                    {
-                        id: 2,
-                        title: "Ночной город",
-                        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-                        article: {
-                            title: "Городская эстетика в цифровую эпоху",
-                            content: `
-                                <div class="article-text">
-                                    <p>Городские пейзажи всегда вдохновляли художников и фотографов. В эпоху цифровых технологий эта тема обрела новое звучание через <span class="highlight-accent">короткие видеоформаты</span>.</p>
-                                    
-                                    <div class="info-note">
-                                        <strong>Интересный факт:</strong> <span class="text-primary">Ночная съемка</span> требует особого подхода к освещению и настройкам камеры.
-                                    </div>
-                                    
-                                    <h3 class="article-subtitle">Неоновая поэзия</h3>
-                                    <p>Ночной город с его <span class="highlight-warning">неоновыми огнями</span> создает уникальную атмосферу, которую так сложно передать словами.</p>
-                                </div>
-                            `
-                        }
-                    },
-                    {
-                        id: 3,
-                        title: "Горные вершины",
-                        videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-                        article: {
-                            title: "Природа как источник вдохновения",
-                            content: `
-                                <div class="article-text">
-                                    <p>Горные пейзажи обладают особой магией — они одновременно умиротворяют и вдохновляют на свершения. <span class="highlight-success">Видеосъемка в горах</span> требует особого подхода и подготовки.</p>
-                                    
-                                    <div class="success-note">
-                                        <strong>Успех:</strong> Правильно выбранный <span class="text-accent">ракурс съемки</span> может превратить обычный пейзаж в шедевр.
-                                    </div>
-                                    
-                                    <h3 class="article-subtitle">Высота и перспектива</h3>
-                                    <p>Съемка на высоте открывает <span class="highlight-primary">уникальные ракурсы</span> и возможности для создания захватывающего контента.</p>
-                                </div>
-                            `
-                        }
-                    }
-                ];
+                
+                createVideoCards();
+                updateCarousel();
+                updateArticle();
+                loadAdminVideosList();
             }
-            
-            const videos = loadVideosData();
-            let currentIndex = 0;
-            let currentlyPlayingVideo = null;
-            
+
             // Функции для карусели видео
             function createVideoCards() {
+                carousel.innerHTML = '';
                 const fragment = document.createDocumentFragment();
                 
                 videos.forEach((video, index) => {
@@ -877,21 +993,17 @@
                     const playOverlay = videoCard.querySelector('.play-overlay');
                     const replayIcon = videoCard.querySelector('.replay-icon');
                     
-                    // Обработчик клика на видео
                     videoCard.addEventListener('click', (e) => {
-                        // Если клик не на иконке перезапуска
                         if (!e.target.closest('.replay-icon')) {
                             toggleVideoPlayback(videoElement, playOverlay);
                         }
                     });
                     
-                    // Обработчик окончания видео
                     videoElement.addEventListener('ended', () => {
                         playOverlay.classList.remove('hidden');
                         currentlyPlayingVideo = null;
                     });
                     
-                    // Обработчик перезапуска видео
                     replayIcon.addEventListener('click', (e) => {
                         e.stopPropagation();
                         restartVideo(videoElement, playOverlay);
@@ -902,8 +1014,6 @@
                 
                 carousel.appendChild(fragment);
                 createProgressDots();
-                updateCarousel();
-                updateArticle();
             }
             
             function createProgressDots() {
@@ -990,9 +1100,11 @@
             }
             
             function updateArticle() {
-                const currentVideo = videos[currentIndex];
-                articleTitle.textContent = currentVideo.article.title;
-                articleContent.innerHTML = currentVideo.article.content;
+                if (videos.length > 0 && currentIndex < videos.length) {
+                    const currentVideo = videos[currentIndex];
+                    articleTitle.textContent = currentVideo.article.title;
+                    articleContent.innerHTML = currentVideo.article.content;
+                }
             }
             
             function goToVideo(index) {
@@ -1015,92 +1127,216 @@
             function prevVideo() {
                 goToVideo((currentIndex - 1 + videos.length) % videos.length);
             }
-            
-            // Функции для админ-панели
-            function openAdminPanel() {
-                window.open('admin.html', '_blank');
+
+            // ФУНКЦИИ АДМИН-ПАНЕЛИ
+            function showAdminPanel() {
+                document.getElementById('adminPanel').classList.add('active');
+                loadAdminVideosList();
             }
             
-            function checkPassword() {
-                if (passwordInput.value === ADMIN_PASSWORD) {
-                    passwordModal.classList.remove('active');
-                    passwordInput.value = '';
-                    passwordError.classList.remove('active');
-                    openAdminPanel();
-                } else {
-                    passwordError.classList.add('active');
-                    passwordInput.value = '';
-                    setTimeout(() => {
-                        passwordError.classList.remove('active');
-                    }, 3000);
-                }
+            function hideAdminPanel() {
+                document.getElementById('adminPanel').classList.remove('active');
             }
             
-            function showPasswordModal() {
-                passwordModal.classList.add('active');
-                passwordInput.focus();
+            function showAdminSection(sectionId) {
+                document.querySelectorAll('.admin-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+                
+                document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
             }
             
-            function resetCodeSequence() {
-                codeSequence = [];
-                f12Pressed = false;
-                if (codeTimeout) {
-                    clearTimeout(codeTimeout);
-                    codeTimeout = null;
-                }
-            }
-            
-            function checkCodeSequence(key) {
-                // Если нажат F12, активируем режим ввода кода
-                if (key === 'F12') {
-                    f12Pressed = true;
-                    codeSequence = [];
-                    // Таймаут 10 секунд для ввода кода
-                    codeTimeout = setTimeout(resetCodeSequence, 10000);
+            function loadAdminVideosList() {
+                const videosList = document.getElementById('videosList');
+                videosList.innerHTML = '';
+                
+                if (videos.length === 0) {
+                    videosList.innerHTML = '<p>Нет добавленных видео</p>';
                     return;
                 }
                 
-                // Если F12 не нажат, игнорируем цифры
+                videos.forEach(video => {
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    videoItem.innerHTML = `
+                        <div class="video-item-header">
+                            <div class="video-item-title">${video.title}</div>
+                            <div class="video-item-actions">
+                                <button class="action-btn" onclick="editVideo(${video.id})">✏️</button>
+                                <button class="action-btn" onclick="deleteVideo(${video.id})">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="video-item-url" style="font-size: 0.9rem; opacity: 0.8;">${video.videoUrl}</div>
+                        <div class="video-item-article" style="margin-top: 10px; font-size: 0.9rem;">📄 ${video.article.title}</div>
+                    `;
+                    videosList.appendChild(videoItem);
+                });
+            }
+            
+            function saveVideo(event) {
+                event.preventDefault();
+                
+                const title = document.getElementById('videoTitle').value;
+                const url = document.getElementById('videoUrl').value;
+                const articleTitle = document.getElementById('articleTitle').value;
+                const content = document.getElementById('articleContentAdmin').value;
+                
+                const articleContent = `<div class="article-text">${content}</div>`;
+                
+                const newVideo = {
+                    id: videos.length > 0 ? Math.max(...videos.map(v => v.id)) + 1 : 1,
+                    title: title,
+                    videoUrl: url,
+                    article: {
+                        title: articleTitle,
+                        content: articleContent
+                    }
+                };
+                
+                videos.push(newVideo);
+                localStorage.setItem('vibeShortsVideos', JSON.stringify(videos));
+                
+                document.getElementById('videoForm').reset();
+                showAdminMessage('✅ Видео успешно добавлено!', 'success');
+                
+                // ОБНОВЛЯЕМ ОСНОВНОЙ САЙТ
+                createVideoCards();
+                updateCarousel();
+                updateArticle();
+                loadAdminVideosList();
+            }
+            
+            function editVideo(id) {
+                const video = videos.find(v => v.id === id);
+                if (!video) return;
+                
+                document.getElementById('videoTitle').value = video.title;
+                document.getElementById('videoUrl').value = video.videoUrl;
+                document.getElementById('articleTitle').value = video.article.title;
+                
+                // Извлекаем контент из article-text обертки
+                let content = video.article.content.replace('<div class="article-text">', '').replace('</div>', '');
+                document.getElementById('articleContentAdmin').value = content;
+                
+                showAdminSection('addVideoSection');
+                
+                const form = document.getElementById('videoForm');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.textContent = '💾 Обновить видео';
+                submitBtn.onclick = function(e) {
+                    updateVideo(e, id);
+                };
+            }
+            
+            function updateVideo(event, id) {
+                event.preventDefault();
+                
+                const title = document.getElementById('videoTitle').value;
+                const url = document.getElementById('videoUrl').value;
+                const articleTitle = document.getElementById('articleTitle').value;
+                const content = document.getElementById('articleContentAdmin').value;
+                
+                const articleContent = `<div class="article-text">${content}</div>`;
+                
+                const videoIndex = videos.findIndex(v => v.id === id);
+                if (videoIndex !== -1) {
+                    videos[videoIndex] = {
+                        id: id,
+                        title: title,
+                        videoUrl: url,
+                        article: {
+                            title: articleTitle,
+                            content: articleContent
+                        }
+                    };
+                    
+                    localStorage.setItem('vibeShortsVideos', JSON.stringify(videos));
+                    
+                    const submitBtn = document.querySelector('#videoForm button[type="submit"]');
+                    submitBtn.textContent = '💾 Сохранить видео';
+                    submitBtn.onclick = saveVideo;
+                    
+                    document.getElementById('videoForm').reset();
+                    
+                    showAdminMessage('✅ Видео успешно обновлено!', 'success');
+                    
+                    // ОБНОВЛЯЕМ ОСНОВНОЙ САЙТ
+                    createVideoCards();
+                    updateCarousel();
+                    updateArticle();
+                    loadAdminVideosList();
+                }
+            }
+            
+            function deleteVideo(id) {
+                if (confirm('Вы уверены, что хотите удалить это видео?')) {
+                    videos = videos.filter(v => v.id !== id);
+                    localStorage.setItem('vibeShortsVideos', JSON.stringify(videos));
+                    showAdminMessage('✅ Видео удалено!', 'success');
+                    
+                    // ОБНОВЛЯЕМ ОСНОВНОЙ САЙТ
+                    createVideoCards();
+                    updateCarousel();
+                    updateArticle();
+                    loadAdminVideosList();
+                }
+            }
+            
+            function showAdminMessage(text, type) {
+                const message = document.createElement('div');
+                message.className = `message ${type}`;
+                message.textContent = text;
+                document.querySelector('.admin-container').appendChild(message);
+                setTimeout(() => { message.remove(); }, 3000);
+            }
+
+            // Проверка секретного кода для открытия админки
+            function checkCodeSequence(key) {
+                if (key === 'F12') {
+                    f12Pressed = true;
+                    codeSequence = [];
+                    codeTimeout = setTimeout(() => {
+                        f12Pressed = false;
+                        codeSequence = [];
+                    }, 10000);
+                    return;
+                }
+                
                 if (!f12Pressed) return;
                 
-                // Проверяем только цифры
                 if (key >= '0' && key <= '9') {
                     codeSequence.push(key);
                     
-                    // Проверяем совпадение с секретным кодом
                     if (codeSequence.length === SECRET_CODE.length) {
                         if (codeSequence.join('') === SECRET_CODE.join('')) {
-                            // Код верный - показываем модальное окно с паролем
-                            showPasswordModal();
-                            resetCodeSequence();
+                            showAdminPanel();
+                            f12Pressed = false;
+                            codeSequence = [];
                         } else {
-                            // Неверный код - сбрасываем
-                            resetCodeSequence();
+                            f12Pressed = false;
+                            codeSequence = [];
                         }
                     }
                     
-                    // Сбрасываем таймер при каждом нажатии цифры
                     if (codeTimeout) {
                         clearTimeout(codeTimeout);
-                        codeTimeout = setTimeout(resetCodeSequence, 10000);
+                        codeTimeout = setTimeout(() => {
+                            f12Pressed = false;
+                            codeSequence = [];
+                        }, 10000);
                     }
                 }
             }
             
-            // Обработчики событий для карусели
+            // Обработчики событий
             nextBtn.addEventListener('click', nextVideo);
             prevBtn.addEventListener('click', prevVideo);
             
-            let startX = 0;
-            carousel.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            }, { passive: true });
-            
-            carousel.addEventListener('touchend', (e) => {
-                const endX = e.changedTouches[0].clientX;
-                if (startX - endX > 50) nextVideo();
-                else if (endX - startX > 50) prevVideo();
-            }, { passive: true });
+            document.getElementById('videoForm').addEventListener('submit', saveVideo);
             
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowRight') nextVideo();
@@ -1115,30 +1351,43 @@
                     }
                 }
                 
-                // Проверка комбинации клавиш для админ-панели
                 checkCodeSequence(e.key);
             });
             
-            // Обработчики событий для модального окна пароля
-            passwordSubmit.addEventListener('click', checkPassword);
-            passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
-            });
-            
-            // Закрытие модального окна при клике вне его
-            passwordModal.addEventListener('click', (e) => {
-                if (e.target === passwordModal) {
-                    passwordModal.classList.remove('active');
-                    passwordInput.value = '';
-                    passwordError.classList.remove('active');
-                }
-            });
-            
             // Запуск
-            createVideoCards();
+            loadVideosData();
         });
+
+        // Глобальные функции для админ-панели
+        function showAdminPanel() {
+            document.getElementById('adminPanel').classList.add('active');
+        }
+        
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('active');
+        }
+        
+        function showAdminSection(sectionId) {
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        function editVideo(id) {
+            // Функция реализована в основном скрипте
+            window.editVideo && window.editVideo(id);
+        }
+        
+        function deleteVideo(id) {
+            // Функция реализована в основном скрипте
+            window.deleteVideo && window.deleteVideo(id);
+        }
     </script>
 </body>
 </html>
