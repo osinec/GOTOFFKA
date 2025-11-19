@@ -3,691 +3,1052 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VibeShorts | Оптимизированная Галерея</title>
+    <title>VibeShorts | Галерея со статьями</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ==================================== */
-        /* ОСНОВНЫЕ СТИЛИ И ПЕРЕМЕННЫЕ */
-        /* ==================================== */
         :root {
             --primary: #8B5CF6;
             --primary-light: #A78BFA;
             --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
             --dark: #0F0F23;
             --darker: #070711;
             --light: #F8FAFC;
             --glass: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.12);
-            /* Размеры карточек */
-            --card-width: 250px;
-            --card-height: 450px;
-            --center-card-width: 300px;
-            --center-card-height: 540px;
-            --card-margin: 20px;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: system-ui, -apple-system, sans-serif;
         }
-
+        
         html, body {
             overflow-x: hidden;
             width: 100%;
             position: relative;
         }
-
+        
         body {
-            background-color: var(--darker);
+            background: var(--darker);
             color: var(--light);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
-
-        .content-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 40px;
-        }
-
-        /* --- Header & Footer --- */
-        .header {
-            padding: 40px 0;
+        
+        header {
             text-align: center;
-            border-bottom: 1px solid var(--glass-border);
+            padding: 25px 20px 20px;
+            background: transparent;
         }
-
-        .header h1 {
+        
+        h1 {
             font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 5px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--light), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
         }
-
-        .footer {
-            padding: 20px 0;
-            text-align: center;
-            border-top: 1px solid var(--glass-border);
-            margin-top: 40px;
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
         }
-
-        /* --- Main Content (БЛОЧНАЯ КОМПОНОВКА) --- */
-        .main-content {
+        
+        .gallery-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 40px;
-            padding: 40px 0;
-        }
-
-        /* --- Секция Статьи (ЧИСТЫЙ СТИЛЬ ТЕКСТА) --- */
-        .article-section {
-            width: 100%;
-            max-width: 800px;
-            padding: 30px;
-            background-color: var(--dark);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-        }
-
-        .article-title {
-            font-size: 1.8rem;
-            color: var(--accent);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--glass-border);
-        }
-
-        .article-content {
-            line-height: 1.7;
-            font-size: 1.05rem;
-            color: var(--light);
-        }
-        
-        .article-content p { margin-bottom: 15px; }
-        .article-content h3 { margin-top: 25px; margin-bottom: 15px; color: var(--primary-light); font-size: 1.4rem; }
-        .article-content ul { margin-left: 20px; list-style: disc; }
-        .article-content ul li { margin-bottom: 8px; }
-        
-        /* --- Carousel (Горизонтальная с фокусом) --- */
-        .carousel-section {
-            width: 90%;
-            max-width: 900px; 
-            margin: 40px auto 0;
             position: relative;
+            perspective: 1400px;
+            padding: 20px 0 80px;
+            min-height: 600px;
+            flex-direction: column;
         }
         
-        .carousel-wrapper {
-            width: 100%;
-            overflow: hidden; 
-            padding: 30px 0; 
-        }
-        
-        .carousel-inner {
-            display: flex;
-            align-items: center; 
-            transition: transform 0.6s ease;
+        .carousel {
+            position: relative;
+            width: 320px;
+            height: 560px;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 30px;
         }
         
         .video-card {
-            flex-shrink: 0;
-            width: var(--card-width);
-            height: var(--card-height);
-            background-color: var(--dark);
-            border-radius: 12px;
-            margin: 0 calc(var(--card-margin) / 2);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.6s ease, box-shadow 0.6s ease, border-color 0.6s ease, width 0.6s ease, height 0.6s ease;
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-            border: 2px solid var(--glass-border);
-            z-index: 1; 
-        }
-        
-        .video-card.center {
-            width: var(--center-card-width);
-            height: var(--center-card-height);
-            transform: scale(1.0); 
-            border-color: var(--primary);
-            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
-            z-index: 10;
-        }
-        
-        /* КОНТЕЙНЕР ДЛЯ ВИДЕО */
-        .video-player-container {
+            position: absolute;
             width: 100%;
             height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            background: var(--dark);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            top: 0;
+            left: 0;
+        }
+        
+        .video-player-container {
+            width: 100%;
+            height: 85%;
             position: relative;
             background: #000;
             overflow: hidden;
         }
-
-        /* Стиль для заглушки (Placeholder) */
-        .video-player-placeholder {
+        
+        .video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-unsupported {
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #1a1a2e;
+            background: var(--dark);
             color: var(--light);
-            font-size: 0.9rem;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 5;
-            padding: 20px;
             text-align: center;
-        }
-        .video-player-placeholder i {
-             font-size: 1.5rem;
-             margin-bottom: 10px;
+            padding: 20px;
         }
         
-        /* СКРЫВАЕМ НЕАКТИВНЫЙ ПЛЕЙЕР/АЙФРЕЙМ */
-        .video-player, .video-iframe {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 6; 
+        .video-unsupported i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.7;
         }
-
+        
+        .video-source-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            z-index: 5;
+        }
+        
         .play-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 50;
-            transition: opacity 0.3s;
+            background: rgba(0, 0, 0, 0.7);
+            transition: opacity 0.2s ease;
+            cursor: pointer;
+            z-index: 2;
+            text-align: center;
         }
-
+        
         .play-overlay.hidden {
             opacity: 0;
             pointer-events: none;
         }
-
+        
         .play-icon {
-            font-size: 4rem;
-            color: var(--light);
-            opacity: 0.9;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            transition: transform 0.2s ease;
+            margin-bottom: 15px;
         }
         
-        .video-source-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 4px 8px;
-            background: var(--darker);
-            color: var(--accent);
-            border-radius: 6px;
-            font-size: 0.7rem;
-            z-index: 100;
+        .play-overlay:hover .play-icon {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.25);
         }
-
-        /* Navigation Buttons */
+        
+        .external-link-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        .external-link-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .replay-icon {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+        }
+        
+        .video-card:hover .replay-icon {
+            opacity: 1;
+        }
+        
+        .video-info {
+            padding: 20px;
+            height: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 15, 35, 0.9);
+        }
+        
+        .video-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
         .nav-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             background: var(--glass);
             border: 1px solid var(--glass-border);
-            color: var(--light);
-            font-size: 1.5rem;
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            z-index: 20;
-            backdrop-filter: blur(10px);
-            transition: background 0.3s, color 0.3s;
+            z-index: 100;
+            transition: all 0.2s ease;
+            border: none;
         }
-
-        .nav-btn:hover {
-            background: var(--primary);
-            color: var(--darker);
-        }
-
-        .prev-btn { left: -60px; }
-        .next-btn { right: -60px; }
         
-        /* Progress Dots */
+        .nav-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .prev-btn {
+            left: 15px;
+        }
+        
+        .next-btn {
+            right: 15px;
+        }
+        
+        .nav-btn i {
+            font-size: 1.4rem;
+            color: white;
+        }
+        
         .progress-dots {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 15px;
+            position: relative;
+            z-index: 10;
+            margin-top: 20px;
         }
         
         .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--glass-border);
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .dot.active {
-            background-color: var(--primary);
             width: 12px;
             height: 12px;
+            border-radius: 50%;
+            background: var(--glass);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
         }
         
-        /* Media Queries */
-        @media (max-width: 950px) {
-            .carousel-section { max-width: 600px; }
-            .prev-btn { left: 0; }
-            .next-btn { right: 0; }
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.3);
         }
         
-        @media (max-width: 650px) {
-            :root {
-                --card-width: 180px;
-                --card-height: 320px;
-                --center-card-width: 250px;
-                --center-card-height: 450px;
-                --card-margin: 10px;
+        .dot:hover {
+            background: var(--primary-light);
+            transform: scale(1.2);
+        }
+
+        /* УВЕЛИЧЕННЫЙ РАЗДЕЛ ДЛЯ СТАТЬИ */
+        .article-section {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 40px;
+            background: rgba(15, 15, 35, 0.7);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .article-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .article-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .article-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+        
+        .article-text p {
+            margin-bottom: 25px;
+        }
+        
+        .article-subtitle {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin: 40px 0 20px 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+        }
+        
+        .article-list {
+            margin: 25px 0;
+            padding-left: 30px;
+        }
+        
+        .article-list li {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .article-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .article-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .article-quote {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 30px;
+            margin: 40px 0;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        /* СТИЛИ ДЛЯ ВЫДЕЛЕНИЯ ТЕКСТА */
+        .highlight-primary {
+            background: linear-gradient(120deg, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0.1) 100%);
+            color: var(--primary-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .highlight-accent {
+            background: linear-gradient(120deg, rgba(6, 182, 212, 0.3) 0%, rgba(6, 182, 212, 0.1) 100%);
+            color: var(--accent);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .highlight-success {
+            background: linear-gradient(120deg, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.1) 100%);
+            color: var(--success);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-left: 3px solid var(--success);
+        }
+        
+        .highlight-warning {
+            background: linear-gradient(120deg, rgba(245, 158, 11, 0.3) 0%, rgba(245, 158, 11, 0.1) 100%);
+            color: var(--warning);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-left: 3px solid var(--warning);
+        }
+        
+        .highlight-error {
+            background: linear-gradient(120deg, rgba(239, 68, 68, 0.3) 0%, rgba(239, 68, 68, 0.1) 100%);
+            color: var(--error);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-left: 3px solid var(--error);
+        }
+        
+        .highlight-blue-preview {
+            background: linear-gradient(120deg, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0.1) 100%);
+            color: #3B82F6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-left: 3px solid #3B82F6;
+        }
+        
+        .highlight-orange-preview {
+            background: linear-gradient(120deg, rgba(249, 115, 22, 0.3) 0%, rgba(249, 115, 22, 0.1) 100%);
+            color: #F97316;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border-left: 3px solid #F97316;
+        }
+        
+        .text-primary {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+        
+        .text-accent {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .text-success {
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .text-warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+        
+        .text-error {
+            color: var(--error);
+            font-weight: 600;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0 5px;
+        }
+        
+        .badge-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .badge-accent {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .badge-error {
+            background: var(--error);
+            color: white;
+        }
+        
+        .important-note {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            border-left: 4px solid var(--warning);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        .success-note {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-left: 4px solid var(--success);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        
+        .info-note {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: var(--error);
+            font-size: 1.2rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .carousel {
+                width: 300px;
+                height: 520px;
             }
-            .carousel-section { max-width: 100%; }
-            .nav-btn { display: none; }
-            .article-section { padding: 15px; }
+            
+            .nav-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .article-section {
+                padding: 30px 25px;
+                margin: 0 20px 30px;
+            }
+            
+            .article-title {
+                font-size: 2rem;
+            }
+            
+            .article-text {
+                font-size: 1.1rem;
+            }
+            
+            .article-subtitle {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .carousel {
+                width: 280px;
+                height: 480px;
+            }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .article-section {
+                padding: 25px 20px;
+                margin: 0 15px 25px;
+            }
+            
+            .article-title {
+                font-size: 1.8rem;
+            }
+            
+            .article-text {
+                font-size: 1rem;
+            }
+            
+            .article-subtitle {
+                font-size: 1.3rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="loading" class="loading-message"></div>
-    <div class="content-wrapper">
-        <header class="header">
-            <h1>VibeShorts</h1>
-            <p>Галерея: Фокусированная карусель и статья</p>
-        </header>
-
-        <main class="main-content">
-            <section class="carousel-section">
-                <div class="carousel-wrapper">
-                    <div id="carousel" class="carousel-inner">
-                        </div>
-                </div>
-                <button id="prevBtn" class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
-                <button id="nextBtn" class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
-                <div id="progressDots" class="progress-dots"></div>
-            </section>
-
-            <section class="article-section">
-                <h2 id="articleTitle" class="article-title"></h2>
-                <div id="articleContent" class="article-content"></div>
-            </section>
-        </main>
-
-        <footer class="footer">
-            <p>&copy; 2025 VibeShorts. Все права защищены.</p>
-        </footer>
+    <header>
+        <h1>VibeShorts</h1>
+        <p class="subtitle">Галерея видео с пространством для статей</p>
+    </header>
+    
+    <div class="gallery-container">
+        <button class="nav-btn prev-btn" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <div class="carousel" id="carousel">
+            <div class="loading" id="loading">
+                <p>🔄 Загрузка видео...</p>
+            </div>
+        </div>
+        
+        <button class="nav-btn next-btn" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        
+        <div class="progress-dots" id="progressDots"></div>
     </div>
     
-    <script>
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    </script>
+    <section class="article-section">
+        <div class="article-header">
+            <h2 class="article-title" id="articleTitle"></h2>
+        </div>
+        
+        <div class="article-content" id="articleContent">
+            <div class="article-text">
+                <p></p>
+            </div>
+        </div>
+    </section>
 
     <script>
-        /* ==================================== */
-        /* КОД JavaScript (ОПТИМИЗИРОВАННЫЙ) */
-        /* ==================================== */
-        
+        // Глобальные переменные
         let videos = [];
-        // currentIndex теперь указывает на позицию в массиве [N видео + N клонов]
-        let currentIndex = 0; 
+        let currentIndex = 0;
         let currentlyPlayingVideo = null;
-        let ytPlayers = {};
-        let carouselElement;
-        
-        // --- Инициализация ---
+
+        // Блокировка горизонтального скролла
         document.addEventListener('DOMContentLoaded', function() {
-            carouselElement = document.getElementById('carousel');
+            // Предотвращаем горизонтальный скролл
+            document.body.style.overflowX = 'hidden';
+            document.documentElement.style.overflowX = 'hidden';
             
-            document.getElementById('nextBtn').addEventListener('click', () => nextVideo(true));
-            document.getElementById('prevBtn').addEventListener('click', () => prevVideo(true));
+            // Блокируем горизонтальные свайпы
+            document.addEventListener('touchmove', function(e) {
+                if (e.touches.length > 1) return;
+                
+                const touch = e.touches[0];
+                const startX = touch.pageX;
+                
+                // Если движение в основном горизонтальное - блокируем
+                if (Math.abs(e.touches[0].pageX - startX) > Math.abs(e.touches[0].pageY - startX)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
             
+            // Блокируем горизонтальную прокрутку колесиком мыши
+            document.addEventListener('wheel', function(e) {
+                if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            const carousel = document.getElementById('carousel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progressDots = document.getElementById('progressDots');
+            const articleTitle = document.getElementById('articleTitle');
+            const articleContent = document.getElementById('articleContent');
+            const loading = document.getElementById('loading');
+            
+            // Загрузка данных из JSON файла
+            loadVideosData();
+            
+            // Обработчики событий для карусели
+            nextBtn.addEventListener('click', nextVideo);
+            prevBtn.addEventListener('click', prevVideo);
+            
+            // Обработчики клавиш
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight') { e.preventDefault(); nextVideo(); }
-                else if (e.key === 'ArrowLeft') { e.preventDefault(); prevVideo(); }
-                // Логика пробела для плейбэка...
+                if (e.key === 'ArrowRight') nextVideo();
+                else if (e.key === 'ArrowLeft') prevVideo();
+                else if (e.key === ' ') {
+                    e.preventDefault();
+                    const activeCard = carousel.children[currentIndex];
+                    if (activeCard) {
+                        const videoElement = activeCard.querySelector('.video-player');
+                        const playOverlay = activeCard.querySelector('.play-overlay');
+                        if (videoElement && playOverlay) {
+                            toggleVideoPlayback(videoElement, playOverlay);
+                        }
+                    }
+                }
             });
-            
-            // Swipe logic...
+
+            // Swipe для мобильных - только для карусели
             let startX = 0;
-            carouselElement.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
-            carouselElement.addEventListener('touchend', (e) => {
-                const diff = startX - e.changedTouches[0].clientX;
-                if (diff > 50) nextVideo();
-                else if (diff < -50) prevVideo();
+            carousel.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
             }, { passive: true });
             
-            window.addEventListener('resize', updateCarousel);
-            
-            loadVideosData();
+            carousel.addEventListener('touchend', (e) => {
+                const endX = e.changedTouches[0].clientX;
+                if (startX - endX > 50) nextVideo();
+                else if (endX - startX > 50) prevVideo();
+            }, { passive: true });
         });
 
-        // ====================================
-        // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (анализ ссылок)
-        // ====================================
-        function getYouTubeId(videoUrl) {
-            const match = videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-            return match ? match[1] : null;
-        }
+        // ФУНКЦИЯ ДЛЯ ОПРЕДЕЛЕНИЯ ТИПА ВИДЕО
         function getVideoType(videoUrl) {
             if (!videoUrl) return 'unsupported';
-            if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) return 'youtube';
-            if (videoUrl.includes('vimeo.com')) return 'vimeo'; 
-            if (videoUrl.includes('vk.com') || videoUrl.includes('vk.ru') || videoUrl.includes('video_ext.php')) return 'vk';
-            if (videoUrl.endsWith('.mp4') || videoUrl.includes('mp4')) return 'direct';
-            return 'unsupported';
-        }
-        function createVKEmbed(videoUrl) {
-            let ownerId = null;
-            let videoId = null;
-            const clipMatch = videoUrl.match(/clip(-?\d+)_(\d+)/);
-            if (clipMatch) { ownerId = clipMatch[1]; videoId = clipMatch[2]; }
-            const videoMatch = videoUrl.match(/video(-?\d+)_(\d+)/);
-            if (videoMatch) { ownerId = videoMatch[1]; videoId = videoMatch[2]; }
-            if (ownerId && videoId) {
-                const finalOwnerId = ownerId.startsWith('-') ? ownerId : `-${ownerId}`;
-                // Используем минимальный набор параметров для лучшей совместимости
-                return `https://vk.com/video_ext.php?oid=${finalOwnerId}&id=${videoId}`;
+            
+            if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
+                return 'youtube';
+            } else if (videoUrl.includes('vimeo.com')) {
+                return 'vimeo';
+            } else if (videoUrl.includes('vk.com') || videoUrl.includes('vk.ru')) {
+                return 'vk';
+            } else if (videoUrl.endsWith('.mp4') || videoUrl.includes('mp4')) {
+                return 'direct';
+            } else {
+                return 'iframe'; // По умолчанию - пытаемся использовать iframe
             }
-            return null;
+        }
+
+        // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ IFrame ВСТАВКИ VK
+        function createVKEmbed(videoUrl) {
+            // Извлекаем ID видео из ссылки ВК. Форматы могут быть разными, но общий для встраивания:
+            // https://vk.com/video_ext.php?oid=-...&id=...&hash=...
+            
+            // Попробуем извлечь ID из ссылки типа https://vk.com/video-XXX_YYY
+            const matchVideoId = videoUrl.match(/video(-?\d+)_(\d+)/);
+            if (matchVideoId) {
+                const ownerId = matchVideoId[1];
+                const videoId = matchVideoId[2];
+                // Хэш нужен для публичного доступа, но без него может не работать. 
+                // Даем базовую ссылку, надеясь, что ВК сам подставит нужное.
+                return `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}&hash=&hd=1`;
+            }
+
+            // Попытка извлечь из ссылки на клип https://vk.com/clip-XXX_YYY
+            const matchClipId = videoUrl.match(/clip(-?\d+)_(\d+)/);
+            if (matchClipId) {
+                const ownerId = matchClipId[1];
+                const videoId = matchClipId[2];
+                return `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}&hash=&hd=1`;
+            }
+
+            // Если не нашли ID, можно попробовать использовать саму ссылку, но это редко работает.
+            return videoUrl; 
         }
         
-        // ====================================
-        // ФУНКЦИИ ЗАГРУЗКИ И СОЗДАНИЯ
-        // ====================================
+        // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ IFrame ВСТАВКИ VIMEO
+        function createVimeoEmbed(videoUrl) {
+            const match = videoUrl.match(/(?:vimeo\.com\/(?:video\/)?)([^"&?\/\s]+)/);
+            if (match) {
+                const videoId = match[1];
+                return `https://player.vimeo.com/video/${videoId}?autoplay=1&loop=0&autopause=1`;
+            }
+            return videoUrl;
+        }
 
+        // ЗАГРУЗКА ДАННЫХ ИЗ JSON ФАЙЛА
         async function loadVideosData() {
             const loading = document.getElementById('loading');
+            const carousel = document.getElementById('carousel');
+            
             try {
                 loading.innerHTML = '<p>🔄 Загрузка данных...</p>';
-                const response = await fetch('data.json');
-                if (!response.ok) throw new Error('Ошибка загрузки данных. Проверьте путь к data.json.');
                 
-                videos = (await response.json()).videos;
+                // Загружаем данные из JSON файла
+                const response = await fetch('data.json');
+                
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки данных');
+                }
+                
+                const data = await response.json();
+                videos = data.videos;
+                
+                // Скрываем индикатор загрузки
                 loading.style.display = 'none';
                 
+                // Создаем видео карточки
                 createVideoCards();
-                // Устанавливаем начальный индекс в середине массива клонов для бесконечного цикла
-                currentIndex = 0; 
-                updateCarousel(false);
+                updateCarousel();
                 updateArticle();
                 
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
-                loading.innerHTML = `<div class="error-message"><p>❌ Ошибка загрузки данных</p><p style="font-size: 1rem; margin-top: 10px;">${error.message}</p></div>`;
+                loading.innerHTML = `
+                    <div class="error-message">
+                        <p>❌ Ошибка загрузки данных</p>
+                        <p style="font-size: 1rem; margin-top: 10px;">Проверьте наличие файла data.json</p>
+                    </div>
+                `;
             }
         }
 
+        // ФУНКЦИИ ДЛЯ ОСНОВНОГО САЙТА
         function createVideoCards() {
-            carouselElement.innerHTML = '';
+            const carousel = document.getElementById('carousel');
+            carousel.innerHTML = '';
             const fragment = document.createDocumentFragment();
-            ytPlayers = {}; 
             
-            // Клонируем массив для циклического листания (N видео + N клонов)
-            const allVideos = [...videos, ...videos];
-
-            allVideos.forEach((video, index) => {
-                const isReal = index < videos.length;
-                const realIndex = index % videos.length;
-
+            videos.forEach((video, index) => {
                 const videoCard = document.createElement('div');
                 videoCard.className = 'video-card';
-                videoCard.dataset.index = realIndex; 
-                videoCard.dataset.isclone = !isReal;
-                videoCard.dataset.loaded = 'false'; // Флаг ленивой загрузки
-
+                videoCard.dataset.index = index;
+                
                 const videoType = getVideoType(video.videoUrl);
+                let videoHTML = '';
                 let sourceName = '';
+                let iframeSrc = '';
                 
                 switch(videoType) {
-                    case 'direct': sourceName = 'MP4'; break;
-                    case 'youtube': sourceName = 'YouTube'; break;
-                    case 'vk': sourceName = 'VK'; break;
-                    case 'vimeo': sourceName = 'Vimeo'; break;
-                    default: sourceName = 'Не поддерживается';
+                    case 'direct':
+                        videoHTML = `
+                            <video class="video-player" preload="metadata">
+                                <source src="${video.videoUrl}" type="video/mp4">
+                                Ваш браузер не поддерживает видео тег.
+                            </video>
+                            <div class="play-overlay">
+                                <div class="play-icon">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="replay-icon" title="Перезапустить видео">
+                                <i class="fas fa-redo"></i>
+                            </div>
+                        `;
+                        sourceName = 'MP4';
+                        break;
+                        
+                    case 'youtube':
+                        const youtubeId = video.videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
+                        if (youtubeId) {
+                            iframeSrc = `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&controls=1&modestbranding=1&rel=0`;
+                            sourceName = 'YouTube';
+                        }
+                        break;
+
+                    case 'vimeo':
+                        iframeSrc = createVimeoEmbed(video.videoUrl);
+                        sourceName = 'Vimeo';
+                        break;
+                        
+                    case 'vk':
+                        iframeSrc = createVKEmbed(video.videoUrl);
+                        sourceName = 'VK';
+                        break;
+                    
+                    case 'iframe': // Общая попытка встраивания через iframe
+                        iframeSrc = video.videoUrl;
+                        sourceName = 'iFrame Embed';
+                        break;
+                        
+                    default:
+                        // Неподдерживаемые видео, если видеоUrl был пуст или не удалось определить тип
+                        videoHTML = `
+                            <div class="video-unsupported">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Видео недоступно</p>
+                                <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Ссылка: ${video.videoUrl || 'Не указана'}</p>
+                                ${video.videoUrl ? `<button class="external-link-btn" onclick="window.open('${video.videoUrl}', '_blank')">
+                                    <i class="fas fa-external-link-alt"></i> Открыть в браузере
+                                </button>` : ''}
+                            </div>
+                        `;
+                        sourceName = 'Не поддерживается';
+                }
+
+                if (iframeSrc) {
+                    videoHTML = `
+                        <iframe class="video-iframe" 
+                            src="${iframeSrc}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                        <div class="play-overlay">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Если это VK и не iframe (для старого решения с кнопкой)
+                if (videoType === 'vk' && !iframeSrc) {
+                    videoHTML = `
+                        <div class="video-unsupported" style="background: linear-gradient(135deg, var(--dark), var(--darker));">
+                            <i class="fab fa-vk" style="font-size: 4rem; color: #4A76A8; margin-bottom: 20px;"></i>
+                            <h3 style="margin-bottom: 10px; color: var(--primary-light);">Видео из ВКонтакте</h3>
+                            <p style="margin-bottom: 20px; opacity: 0.8; max-width: 250px;">Это видео доступно для просмотра в ВКонтакте</p>
+                            <button class="external-link-btn" onclick="window.open('${video.videoUrl}', '_blank')">
+                                <i class="fas fa-external-link-alt"></i> Открыть в ВК
+                            </button>
+                        </div>
+                    `;
                 }
                 
-                // Создаем контейнер с заглушкой (Placeholder)
                 videoCard.innerHTML = `
                     <div class="video-player-container">
-                        <div class="video-player-placeholder">
-                            <i class="fas fa-video"></i>
-                            <span>${sourceName}</span> (Нажмите для загрузки и просмотра)
-                        </div>
-                        <div class="play-overlay">
-                            <div class="play-icon"><i class="fas fa-play"></i></div>
-                        </div>
-                        ${sourceName ? `<div class="video-source-badge">${sourceName}</div>` : ''}
+                        ${videoHTML}
+                        ${sourceName && sourceName !== 'Не поддерживается' ? `<div class="video-source-badge">${sourceName}</div>` : ''}
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${video.title}</div>
                     </div>
                 `;
                 
-                // Обработчик клика для активации загрузки и воспроизведения
-                videoCard.addEventListener('click', (e) => {
-                    if (videoCard.classList.contains('center')) {
-                        const realIndexCheck = parseInt(videoCard.dataset.index);
-                        
-                        // 1. Если не загружено, загружаем
-                        if (videoCard.dataset.loaded === 'false') {
-                            loadActiveVideoContent(videoCard, realIndexCheck, isReal);
+                // ОБРАБОТЧИКИ ДЛЯ ПРЯМЫХ MP4 ВИДЕО
+                if (videoType === 'direct') {
+                    const videoElement = videoCard.querySelector('.video-player');
+                    const playOverlay = videoCard.querySelector('.play-overlay');
+                    const replayIcon = videoCard.querySelector('.replay-icon');
+                    
+                    videoCard.addEventListener('click', (e) => {
+                        if (!e.target.closest('.replay-icon') && !e.target.closest('.external-link-btn')) {
+                            toggleVideoPlayback(videoElement, playOverlay);
                         }
-                        
-                        // 2. Воспроизведение (работает только после загрузки)
-                        if (videoCard.dataset.loaded === 'true') {
-                            if (videoType === 'direct') {
-                                toggleVideoPlayback(videoCard.querySelector('.video-player'), videoCard.querySelector('.play-overlay'));
-                            } else if (videoType === 'youtube') {
-                                const playerId = `${realIndexCheck}-${isReal ? 'real' : 'clone'}`;
-                                if (ytPlayers[playerId]) toggleYouTubePlayback(ytPlayers[playerId], videoCard.querySelector('.play-overlay'));
-                            } else {
-                                // Iframe (VK/Vimeo)
-                                videoCard.querySelector('.play-overlay').classList.toggle('hidden');
-                            }
-                            // Остановка всех остальных
-                            stopAllOtherVideos(realIndexCheck, videoType);
-                        }
-                    } else {
-                        // Если кликнули на не-центрированную карточку, переключаемся на нее
-                        const targetIndex = index;
-                        goToVideo(targetIndex); 
+                    });
+                    
+                    videoElement.addEventListener('ended', () => {
+                        playOverlay.classList.remove('hidden');
+                        currentlyPlayingVideo = null;
+                    });
+                    
+                    if (replayIcon) {
+                        replayIcon.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            restartVideo(videoElement, playOverlay);
+                        });
                     }
-                });
+                }
+                // ДЛЯ IFRAME (YouTube, VK, Vimeo и др.) - УПРАВЛЕНИЕ ЧЕРЕЗ КЛИК НА OVERLAY
+                else if (iframeSrc) {
+                    const playOverlay = videoCard.querySelector('.play-overlay');
+                    const iframe = videoCard.querySelector('.video-iframe');
+                    
+                    if (playOverlay && iframe) {
+                        playOverlay.addEventListener('click', (e) => {
+                            if (!e.target.closest('.video-source-badge') && !e.target.closest('.external-link-btn')) {
+                                playOverlay.classList.add('hidden');
+                                // Дополнительная логика для автозапуска, если платформа позволяет
+                                // (Для YouTube iframe src уже содержит enablejsapi=1)
+                                if (videoType === 'youtube' && iframe.contentWindow) {
+                                     // Отправка postMessage для запуска YouTube видео через API
+                                     iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                                }
+                                
+                                // Останавливаем предыдущее MP4 видео
+                                if (currentlyPlayingVideo && currentlyPlayingVideo.tagName === 'VIDEO') {
+                                    currentlyPlayingVideo.pause();
+                                    currentlyPlayingVideo.currentTime = 0;
+                                    const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
+                                    if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
+                                    currentlyPlayingVideo = null;
+                                }
+                                
+                                // Снимаем активный статус с других iframe overlay
+                                document.querySelectorAll('.play-overlay:not(.hidden)').forEach(overlay => {
+                                    if (overlay !== playOverlay) {
+                                        overlay.classList.remove('hidden');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
                 
                 fragment.appendChild(videoCard);
             });
             
-            carouselElement.appendChild(fragment);
+            carousel.appendChild(fragment);
             createProgressDots();
         }
         
-        // --- ФУНКЦИЯ ЛЕНИВОЙ ЗАГРУЗКИ ---
-        function loadActiveVideoContent(cardElement, realIndex, isReal) {
-            const videoData = videos[realIndex];
-            const placeholder = cardElement.querySelector('.video-player-placeholder');
-            const videoType = getVideoType(videoData.videoUrl);
-
-            let contentHTML = '';
-            
-            switch(videoType) {
-                case 'direct':
-                    contentHTML = `<video class="video-player" preload="metadata" playsinline muted><source src="${videoData.videoUrl}" type="video/mp4">Ваш браузер не поддерживает видео тег.</video>`;
-                    break;
-                case 'youtube':
-                    const youtubeId = getYouTubeId(videoData.videoUrl);
-                    const playerId = `${realIndex}-${isReal ? 'real' : 'clone'}`;
-                    // Важно: вставляем div, а YT API сам превратит его в iframe
-                    contentHTML = `<div id="youtube-player-${playerId}" class="video-iframe"></div>`;
-                    
-                    if (typeof YT !== 'undefined' && YT.Player) {
-                        // Инициализируем плеер
-                        initYouTubePlayer(playerId, youtubeId, realIndex); 
-                    }
-                    break;
-                case 'vk':
-                case 'vimeo':
-                    const url = videoType === 'vk' ? createVKEmbed(videoData.videoUrl) : `https://player.vimeo.com/video/${videoData.videoUrl.match(/vimeo\.com\/(\d+)/)?.[1]}?title=0&byline=0&portrait=0&autoplay=0`;
-                    contentHTML = `<iframe class="video-iframe" src="${url}" frameborder="0" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"></iframe>`;
-                    break;
-                default:
-                    return; 
-            }
-
-            placeholder.insertAdjacentHTML('beforebegin', contentHTML);
-            placeholder.remove();
-            cardElement.dataset.loaded = 'true';
-        }
-
-
-        // ====================================
-        // ФУНКЦИИ КАРУСЕЛИ И ЦИКЛИЧЕСКОГО ЛИСТАНИЯ
-        // ====================================
-
-        function updateCarousel(isAnimated = true) {
-            if (videos.length === 0 || carouselElement.children.length === 0) return;
-            
-            const cards = Array.from(carouselElement.children);
-            const activeCard = cards[currentIndex];
-            
-            if (!activeCard) return;
-
-            // 1. Сброс классов и установка класса для центральной карточки
-            cards.forEach(card => card.classList.remove('center'));
-            activeCard.classList.add('center');
-            
-            // ЛЕНИВАЯ ЗАГРУЗКА: Загружаем контент для активного видео
-            if (activeCard.dataset.loaded === 'false') {
-                 loadActiveVideoContent(activeCard, parseInt(activeCard.dataset.index), activeCard.dataset.isclone === 'true');
-            }
-
-            // 2. Расчет сдвига (логика центрирования)
-            const sectionWidth = carouselElement.parentElement.offsetWidth; 
-            const centerCardWidth = activeCard.offsetWidth; 
-            const margin = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-margin'));
-
-            let accumulatedWidth = 0;
-            for (let i = 0; i < currentIndex; i++) {
-                accumulatedWidth += (cards[i].offsetWidth + margin); 
-            }
-
-            const centeringAdjustment = (sectionWidth / 2) - (centerCardWidth / 2);
-            const finalTranslation = -accumulatedWidth + centeringAdjustment;
-
-            // 3. Применение трансформации
-            carouselElement.style.transition = isAnimated ? 'transform 0.6s ease' : 'none';
-            carouselElement.style.transform = `translateX(${finalTranslation}px)`;
-
-            // 4. Логика "прыжка" для циклической прокрутки
-            if (currentIndex >= videos.length || currentIndex < 0) {
-                
-                // Ждем окончания анимации (0.6s)
-                setTimeout(() => {
-                    carouselElement.style.transition = 'none';
-                    let jumpIndex;
-
-                    if (currentIndex >= videos.length) {
-                        // Перешли на первый клон (N), прыгаем на реальный первый (0)
-                        jumpIndex = currentIndex - videos.length;
-                    } else { 
-                        // Перешли на последний клон (0-1 = -1), прыгаем на реальный последний (N-1)
-                        jumpIndex = currentIndex + videos.length;
-                    }
-                    
-                    currentIndex = jumpIndex; 
-                    // Мгновенный пересчет позиции без анимации
-                    updateCarousel(false); 
-                }, 600);
-            }
-            
-            updateArticle();
-            updateProgressDots();
-            stopAllOtherVideos(currentIndex % videos.length, 'none'); 
-        }
-
-        // ====================================
-        // ВОСПРОИЗВЕДЕНИЕ И ОСТАНОВКА
-        // ====================================
-        
-        function onYouTubeIframeAPIReady() {
-            // Фактическая инициализация теперь в loadActiveVideoContent
-        }
-
-        function initYouTubePlayer(playerId, videoId, realIndex) {
-            ytPlayers[playerId] = new YT.Player(`Youtubeer-${playerId}`, {
-                videoId: videoId,
-                playerVars: {
-                    'enablejsapi': 1,
-                    'controls': 1,
-                    'modestbranding': 1,
-                    'rel': 0,
-                    'showinfo': 0,
-                    'playsinline': 1 
-                },
-                events: {
-                    'onStateChange': onPlayerStateChange(realIndex) 
-                }
+        function createProgressDots() {
+            const progressDots = document.getElementById('progressDots');
+            progressDots.innerHTML = '';
+            videos.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
+                dot.addEventListener('click', () => goToVideo(index));
+                progressDots.appendChild(dot);
             });
-        }
-
-        function onPlayerStateChange(realIndex) {
-            return function(event) {
-                const playOverlay = document.querySelector(`.video-card[data-index="${realIndex}"].center .play-overlay`);
-
-                if (event.data === YT.PlayerState.PLAYING) {
-                    if (playOverlay) playOverlay.classList.add('hidden');
-                    stopAllOtherVideos(realIndex, 'youtube');
-                } else if (event.data === YT.PlayerState.ENDED || event.data === YT.PlayerState.PAUSED) {
-                    if (playOverlay) playOverlay.classList.remove('hidden');
-                }
-            }
-        }
-
-        function toggleYouTubePlayback(player, playOverlay) {
-            if (!player || !player.getPlayerState) return;
-            const playerState = player.getPlayerState();
-            
-            if (playerState === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                playOverlay.classList.remove('hidden');
-            } else {
-                player.playVideo();
-                playOverlay.classList.add('hidden');
-            }
         }
         
         function toggleVideoPlayback(videoElement, playOverlay) {
-            if (!videoElement) return;
-            stopAllOtherVideos(currentIndex % videos.length, 'direct');
+            if (currentlyPlayingVideo && currentlyPlayingVideo !== videoElement) {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo.currentTime = 0;
+                const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
+                if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
+            }
             
             if (videoElement.paused) {
                 videoElement.play().then(() => {
                     playOverlay.classList.add('hidden');
                     currentlyPlayingVideo = videoElement;
-                }).catch(error => { console.error('Ошибка воспроизведения MP4:', error); });
+                }).catch(error => {
+                    console.error('Ошибка воспроизведения:', error);
+                });
             } else {
                 videoElement.pause();
                 playOverlay.classList.remove('hidden');
@@ -695,110 +1056,115 @@
             }
         }
         
-        function stopAllOtherVideos(activeIndex, activeType) {
-            // 1. Остановка MP4 видео
-            document.querySelectorAll('.video-card').forEach(card => {
-                const video = card.querySelector('.video-player');
-                const overlay = card.querySelector('.play-overlay');
-                if (video && !video.paused && parseInt(card.dataset.index) !== activeIndex) {
-                    video.pause();
-                    video.currentTime = 0;
-                    if (overlay) overlay.classList.remove('hidden');
-                }
+        function restartVideo(videoElement, playOverlay) {
+            videoElement.currentTime = 0;
+            videoElement.play().then(() => {
+                playOverlay.classList.add('hidden');
+                currentlyPlayingVideo = videoElement;
+            }).catch(error => {
+                console.error('Ошибка воспроизведения:', error);
             });
+        }
+        
+        function updateCarousel() {
+            const carousel = document.getElementById('carousel');
+            const progressDots = document.getElementById('progressDots');
+            const cards = carousel.children;
+            const dots = progressDots.children;
+            const totalCards = cards.length;
             
-            // 2. Остановка YouTube плееров
-            for (const playerId in ytPlayers) {
-                const realIndex = parseInt(playerId.split('-')[0]);
-                if (realIndex !== activeIndex) {
-                     const player = ytPlayers[playerId];
-                     if (player && player.pauseVideo && player.getPlayerState && player.getPlayerState() === YT.PlayerState.PLAYING) {
-                        player.pauseVideo();
-                        const otherOverlay = document.querySelector(`.video-card[data-index="${realIndex}"] .play-overlay`);
-                        if (otherOverlay) otherOverlay.classList.remove('hidden');
-                     }
+            for (let i = 0; i < totalCards; i++) {
+                const card = cards[i];
+                const position = (i - currentIndex + totalCards) % totalCards;
+                
+                card.style.transform = '';
+                card.style.opacity = '1';
+                card.style.zIndex = '1';
+                card.style.pointerEvents = 'auto';
+                
+                if (position === 0) {
+                    card.style.transform = 'translateZ(0)';
+                    card.style.zIndex = '10';
+                } else if (position === 1) {
+                    card.style.transform = 'translateX(340px) translateZ(-120px) rotateY(-12deg)';
+                    card.style.opacity = '0.8';
+                    card.style.zIndex = '9';
+                } else if (position === totalCards - 1) {
+                    card.style.transform = 'translateX(-340px) translateZ(-120px) rotateY(12deg)';
+                    card.style.opacity = '0.8';
+                    card.style.zIndex = '9';
+                } else if (position === 2) {
+                    card.style.transform = 'translateX(680px) translateZ(-240px) rotateY(-24deg)';
+                    card.style.opacity = '0.4';
+                    card.style.zIndex = '8';
+                } else if (position === totalCards - 2) {
+                    card.style.transform = 'translateX(-680px) translateZ(-240px) rotateY(24deg)';
+                    card.style.opacity = '0.4';
+                    card.style.zIndex = '8';
+                } else {
+                    card.style.transform = 'translateZ(-360px)';
+                    card.style.opacity = '0';
+                    card.style.zIndex = '1';
+                    card.style.pointerEvents = 'none';
                 }
             }
             
-            // 3. Для iframe (VK/Vimeo) — просто показываем оверлей, если неактивен.
-            if (activeType !== 'youtube' && activeType !== 'direct') {
-                document.querySelectorAll('.video-card').forEach(card => {
-                    if (parseInt(card.dataset.index) !== activeIndex) {
-                        const overlay = card.querySelector('.play-overlay');
-                        if (overlay) overlay.classList.remove('hidden');
-                    }
-                });
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = `dot ${i === currentIndex ? 'active' : ''}`;
             }
         }
-
-        // ====================================
-        // НАВИГАЦИЯ И УПРАВЛЕНИЕ КОНТЕНТОМ
-        // ====================================
         
         function updateArticle() {
             const articleTitle = document.getElementById('articleTitle');
             const articleContent = document.getElementById('articleContent');
             
-            // Получаем реальный индекс, очищенный от клонирования
-            const realIndex = currentIndex % videos.length;
-            
-            if (videos.length > 0) {
-                const currentVideo = videos[realIndex];
+            if (videos.length > 0 && currentIndex < videos.length) {
+                const currentVideo = videos[currentIndex];
                 articleTitle.textContent = currentVideo.article.title;
-                
-                // Очистка статьи от старых HTML-тэгов выделения
-                let cleanedContent = currentVideo.article.content
-                    .replace(/<div class="[^"]*article-text[^"]*">/g, '')
-                    .replace(/<\/div>/g, '') 
-                    .replace(/<span class="[^"]*">/g, '')
-                    .replace(/<\/span>/g, '')
-                    .replace(/<div class="important-note">.*?<\/div>/gs, '')
-                    .replace(/<div class="success-note">.*?<\/div>/gs, '')
-                    .replace(/<div class="article-quote">.*?<\/div>/gs, '')
-                    .replace(/<ul class="article-list">/g, '<ul>')
-                    .replace(/<span class="badge[^>]*>/g, '')
-                    .replace(/<\/span>/g, '');
-
-                articleContent.innerHTML = cleanedContent;
-                
-                const articleSection = document.getElementById('articleContent').parentElement;
-                articleSection.scrollTop = 0; 
+                articleContent.innerHTML = currentVideo.article.content;
             }
         }
         
-        function updateProgressDots() {
-            const progressDots = document.getElementById('progressDots');
-            progressDots.innerHTML = '';
-            const realCurrentIndex = currentIndex % videos.length; 
+        function goToVideo(index) {
+            // Останавливаем текущее MP4 видео
+            if (currentlyPlayingVideo && currentlyPlayingVideo.tagName === 'VIDEO') {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo.currentTime = 0;
+                const playOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
+                if (playOverlay) playOverlay.classList.remove('hidden');
+                currentlyPlayingVideo = null;
+            }
             
-            videos.forEach((_, index) => {
-                const dot = document.createElement('div');
-                dot.className = `dot ${index === realCurrentIndex ? 'active' : ''}`;
-                // При клике на точку, мы вычисляем нужный индекс в массиве [N+N]
-                dot.addEventListener('click', () => {
-                    const targetIndex = index + (currentIndex >= videos.length ? videos.length : 0);
-                    goToVideo(targetIndex);
-                });
-                progressDots.appendChild(dot);
-            });
+            // Скрываем overlay для iframe видео на предыдущей карточке, если он был скрыт (т.е. видео играло)
+            const prevCard = document.querySelector(`.video-card[data-index="${currentIndex}"]`);
+            if (prevCard) {
+                const prevPlayOverlay = prevCard.querySelector('.play-overlay');
+                const prevIframe = prevCard.querySelector('.video-iframe');
+
+                // Для YouTube: отправляем команду на остановку
+                if (prevIframe && prevPlayOverlay && !prevPlayOverlay.classList.contains('hidden')) {
+                     const prevVideoType = getVideoType(videos[currentIndex].videoUrl);
+                     if (prevVideoType === 'youtube' && prevIframe.contentWindow) {
+                         prevIframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+                     }
+                }
+                
+                if (prevPlayOverlay) {
+                    prevPlayOverlay.classList.remove('hidden'); // Показываем оверлей обратно
+                }
+            }
+
+            currentIndex = index;
+            updateCarousel();
+            updateArticle();
         }
         
-        function goToVideo(newIndex) {
-            stopAllOtherVideos(currentIndex % videos.length, 'none');
-            currentIndex = newIndex;
-            updateCarousel(true);
-        }
-
         function nextVideo() {
-            stopAllOtherVideos(currentIndex % videos.length, 'none');
-            currentIndex = (currentIndex + 1);
-            updateCarousel(true);
+            goToVideo((currentIndex + 1) % videos.length);
         }
-
+        
         function prevVideo() {
-            stopAllOtherVideos(currentIndex % videos.length, 'none');
-            currentIndex = (currentIndex - 1);
-            updateCarousel(true);
+            goToVideo((currentIndex - 1 + videos.length) % videos.length);
         }
     </script>
 </body>
