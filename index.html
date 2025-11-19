@@ -728,8 +728,11 @@
             
             // Настройки безопасности
             const ADMIN_PASSWORD = "admin123"; // Пароль для доступа к админ-панели
-            const ADMIN_KEY_SEQUENCE = ["Shift", "A"]; // Комбинация клавиш для открытия админки
-            let keySequence = [];
+            const SECRET_CODE = ["0", "4", "5", "1"]; // Секретный код 0451
+            
+            let f12Pressed = false;
+            let codeSequence = [];
+            let codeTimeout = null;
             
             // АВТОМАТИЧЕСКАЯ ЗАГРУЗКА ДАННЫХ ИЗ АДМИН-ПАНЕЛИ
             function loadVideosData() {
@@ -973,6 +976,53 @@
                 passwordInput.focus();
             }
             
+            function resetCodeSequence() {
+                codeSequence = [];
+                f12Pressed = false;
+                if (codeTimeout) {
+                    clearTimeout(codeTimeout);
+                    codeTimeout = null;
+                }
+            }
+            
+            function checkCodeSequence(key) {
+                // Если нажат F12, активируем режим ввода кода
+                if (key === 'F12') {
+                    e.preventDefault();
+                    f12Pressed = true;
+                    codeSequence = [];
+                    // Таймаут 5 секунд для ввода кода
+                    codeTimeout = setTimeout(resetCodeSequence, 5000);
+                    return;
+                }
+                
+                // Если F12 не нажат, игнорируем цифры
+                if (!f12Pressed) return;
+                
+                // Проверяем только цифры
+                if (key >= '0' && key <= '9') {
+                    codeSequence.push(key);
+                    
+                    // Проверяем совпадение с секретным кодом
+                    if (codeSequence.length === SECRET_CODE.length) {
+                        if (codeSequence.join('') === SECRET_CODE.join('')) {
+                            // Код верный - показываем модальное окно с паролем
+                            showPasswordModal();
+                            resetCodeSequence();
+                        } else {
+                            // Неверный код - сбрасываем
+                            resetCodeSequence();
+                        }
+                    }
+                    
+                    // Сбрасываем таймер при каждом нажатии цифры
+                    if (codeTimeout) {
+                        clearTimeout(codeTimeout);
+                        codeTimeout = setTimeout(resetCodeSequence, 5000);
+                    }
+                }
+            }
+            
             // Обработчики событий для карусели
             nextBtn.addEventListener('click', nextVideo);
             prevBtn.addEventListener('click', prevVideo);
@@ -1002,15 +1052,7 @@
                 }
                 
                 // Проверка комбинации клавиш для админ-панели
-                keySequence.push(e.key);
-                if (keySequence.length > ADMIN_KEY_SEQUENCE.length) {
-                    keySequence.shift();
-                }
-                
-                if (keySequence.join(',') === ADMIN_KEY_SEQUENCE.join(',')) {
-                    showPasswordModal();
-                    keySequence = [];
-                }
+                checkCodeSequence(e.key);
             });
             
             // Обработчики событий для модального окна пароля
