@@ -1,6 +1,3 @@
-Вот полный исправленный код HTML-файла с обновленной функцией `createVKEmbed`, которая должна корректно обрабатывать ссылки на видео из ВКонтакте и встраивать их в `iframe`.
-
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -644,7 +641,7 @@
                 return 'unsupported';
             }
         }
-        // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ IFrame ВСТАВКИ VK (ИСПРАВЛЕННАЯ)
+        // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ IFrame ВСТАВКИ VK (ИСПРАВЛЕНАЯ)
         function createVKEmbed(videoUrl) {
             if (!videoUrl) return null;
 
@@ -652,36 +649,44 @@
             let videoId = null;
             let ownerId = null;
 
-            // Формат 1: https://vk.com/video-123456_456789
+            // Формат 1: https://vk.com/video-123456_456789 (группа) или https://vk.com/video123456_456789 (пользователь)
             const match1 = videoUrl.match(/video(-?\d+_\d+)/);
             if (match1) {
-                const parts = match1[1].split('_');
-                ownerId = parts[0];
-                videoId = parts[1];
+                const fullId = match1[1];
+                const parts = fullId.split('_');
+                if (parts.length === 2) {
+                    ownerId = parts[0]; // Может быть "-123456" или "123456"
+                    videoId = parts[1];
+                }
             }
 
             // Формат 2: https://vk.com/clip-123456_456789
+            // Клипы всегда принадлежат группе. Владелец (ownerId) - это ID группы (положительный).
+            // В URL он представлен как clip-123456_456789, где 123456 - ID группы.
+            // Для iframe нужно oid=-123456 (отрицательный ID).
             const match2 = videoUrl.match(/clip-(\d+)_(\d+)/);
             if (match2) {
-                ownerId = match2[1];
+                ownerId = '-' + match2[1]; // Для iframe нужно отрицательное значение
                 videoId = match2[2];
             }
 
-            // Формат 3: https://vk.com/video?z=video-oid-123456_456789%2Fpl_-123456_456789
-            // Этот формат может содержать video_oid, но не всегда. Основной match1 уже должен сработать.
-            // Проверим, если ownerId и videoId не найдены, можно попробовать извлечь из параметра z
-            if (!ownerId || !videoId) {
+            // Формат 3: https://vk.com/video?z=video-123456_456789%2Fpl_-123456_456789
+            // Этот формат уже должен быть обработан match1, но на всякий случай:
+            if (!ownerId && !videoId) {
                 const match3 = videoUrl.match(/[?&]z=video(-?\d+_\d+)/);
                 if (match3) {
-                    const parts = match3[1].split('_');
-                    ownerId = parts[0];
-                    videoId = parts[1];
+                    const fullId = match3[1];
+                    const parts = fullId.split('_');
+                    if (parts.length === 2) {
+                        ownerId = parts[0];
+                        videoId = parts[1];
+                    }
                 }
             }
 
             // Если нашли ID, создаем URL для iframe
             if (ownerId !== null && videoId !== null) {
-                // Для публичных видео (положительный ownerId) и для групп (отрицательный ownerId)
+                // Используем ownerId как есть (с минусом или без), он определяет тип владельца
                 return `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}&hash=`;
             }
 
@@ -706,7 +711,7 @@
                     videos = [
                         {
                             title: "Демо видео из VK",
-                            videoUrl: "https://vk.com/video-123456_456789",
+                            videoUrl: "https://vk.com/video-123456_456789", // Пример: видео группы
                             article: {
                                 title: "Демо статья для VK видео",
                                 content: `
@@ -741,7 +746,7 @@
                 videos = [
                     {
                         title: "Демо видео из VK",
-                        videoUrl: "https://vk.com/video-123456_456789",
+                        videoUrl: "https://vk.com/video-123456_456789", // Пример: видео группы
                         article: {
                             title: "Демо статья для VK видео",
                             content: `
@@ -1024,4 +1029,3 @@
     </script>
 </body>
 </html>
-```
