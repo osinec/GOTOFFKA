@@ -1,28 +1,907 @@
-{
-  "videos": [
-    {
-      "title": "Искусство минимализма",
-      "videoUrl": "minimalism.mp4",
-      "article": {
-        "title": "Искусство минимализма в современном дизайне",
-        "content": "<div class=\"article-text\"><p>Минимализм — это не просто стиль, это философия, которая находит отражение в дизайне, архитектуре и образе жизни. <span class=\"highlight-primary\">Простота и функциональность</span> становятся ключевыми принципами современного творчества.</p><div class=\"article-image\"><img src=\"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80\" alt=\"Минималистичный интерьер\"></div><h3 class=\"article-subtitle\">Основные принципы минимализма</h3><ul class=\"article-list\"><li><span class=\"text-primary\">Простота форм</span> — отсутствие лишних деталей и декора</li><li><span class=\"text-accent\">Функциональность</span> — каждая деталь имеет своё назначение</li><li><span class=\"text-success\">Чистота пространства</span> — свобода от ненужных предметов</li><li><span class=\"text-warning\">Качественные материалы</span> — акцент на текстуры и фактуры</li></ul><div class=\"article-quote\">\"Меньше — значит больше. Простота — это высшая степень утонченности.\"</div><div class=\"success-note\"><p><strong>Совет:</strong> Начните с малого — уберите лишние предметы с рабочего стола и обратите внимание, как это повлияет на вашу продуктивность.</p></div></div>"
-      }
-    },
-    {
-      "title": "Цифровая графика",
-      "videoUrl": "digital-art.mp4",
-      "article": {
-        "title": "Эволюция цифрового искусства: от пикселей к нейросетям",
-        "content": "<div class=\"article-text\"><p>Цифровое искусство прошло впечатляющий путь от простых <span class=\"highlight-accent\">8-битных изображений</span> до сложнейших произведений, созданных искусственным интеллектом.</p><h3 class=\"article-subtitle\">Ключевые этапы развития</h3><p>История цифрового искусства насчитывает несколько десятилетий, каждый из которых принес свои уникальные технологии и стили:</p><ul class=\"article-list\"><li><span class=\"badge badge-primary\">1980-е</span> — появление первых графических редакторов</li><li><span class=\"badge badge-accent\">1990-е</span> — развитие 3D-графики и анимации</li><li><span class=\"badge badge-success\">2000-е</span> — расцвет цифровой живописи</li><li><span class=\"badge badge-warning\">2010-е</span> — интерактивное и генеративное искусство</li><li><span class=\"badge badge-error\">2020-е</span> — искусственный интеллект в творчестве</li></ul><div class=\"article-image\"><img src=\"https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80\" alt=\"Цифровое искусство\"></div><div class=\"important-note\"><p><strong>Интересный факт:</strong> Первое цифровое искусство было создано в 1960-х годах, когда компьютеры занимали целые комнаты, а для создания простого изображения требовались дни программирования.</p></div><h3 class=\"article-subtitle\">Будущее цифрового искусства</h3><p>С развитием технологий <span class=\"highlight-warning\">VR и AR</span> искусство становится все более иммерсивным, позволяя зрителю буквально погружаться в произведение.</p></div>"
-      }
-    },
-    {
-      "title": "Урбанистика будущего",
-      "videoUrl": "future-cities.mp4",
-      "article": {
-        "title": "Города будущего: между технологиями и экологией",
-        "content": "<div class=\"article-text\"><p>Современные мегаполисы стоят на пороге революционных изменений. <span class=\"highlight-success\">Умные города</span> будущего будут сочетать передовые технологии с экологичными решениями.</p><div class=\"article-image\"><img src=\"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80\" alt=\"Город будущего\"></div><h3 class=\"article-subtitle\">Ключевые тенденции</h3><p>Архитекторы и урбанисты по всему миру работают над созданием городов, которые будут:</p><ul class=\"article-list\"><li><span class=\"text-primary\">Экологичными</span> — с зелеными зонами и возобновляемой энергией</li><li><span class=\"text-accent\">Умными</span> — с автоматизированными системами управления</li><li><span class=\"text-success\">Доступными</span> — с развитой инфраструктурой для всех жителей</li><li><span class=\"text-warning\">Устойчивыми</span> — способными противостоять климатическим изменениям</li></ul><div class=\"info-note\"><p><strong>Пример:</strong> Сингапур уже сегодня внедряет технологии \"умного города\", включая автоматизированный транспорт и энергоэффективные здания.</p></div><div class=\"article-quote\">\"Город будущего — это не просто скопление технологий, это гармоничная среда, где люди хотят жить, работать и творить.\"</div><h3 class=\"article-subtitle\">Вызовы и решения</h3><p>Создание городов будущего требует решения сложных задач, включая <span class=\"highlight-error\">перенаселение</span>, транспортные проблемы и экологические вызовы. Однако современные технологии предлагают инновационные решения для каждой из этих проблем.</p></div>"
-      }
-    }
-  ]
-}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>VibeShorts | Галерея со статьями</title>
+
+    <!-- Шрифты: Inter, Poppins, Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-light: #A78BFA;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --darker: #E9EEF8;
+            --text-main: #0F1724;
+            --glass: rgba(255,255,255,0.25);
+            --glass-border: rgba(255,255,255,0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background: linear-gradient(180deg, var(--darker), #ffffff);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        header {
+            text-align: center;
+            padding: 28px 20px 8px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #0b1220, var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+        }
+
+        .subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            color: rgba(15,23,36,0.75);
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .news-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .news-frame {
+            background: linear-gradient(135deg, #0D9488, #10B981);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 16px 40px rgba(16, 185, 129, 0.35);
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            color: white;
+            min-height: auto;
+            transition: all 0.3s ease-out;
+        }
+
+        .news-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: glowPulse 4s infinite alternate;
+            pointer-events: none;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .news-content {
+            position: relative;
+            z-index: 2;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .news-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
+        }
+
+        .news-content p {
+            margin-bottom: 12px;
+            opacity: 0.95;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .news-date {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            font-style: italic;
+            margin-bottom: 16px;
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+        }
+
+        /* Кнопка под видео */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0 40px;
+        }
+
+        .news-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #0D9488, #10B981, #0D9488);
+            background-size: 300% 300%;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            letter-spacing: 0.5px;
+            font-size: 1.05rem;
+            position: relative;
+            overflow: hidden;
+            animation: shimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .news-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        }
+
+        .news-button:active {
+            transform: translateY(0);
+        }
+
+        @keyframes glowPulse {
+            from { transform: translate(-20%, -20%) rotate(2deg); }
+            to { transform: translate(20%, 20%) rotate(-2deg); }
+        }
+
+        .gallery-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            perspective: 1400px;
+            padding: 20px 0 40px;
+            min-height: 600px;
+            flex-direction: column;
+        }
+
+        .carousel {
+            position: relative;
+            width: 320px;
+            height: 568px;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 30px;
+        }
+
+        .video-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(10, 20, 30, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border: 1px solid rgba(10,20,30,0.05);
+            cursor: pointer;
+            top: 0;
+            left: 0;
+        }
+
+        .video-player-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.28);
+            transition: opacity 0.2s ease;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .play-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .play-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            transition: transform 0.2s ease;
+        }
+
+        .play-overlay:hover .play-icon {
+            transform: scale(1.08);
+            background: rgba(255,255,255,0.18);
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.05);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            border: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(139,92,246,0.12);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
+
+        .nav-btn i { font-size: 1.4rem; color: var(--text-main); }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            z-index: 10;
+            margin-top: 18px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(10,20,30,0.06);
+            transition: all 0.18s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.25);
+        }
+
+        .dot:hover { transform: scale(1.1); }
+
+        /* GLASSMORPHISM FOR ARTICLE SECTION */
+        .article-section {
+            flex: 1;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 40px;
+
+            background: var(--glass);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+
+            position: relative;
+            z-index: 5;
+            box-shadow: 0 12px 30px rgba(10,20,30,0.06);
+        }
+
+        .article-header { text-align: center; margin-bottom: 30px; }
+
+        .article-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 8px;
+            line-height: 1.12;
+        }
+
+        .article-content {
+            max-width: 920px;
+            margin: 0 auto;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.75;
+            color: var(--text-main);
+        }
+
+        .article-text p { margin-bottom: 18px; }
+
+        .article-subtitle {
+            font-size: 1.6rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin: 28px 0 14px 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 18px;
+        }
+
+        .article-list { margin: 18px 0; padding-left: 30px; }
+        .article-list li { margin-bottom: 12px; font-size: 1.03rem; }
+
+        .article-image { width: 100%; max-width: 800px; margin: 22px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(10,20,30,0.06); }
+        .article-image img { width: 100%; height: auto; display:block; }
+
+        .article-quote {
+            background: rgba(139,92,246,0.05);
+            border-left: 4px solid var(--primary);
+            padding: 22px;
+            margin: 26px 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            font-size: 1.15rem;
+            line-height: 1.6;
+        }
+
+        /* badges & highlights */
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: .9rem; font-weight: 600; margin: 0 6px 6px 0; }
+        .badge-primary { background: var(--primary); color: white; }
+        .badge-accent { background: var(--accent); color: white; }
+        .badge-success { background: var(--success); color: white; }
+        .badge-warning { background: var(--warning); color: white; }
+        .badge-error { background: var(--error); color: white; }
+
+        .important-note, .success-note, .info-note {
+            padding: 18px;
+            margin: 18px 0;
+            border-radius: 10px;
+        }
+        .important-note { background: rgba(245,158,11,0.05); border-left: 4px solid var(--warning); }
+        .success-note { background: rgba(16,185,129,0.05); border-left: 4px solid var(--success); }
+        .info-note    { background: rgba(6,182,212,0.05); border-left: 4px solid var(--accent); }
+
+        .loading { text-align:center; padding: 40px; font-size:1.1rem; opacity: 0.9; }
+
+        /* particles */
+        .particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-1; overflow:hidden; }
+        .particle { position:absolute; background: rgba(139,92,246,0.28); border-radius:50%; animation: float 15s infinite ease-in-out; box-shadow:0 0 6px rgba(139,92,246,0.45); }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.8); opacity:0; }
+            20% { opacity:0.45; }
+            80% { opacity:0.45; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity:0; }
+        }
+
+        @media (max-width:768px) {
+            .carousel { width:300px; height:533px; }
+            h1 { font-size:3.2rem; }
+            .subtitle { font-size: 1rem; }
+            .news-content { font-size: 1rem; }
+            .news-content h3 { font-size: 1.2rem; }
+            .news-frame { padding: 20px; }
+            .news-button { padding: 12px 24px; font-size: 1rem; }
+            .article-section { padding: 28px; margin: 20px; }
+            .article-title { font-size: 2rem; }
+            .article-content { font-size: 1rem; }
+        }
+
+        @media (max-width:480px) {
+            .carousel { width: 280px; height:497px; }
+            h1 { font-size:2.6rem; }
+            .subtitle { font-size: 0.9rem; }
+            .news-content { font-size: 0.95rem; line-height: 1.5; }
+            .news-content h3 { font-size: 1.1rem; }
+            .news-frame { padding: 18px; }
+            .news-button { padding: 10px 20px; font-size: 0.95rem; }
+            .article-section { padding: 20px; margin: 15px; }
+            .article-title { font-size: 1.7rem; }
+            .article-content { font-size: .98rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>VibeShorts</h1>
+        <p class="subtitle">Платформа для визуального обучения и вдохновения<br>с насыщенным, динамическим контентом и минималистичным интерфейсом</p>
+        
+        <div class="news-container">
+            <div class="news-frame">
+                <div class="news-content">
+                    <h3>🌿 Новости VibeShorts</h3>
+                    <div class="news-date">20 ноября 2025</div>
+                    <p>Мы рады сообщить о запуске новой функции автоматического форматирования номеров договоров при ручном вводе, что делает работу с документами еще более удобной и профессиональной.</p>
+                    <p>Также в этом месяце мы добавили новые категории контента, вдохновленные историями людей, которые справляются с сомнениями, эмоциями и признаниями своих ошибок, чтобы помочь вам в личностном росте.</p>
+                    <p>Следите за обновлениями — скоро выйдет специальный выпуск о цифровом этикете и правилах поведения в отношениях в эпоху онлайн-общения.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="gallery-container">
+        <button class="nav-btn prev-btn" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="carousel" id="carousel">
+            <div class="loading" id="loading">
+                <p>🔄 Загрузка видео...</p>
+            </div>
+        </div>
+
+        <button class="nav-btn next-btn" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div class="progress-dots" id="progressDots"></div>
+    </div>
+
+    <!-- Кнопка под видео -->
+    <div class="button-container">
+        <!-- УБРАТЬ КНОПКУ: ЗАКОММЕНТИРУЙ ЭТУ СТРОКУ -->
+        <a href="https://vibeshorts.example.com/special-issue" class="news-button">Читать спецвыпуск →</a>
+        <!-- /КОНЕЦ МЕТКИ -->
+    </div>
+
+    <section class="article-section">
+        <div class="article-header">
+            <h2 class="article-title" id="articleTitle"></h2>
+        </div>
+        <div class="article-content" id="articleContent">
+            <div class="article-text"><p></p></div>
+        </div>
+    </section>
+
+    <script>
+        let videos = [];
+        let currentIndex = 0;
+        let currentlyPlayingVideo = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.overflowX = 'hidden';
+            document.documentElement.style.overflowX = 'hidden';
+
+            document.addEventListener('touchmove', function(e) {
+                if (e.touches.length > 1) return;
+                const touch = e.touches[0];
+                const startX = touch.pageX;
+                if (Math.abs(e.touches[0].pageX - startX) > Math.abs(e.touches[0].pageY - startX)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            document.addEventListener('wheel', function(e) {
+                if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            const carousel = document.getElementById('carousel');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progressDots = document.getElementById('progressDots');
+            const articleTitle = document.getElementById('articleTitle');
+            const articleContent = document.getElementById('articleContent');
+            const loading = document.getElementById('loading');
+
+            loadVideosData();
+            createParticles();
+            nextBtn.addEventListener('click', nextVideo);
+            prevBtn.addEventListener('click', prevVideo);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') nextVideo();
+                else if (e.key === 'ArrowLeft') prevVideo();
+                else if (e.key === ' ') {
+                    e.preventDefault();
+                    const activeCard = carousel.children[currentIndex];
+                    if (activeCard) {
+                        const videoElement = activeCard.querySelector('.video-player');
+                        const playOverlay = activeCard.querySelector('.play-overlay');
+                        if (videoElement && playOverlay) {
+                            toggleVideoPlayback(videoElement, playOverlay);
+                        }
+                    }
+                }
+            });
+
+            let startX = 0;
+            carousel.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            }, { passive: true });
+
+            carousel.addEventListener('touchend', (e) => {
+                const endX = e.changedTouches[0].clientX;
+                if (startX - endX > 50) nextVideo();
+                else if (endX - startX > 50) prevVideo();
+            }, { passive: true });
+        });
+
+        function createParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            document.body.insertBefore(particlesContainer, document.body.firstChild);
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDuration = `${Math.random() * 12 + 8}s`;
+                particle.style.animationDelay = `${Math.random() * 6}s`;
+                const size = Math.random() * 6 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.opacity = Math.random() * 0.4 + 0.15;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        async function loadVideosData() {
+            const loading = document.getElementById('loading');
+            const carousel = document.getElementById('carousel');
+
+            try {
+                loading.innerHTML = '<p>🔄 Загрузка данных...</p>';
+                const response = await fetch('data.json');
+
+                if (!response.ok) {
+                    throw new Error('Ошибка загрузки данных');
+                }
+
+                const data = await response.json();
+                videos = data.videos;
+
+                if (!videos || videos.length === 0) {
+                    videos = getDefaultVideos();
+                }
+
+                loading.style.display = 'none';
+                createVideoCards();
+                updateCarousel();
+                updateArticle();
+
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                loading.innerHTML = `
+                    <div class="error-message">
+                        <p>❌ Ошибка загрузки данных</p>
+                        <p style="font-size: 1rem; margin-top: 10px;">Проверьте наличие файла data.json</p>
+                    </div>
+                `;
+
+                videos = getDefaultVideos();
+
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    createVideoCards();
+                    updateCarousel();
+                    updateArticle();
+                }, 800);
+            }
+        }
+
+        function getDefaultVideos() {
+            return [
+                {
+                    title: "Искусство минимализма",
+                    videoUrl: "minimalism.mp4",
+                    article: {
+                        title: "Искусство минимализма в современном дизайне",
+                        content: `
+                            <div class="article-text">
+                                <p>Минимализм — это не просто стиль, это философия, которая находит отражение в дизайне, архитектуре и образе жизни. <span class="text-primary">Простота и функциональность</span> становятся ключевыми принципами современного творчества.</p>
+
+                                <div class="article-image">
+                                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Минималистичный интерьер">
+                                </div>
+
+                                <h3 class="article-subtitle">Основные принципы минимализма</h3>
+                                <ul class="article-list">
+                                    <li><span class="text-primary">Простота форм</span> — отсутствие лишних деталей и декора</li>
+                                    <li><span class="text-accent">Функциональность</span> — каждая деталь имеет своё назначение</li>
+                                    <li><span class="text-success">Чистота пространства</span> — свобода от ненужных предметов</li>
+                                    <li><span class="text-warning">Качественные материалы</span> — акцент на текстуры и фактуры</li>
+                                </ul>
+
+                                <div class="article-quote">
+                                    "Меньше — значит больше. Простота — это высшая степень утонченности."
+                                </div>
+
+                                <div class="success-note">
+                                    <p><strong>Совет:</strong> Начните с малого — уберите лишние предметы с рабочего стола и обратите внимание, как это повлияет на вашу продуктивность.</p>
+                                </div>
+                            </div>
+                        `
+                    }
+                },
+                {
+                    title: "Цифровая графика",
+                    videoUrl: "digital-art.mp4",
+                    article: {
+                        title: "Эволюция цифрового искусства: от пикселей к нейросетям",
+                        content: `
+                            <div class="article-text">
+                                <p>Цифровое искусство прошло впечатляющий путь от простых <span class="text-accent">8-битных изображений</span> до сложнейших произведений, созданных искусственным интеллектом.</p>
+
+                                <h3 class="article-subtitle">Ключевые этапы развития</h3>
+                                <p>История цифрового искусства насчитывает несколько десятилетий, каждый из которых принес свои уникальные технологии и стили:</p>
+
+                                <ul class="article-list">
+                                    <li><span class="badge badge-primary">1980-е</span> — появление первых графических редакторов</li>
+                                    <li><span class="badge badge-accent">1990-е</span> — развитие 3D-графики и анимации</li>
+                                    <li><span class="badge badge-success">2000-е</span> — расцвет цифровой живописи</li>
+                                    <li><span class="badge badge-warning">2010-е</span> — интерактивное и генеративное искусство</li>
+                                    <li><span class="badge badge-error">2020-е</span> — искусственный интеллект в творчестве</li>
+                                </ul>
+
+                                <div class="article-image">
+                                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Цифровое искусство">
+                                </div>
+
+                                <div class="important-note">
+                                    <p><strong>Интересный факт:</strong> Первое цифровое искусство было создано в 1960-х годах, когда компьютеры занимали целые комнаты, а для создания простого изображения требовались дни программирования.</p>
+                                </div>
+
+                                <h3 class="article-subtitle">Будущее цифрового искусства</h3>
+                                <p>С развитием технологий <span class="text-warning">VR и AR</span> искусство становится все более иммерсивным, позволяя зрителю буквально погружаться в произведение.</p>
+                            </div>
+                        `
+                    }
+                },
+                {
+                    title: "Урбанистика будущего",
+                    videoUrl: "future-cities.mp4",
+                    article: {
+                        title: "Города будущего: между технологиями и экологией",
+                        content: `
+                            <div class="article-text">
+                                <p>Современные мегаполисы стоят на пороге революционных изменений. <span class="text-success">Умные города</span> будущего будут сочетать передовые технологии с экологичными решениями.</p>
+
+                                <div class="article-image">
+                                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Город будущего">
+                                </div>
+
+                                <h3 class="article-subtitle">Ключевые тенденции</h3>
+                                <p>Архитекторы и урбанисты по всему миру работают над созданием городов, которые будут:</p>
+
+                                <ul class="article-list">
+                                    <li><span class="text-primary">Экологичными</span> — с зелеными зонами и возобновляемой энергией</li>
+                                    <li><span class="text-accent">Умными</span> — с автоматизированными системами управления</li>
+                                    <li><span class="text-success">Доступными</span> — с развитой инфраструктурой для всех жителей</li>
+                                    <li><span class="text-warning">Устойчивыми</span> — способными противостоять климатическим изменениям</li>
+                                </ul>
+
+                                <div class="info-note">
+                                    <p><strong>Пример:</strong> Сингапур уже сегодня внедряет технологии "умного города", включая автоматизированный транспорт и энергоэффективные здания.</p>
+                                </div>
+
+                                <div class="article-quote">
+                                    "Город будущего — это не просто скопление технологий, это гармоничная среда, где люди хотят жить, работать и творить."
+                                </div>
+
+                                <h3 class="article-subtitle">Вызовы и решения</h3>
+                                <p>Создание городов будущего требует решения сложных задач, включая <span class="text-error">перенаселение</span>, транспортные проблемы и экологические вызовы. Однако современные технологии предлагают инновационные решения для каждой из этих проблем.</p>
+                            </div>
+                        `
+                    }
+                }
+            ];
+        }
+
+        function createVideoCards() {
+            const carousel = document.getElementById('carousel');
+            carousel.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+
+            videos.forEach((video, index) => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                videoCard.dataset.index = index;
+
+                const videoHTML = `
+                    <video class="video-player" preload="metadata" playsinline>
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        Ваш браузер не поддерживает видео тег.
+                    </video>
+                    <div class="play-overlay">
+                        <div class="play-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                `;
+                videoCard.innerHTML = `
+                    <div class="video-player-container">
+                        ${videoHTML}
+                    </div>
+                `;
+
+                const videoElement = videoCard.querySelector('.video-player');
+                const playOverlay = videoCard.querySelector('.play-overlay');
+
+                videoCard.addEventListener('click', (e) => {
+                    toggleVideoPlayback(videoElement, playOverlay);
+                });
+
+                videoElement.addEventListener('ended', () => {
+                    playOverlay.classList.remove('hidden');
+                    currentlyPlayingVideo = null;
+                });
+
+                fragment.appendChild(videoCard);
+            });
+
+            carousel.appendChild(fragment);
+            createProgressDots();
+        }
+
+        function createProgressDots() {
+            const progressDots = document.getElementById('progressDots');
+            progressDots.innerHTML = '';
+
+            videos.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
+                dot.addEventListener('click', () => goToVideo(index));
+                progressDots.appendChild(dot);
+            });
+        }
+
+        function toggleVideoPlayback(videoElement, playOverlay) {
+            if (currentlyPlayingVideo && currentlyPlayingVideo !== videoElement) {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo.currentTime = 0;
+                const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
+                if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
+            }
+
+            if (videoElement.paused) {
+                videoElement.play().then(() => {
+                    playOverlay.classList.add('hidden');
+                    currentlyPlayingVideo = videoElement;
+                }).catch(error => {
+                    console.error('Ошибка воспроизведения:', error);
+                });
+            } else {
+                videoElement.pause();
+                playOverlay.classList.remove('hidden');
+                currentlyPlayingVideo = null;
+            }
+        }
+
+        function updateCarousel() {
+            const carousel = document.getElementById('carousel');
+            const progressDots = document.getElementById('progressDots');
+            const cards = carousel.children;
+            const dots = progressDots.children;
+            const totalCards = cards.length;
+
+            for (let i = 0; i < totalCards; i++) {
+                const card = cards[i];
+                const position = (i - currentIndex + totalCards) % totalCards;
+                card.style.transform = '';
+                card.style.opacity = '1';
+                card.style.zIndex = '1';
+                card.style.pointerEvents = 'auto';
+
+                if (position === 0) {
+                    card.style.transform = 'translateZ(0)';
+                    card.style.zIndex = '10';
+                } else if (position === 1) {
+                    card.style.transform = 'translateX(340px) translateZ(-120px) rotateY(-12deg)';
+                    card.style.opacity = '0.85';
+                    card.style.zIndex = '9';
+                } else if (position === totalCards - 1) {
+                    card.style.transform = 'translateX(-340px) translateZ(-120px) rotateY(12deg)';
+                    card.style.opacity = '0.85';
+                    card.style.zIndex = '9';
+                } else if (position === 2) {
+                    card.style.transform = 'translateX(680px) translateZ(-240px) rotateY(-24deg)';
+                    card.style.opacity = '0.45';
+                    card.style.zIndex = '8';
+                } else if (position === totalCards - 2) {
+                    card.style.transform = 'translateX(-680px) translateZ(-240px) rotateY(24deg)';
+                    card.style.opacity = '0.45';
+                    card.style.zIndex = '8';
+                } else {
+                    card.style.transform = 'translateZ(-360px)';
+                    card.style.opacity = '0';
+                    card.style.zIndex = '1';
+                    card.style.pointerEvents = 'none';
+                }
+            }
+
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = `dot ${i === currentIndex ? 'active' : ''}`;
+            }
+        }
+
+        function updateArticle() {
+            const articleTitle = document.getElementById('articleTitle');
+            const articleContent = document.getElementById('articleContent');
+
+            if (videos.length > 0 && currentIndex < videos.length) {
+                const currentVideo = videos[currentIndex];
+                articleTitle.textContent = currentVideo.article.title;
+                articleContent.innerHTML = currentVideo.article.content;
+            }
+        }
+
+        function goToVideo(index) {
+            if (currentlyPlayingVideo) {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo.currentTime = 0;
+                const playOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
+                if (playOverlay) playOverlay.classList.remove('hidden');
+            }
+
+            currentlyPlayingVideo = null;
+            currentIndex = index;
+            updateCarousel();
+            updateArticle();
+        }
+
+        function nextVideo() {
+            goToVideo((currentIndex + 1) % videos.length);
+        }
+
+        function prevVideo() {
+            goToVideo((currentIndex - 1 + videos.length) % videos.length);
+        }
+    </script>
+</body>
+</html>
