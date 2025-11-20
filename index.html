@@ -92,7 +92,7 @@
         }
         .video-player-container {
             width: 100%;
-            height: 100%; /* Теперь занимает всю высоту карточки */
+            height: 100%;
             position: relative;
             background: #000;
             overflow: hidden;
@@ -101,28 +101,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-        .video-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .video-unsupported {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: var(--dark);
-            color: var(--light);
-            text-align: center;
-            padding: 20px;
-        }
-        .video-unsupported i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            opacity: 0.7;
         }
         .video-source-badge {
             position: absolute;
@@ -169,9 +147,8 @@
             transform: scale(1.1);
             background: rgba(255, 255, 255, 0.25);
         }
-        /* УБРАНО: .replay-icon */
         .video-info {
-            display: none; /* Скрыта информационная панель */
+            display: none;
         }
         .video-title {
             font-size: 1.3rem;
@@ -234,7 +211,6 @@
             background: var(--primary-light);
             transform: scale(1.2);
         }
-        /* УВЕЛИЧЕННЫЙ РАЗДЕЛ ДЛЯ СТАТЬИ */
         .article-section {
             flex: 1;
             max-width: 1200px;
@@ -310,7 +286,6 @@
             font-size: 1.3rem;
             line-height: 1.6;
         }
-        /* СТИЛИ ДЛЯ ВЫДЕЛЕНИЯ ТЕКСТА */
         .highlight-primary {
             background: linear-gradient(120deg, rgba(139, 92, 246, 0.3) 0%, rgba(139, 92, 246, 0.1) 100%);
             color: var(--primary-light);
@@ -451,7 +426,6 @@
             color: var(--error);
             font-size: 1.2rem;
         }
-        /* Адаптивность */
         @media (max-width: 768px) {
             .carousel {
                 width: 300px;
@@ -525,7 +499,6 @@
         </button>
         <div class="progress-dots" id="progressDots"></div>
     </div>
-    <!-- УВЕЛИЧЕННЫЙ РАЗДЕЛ ДЛЯ СТАТЬИ -->
     <section class="article-section">
         <div class="article-header">
             <h2 class="article-title" id="articleTitle"></h2>
@@ -537,31 +510,29 @@
         </div>
     </section>
     <script>
-        // Глобальные переменные
         let videos = [];
         let currentIndex = 0;
         let currentlyPlayingVideo = null;
-        // Блокировка горизонтального скролла
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Предотвращаем горизонтальный скролл
             document.body.style.overflowX = 'hidden';
             document.documentElement.style.overflowX = 'hidden';
-            // Блокируем горизонтальные свайпы
+            
             document.addEventListener('touchmove', function(e) {
                 if (e.touches.length > 1) return;
                 const touch = e.touches[0];
                 const startX = touch.pageX;
-                // Если движение в основном горизонтальное - блокируем
                 if (Math.abs(e.touches[0].pageX - startX) > Math.abs(e.touches[0].pageY - startX)) {
                     e.preventDefault();
                 }
             }, { passive: false });
-            // Блокируем горизонтальную прокрутку колесиком мыши
+            
             document.addEventListener('wheel', function(e) {
                 if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
                     e.preventDefault();
                 }
             }, { passive: false });
+
             const carousel = document.getElementById('carousel');
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
@@ -569,12 +540,12 @@
             const articleTitle = document.getElementById('articleTitle');
             const articleContent = document.getElementById('articleContent');
             const loading = document.getElementById('loading');
-            // Загрузка данных из JSON файла
+
             loadVideosData();
-            // Обработчики событий для карусели
+
             nextBtn.addEventListener('click', nextVideo);
             prevBtn.addEventListener('click', prevVideo);
-            // Обработчики клавиш
+
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowRight') nextVideo();
                 else if (e.key === 'ArrowLeft') prevVideo();
@@ -590,125 +561,147 @@
                     }
                 }
             });
-            // Swipe для мобильных - только для карусели
+
             let startX = 0;
             carousel.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
             }, { passive: true });
+            
             carousel.addEventListener('touchend', (e) => {
                 const endX = e.changedTouches[0].clientX;
                 if (startX - endX > 50) nextVideo();
                 else if (endX - startX > 50) prevVideo();
             }, { passive: true });
         });
-        // ФУНКЦИЯ ДЛЯ ОПРЕДЕЛЕНИЯ ТИПА ВИДЕО
-        function getVideoType(videoUrl) {
-            if (!videoUrl) return 'unsupported';
-            if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) {
-                return 'youtube';
-            } else if (videoUrl.includes('vimeo.com')) {
-                return 'vimeo';
-            } else if (videoUrl.includes('vk.com') || videoUrl.includes('vk.ru')) {
-                return 'vk';
-            } else if (videoUrl.endsWith('.mp4') || videoUrl.includes('mp4')) {
-                return 'direct';
-            } else {
-                return 'unsupported';
-            }
-        }
-        // ФУНКЦИЯ ДЛЯ СОЗДАНИЯ IFrame ВСТАВКИ VK (ИСПРАВЛЕНА)
-        function createVKEmbed(videoUrl) {
-            if (!videoUrl) return null;
 
-            // Попробуем разные форматы URL
-            let videoId = null;
-            let ownerId = null;
-
-            // Формат 1: https://vk.com/video-123456_456789 (группа) или https://vk.com/video123456_456789 (пользователь)
-            const match1 = videoUrl.match(/video(-?\d+_\d+)/);
-            if (match1) {
-                const fullId = match1[1];
-                const parts = fullId.split('_');
-                if (parts.length === 2) {
-                    ownerId = parts[0]; // Может быть "-123456" или "123456"
-                    videoId = parts[1];
-                }
-            }
-
-            // Формат 2: https://vk.com/clip-123456_456789
-            // Клипы всегда принадлежат группе. Владелец (ownerId) - это ID группы (положительный).
-            // В URL он представлен как clip-123456_456789, где 123456 - ID группы.
-            // Для iframe нужно oid=-123456 (отрицательный ID).
-            const match2 = videoUrl.match(/clip-(\d+)_(\d+)/);
-            if (match2) {
-                ownerId = '-' + match2[1]; // Для iframe нужно отрицательное значение
-                videoId = match2[2];
-            }
-
-            // Формат 3: https://vk.com/video?z=video-123456_456789%2Fpl_-123456_456789
-            // Этот формат уже должен быть обработан match1, но на всякий случай:
-            if (!ownerId && !videoId) {
-                const match3 = videoUrl.match(/[?&]z=video(-?\d+_\d+)/);
-                if (match3) {
-                    const fullId = match3[1];
-                    const parts = fullId.split('_');
-                    if (parts.length === 2) {
-                        ownerId = parts[0];
-                        videoId = parts[1];
-                    }
-                }
-            }
-
-            // Если нашли ID, создаем URL для iframe
-            if (ownerId !== null && videoId !== null) {
-                // Используем ownerId как есть (с минусом или без), он определяет тип владельца
-                return `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}&hash=`;
-            }
-
-            // Если ничего не нашли, возвращаем null
-            return null;
-        }
-        // ЗАГРУЗКА ДАННЫХ ИЗ JSON ФАЙЛА
         async function loadVideosData() {
             const loading = document.getElementById('loading');
             const carousel = document.getElementById('carousel');
+            
             try {
                 loading.innerHTML = '<p>🔄 Загрузка данных...</p>';
-                // Загружаем данные из JSON файла
                 const response = await fetch('data.json');
+                
                 if (!response.ok) {
                     throw new Error('Ошибка загрузки данных');
                 }
+                
                 const data = await response.json();
                 videos = data.videos;
-                // Если данных нет, создаем демо-данные для тестирования
+                
                 if (!videos || videos.length === 0) {
                     videos = [
                         {
-                            title: "Демо видео из VK",
-                            videoUrl: "https://vk.com/video-123456_456789", // Пример: видео группы
+                            title: "Искусство минимализма",
+                            videoUrl: "minimalism.mp4",
                             article: {
-                                title: "Демо статья для VK видео",
+                                title: "Искусство минимализма в современном дизайне",
                                 content: `
                                     <div class="article-text">
-                                        <p>Это демонстрационная статья для видео из ВКонтакте. Здесь вы можете разместить подробное описание, анализ или дополнительную информацию о видео.</p>
-                                        <h3 class="article-subtitle">Особенности VK видео</h3>
-                                        <p>Видео из ВКонтакте поддерживают различные форматы и могут быть легко встроены на сайт.</p>
-                                        <div class="important-note">
-                                            <p><strong>Примечание:</strong> Для работы VK видео требуется стабильное интернет-соединение и поддержка iframe вашим браузером.</p>
+                                        <p>Минимализм — это не просто стиль, это философия, которая находит отражение в дизайне, архитектуре и образе жизни. <span class="highlight-primary">Простота и функциональность</span> становятся ключевыми принципами современного творчества.</p>
+                                        
+                                        <div class="article-image">
+                                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Минималистичный интерьер">
                                         </div>
+                                        
+                                        <h3 class="article-subtitle">Основные принципы минимализма</h3>
+                                        <ul class="article-list">
+                                            <li><span class="text-primary">Простота форм</span> — отсутствие лишних деталей и декора</li>
+                                            <li><span class="text-accent">Функциональность</span> — каждая деталь имеет своё назначение</li>
+                                            <li><span class="text-success">Чистота пространства</span> — свобода от ненужных предметов</li>
+                                            <li><span class="text-warning">Качественные материалы</span> — акцент на текстуры и фактуры</li>
+                                        </ul>
+                                        
+                                        <div class="article-quote">
+                                            "Меньше — значит больше. Простота — это высшая степень утонченности."
+                                        </div>
+                                        
+                                        <div class="success-note">
+                                            <p><strong>Совет:</strong> Начните с малого — уберите лишние предметы с рабочего стола и обратите внимание, как это повлияет на вашу продуктивность.</p>
+                                        </div>
+                                    </div>
+                                `
+                            }
+                        },
+                        {
+                            title: "Цифровая графика", 
+                            videoUrl: "digital-art.mp4",
+                            article: {
+                                title: "Эволюция цифрового искусства: от пикселей к нейросетям",
+                                content: `
+                                    <div class="article-text">
+                                        <p>Цифровое искусство прошло впечатляющий путь от простых <span class="highlight-accent">8-битных изображений</span> до сложнейших произведений, созданных искусственным интеллектом.</p>
+                                        
+                                        <h3 class="article-subtitle">Ключевые этапы развития</h3>
+                                        <p>История цифрового искусства насчитывает несколько десятилетий, каждый из которых принес свои уникальные технологии и стили:</p>
+                                        
+                                        <ul class="article-list">
+                                            <li><span class="badge badge-primary">1980-е</span> — появление первых графических редакторов</li>
+                                            <li><span class="badge badge-accent">1990-е</span> — развитие 3D-графики и анимации</li>
+                                            <li><span class="badge badge-success">2000-е</span> — расцвет цифровой живописи</li>
+                                            <li><span class="badge badge-warning">2010-е</span> — интерактивное и генеративное искусство</li>
+                                            <li><span class="badge badge-error">2020-е</span> — искусственный интеллект в творчестве</li>
+                                        </ul>
+                                        
+                                        <div class="article-image">
+                                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Цифровое искусство">
+                                        </div>
+                                        
+                                        <div class="important-note">
+                                            <p><strong>Интересный факт:</strong> Первое цифровое искусство было создано в 1960-х годах, когда компьютеры занимали целые комнаты, а для создания простого изображения требовались дни программирования.</p>
+                                        </div>
+                                        
+                                        <h3 class="article-subtitle">Будущее цифрового искусства</h3>
+                                        <p>С развитием технологий <span class="highlight-warning">VR и AR</span> искусство становится все более иммерсивным, позволяя зрителю буквально погружаться в произведение.</p>
+                                    </div>
+                                `
+                            }
+                        },
+                        {
+                            title: "Урбанистика будущего",
+                            videoUrl: "future-cities.mp4", 
+                            article: {
+                                title: "Города будущего: между технологиями и экологией",
+                                content: `
+                                    <div class="article-text">
+                                        <p>Современные мегаполисы стоят на пороге революционных изменений. <span class="highlight-success">Умные города</span> будущего будут сочетать передовые технологии с экологичными решениями.</p>
+                                        
+                                        <div class="article-image">
+                                            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Город будущего">
+                                        </div>
+                                        
+                                        <h3 class="article-subtitle">Ключевые тенденции</h3>
+                                        <p>Архитекторы и урбанисты по всему миру работают над созданием городов, которые будут:</p>
+                                        
+                                        <ul class="article-list">
+                                            <li><span class="text-primary">Экологичными</span> — с зелеными зонами и возобновляемой энергией</li>
+                                            <li><span class="text-accent">Умными</span> — с автоматизированными системами управления</li>
+                                            <li><span class="text-success">Доступными</span> — с развитой инфраструктурой для всех жителей</li>
+                                            <li><span class="text-warning">Устойчивыми</span> — способными противостоять климатическим изменениям</li>
+                                        </ul>
+                                        
+                                        <div class="info-note">
+                                            <p><strong>Пример:</strong> Сингапур уже сегодня внедряет технологии "умного города", включая автоматизированный транспорт и энергоэффективные здания.</p>
+                                        </div>
+                                        
+                                        <div class="article-quote">
+                                            "Город будущего — это не просто скопление технологий, это гармоничная среда, где люди хотят жить, работать и творить."
+                                        </div>
+                                        
+                                        <h3 class="article-subtitle">Вызовы и решения</h3>
+                                        <p>Создание городов будущего требует решения сложных задач, включая <span class="highlight-error">перенаселение</span>, транспортные проблемы и экологические вызовы. Однако современные технологии предлагают инновационные решения для каждой из этих проблем.</p>
                                     </div>
                                 `
                             }
                         }
                     ];
                 }
-                // Скрываем индикатор загрузки
+
                 loading.style.display = 'none';
-                // Создаем видео карточки
                 createVideoCards();
                 updateCarousel();
                 updateArticle();
+                
             } catch (error) {
                 console.error('Ошибка загрузки:', error);
                 loading.innerHTML = `
@@ -717,26 +710,43 @@
                         <p style="font-size: 1rem; margin-top: 10px;">Проверьте наличие файла data.json</p>
                     </div>
                 `;
-                // Создаем демо-данные при ошибке загрузки
+                
                 videos = [
                     {
-                        title: "Демо видео из VK",
-                        videoUrl: "https://vk.com/video-123456_456789", // Пример: видео группы
+                        title: "Демо видео",
+                        videoUrl: "demo.mp4",
                         article: {
-                            title: "Демо статья для VK видео",
+                            title: "Демонстрационная статья",
                             content: `
                                 <div class="article-text">
-                                    <p>Это демонстрационная статья для видео из ВКонтакте. Здесь вы можете разместить подробное описание, анализ или дополнительную информацию о видео.</p>
-                                    <h3 class="article-subtitle">Особенности VK видео</h3>
-                                    <p>Видео из ВКонтакте поддерживают различные форматы и могут быть легко встроены на сайт.</p>
-                                    <div class="important-note">
-                                        <p><strong>Примечание:</strong> Для работы VK видео требуется стабильное интернет-соединение и поддержка iframe вашим браузером.</p>
+                                    <p>Это демонстрационная статья для локального видео. Все видео загружаются из той же папки, где находится HTML файл.</p>
+                                    
+                                    <div class="article-image">
+                                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Демо изображение">
+                                    </div>
+                                    
+                                    <h3 class="article-subtitle">Как использовать галерею</h3>
+                                    <p>Для добавления собственных видео и статей:</p>
+                                    
+                                    <ul class="article-list">
+                                        <li>Поместите видеофайлы в формате MP4 в папку с HTML файлом</li>
+                                        <li>Создайте файл data.json с описанием видео и статей</li>
+                                        <li>Обновите страницу — ваши видео появятся в галерее!</li>
+                                    </ul>
+                                    
+                                    <div class="success-note">
+                                        <p><strong>Совет:</strong> Используйте видео вертикального формата для лучшего отображения в мобильных устройствах.</p>
+                                    </div>
+                                    
+                                    <div class="article-quote">
+                                        "Красота в простоте. Самые сложные идеи часто требуют самых простых решений."
                                     </div>
                                 </div>
                             `
                         }
                     }
                 ];
+                
                 setTimeout(() => {
                     loading.style.display = 'none';
                     createVideoCards();
@@ -745,141 +755,61 @@
                 }, 2000);
             }
         }
-        // ФУНКЦИИ ДЛЯ ОСНОВНОГО САЙТА
+
         function createVideoCards() {
             const carousel = document.getElementById('carousel');
             carousel.innerHTML = '';
             const fragment = document.createDocumentFragment();
+            
             videos.forEach((video, index) => {
                 const videoCard = document.createElement('div');
                 videoCard.className = 'video-card';
                 videoCard.dataset.index = index;
-                const videoType = getVideoType(video.videoUrl);
-                let videoHTML = '';
-                let sourceName = '';
-                switch(videoType) {
-                    case 'direct':
-                        videoHTML = `
-                            <video class="video-player" preload="metadata">
-                                <source src="${video.videoUrl}" type="video/mp4">
-                                Ваш браузер не поддерживает видео тег.
-                            </video>
-                            <div class="play-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <!-- УБРАНО: replay-icon -->
-                        `;
-                        sourceName = 'MP4';
-                        break;
-                    case 'youtube':
-                        const youtubeId = video.videoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
-                        if (youtubeId) {
-                            videoHTML = `
-                                <iframe class="video-iframe" 
-                                    src="https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&controls=1&modestbranding=1&rel=0" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    allowfullscreen>
-                                </iframe>
-                                <div class="play-overlay">
-                                    <div class="play-icon">
-                                        <i class="fas fa-play"></i>
-                                    </div>
-                                </div>
-                            `;
-                            sourceName = 'YouTube';
-                        }
-                        break;
-                    case 'vk':
-                        const vkEmbedUrl = createVKEmbed(video.videoUrl);
-                        if (vkEmbedUrl) {
-                            videoHTML = `
-                                <iframe class="video-iframe" 
-                                    src="${vkEmbedUrl}" 
-                                    frameborder="0" 
-                                    allow="autoplay; encrypted-media; fullscreen"
-                                    allowfullscreen>
-                                </iframe>
-                                <div class="play-overlay">
-                                    <div class="play-icon">
-                                        <i class="fas fa-play"></i>
-                                    </div>
-                                </div>
-                            `;
-                            sourceName = 'VK';
-                        } else {
-                            videoHTML = `
-                                <div class="video-unsupported">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <p>Неверный формат ссылки VK</p>
-                                    <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Используйте формат: https://vk.com/video-123456_456789</p>
-                                </div>
-                            `;
-                            sourceName = 'Ошибка VK';
-                        }
-                        break;
-                    default:
-                        videoHTML = `
-                            <div class="video-unsupported">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <p>Видео недоступно</p>
-                                <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">Ссылка: ${video.videoUrl}</p>
-                            </div>
-                        `;
-                        sourceName = 'Не поддерживается';
-                }
+                
+                const videoHTML = `
+                    <video class="video-player" preload="metadata" playsinline>
+                        <source src="${video.videoUrl}" type="video/mp4">
+                        Ваш браузер не поддерживает видео тег.
+                    </video>
+                    <div class="play-overlay">
+                        <div class="play-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-source-badge">Локальное видео</div>
+                `;
+
                 videoCard.innerHTML = `
                     <div class="video-player-container">
                         ${videoHTML}
-                        ${sourceName ? `<div class="video-source-badge">${sourceName}</div>` : ''}
                     </div>
-                    <!-- УБРАНО: video-info -->
                 `;
-                // ОБРАБОТЧИКИ ДЛЯ ПРЯМЫХ MP4 ВИДЕО
-                if (videoType === 'direct') {
-                    const videoElement = videoCard.querySelector('.video-player');
-                    const playOverlay = videoCard.querySelector('.play-overlay');
-                    // Убран replayIcon
-                    videoCard.addEventListener('click', (e) => {
-                        // При клике на карточку просто воспроизводим видео
+
+                const videoElement = videoCard.querySelector('.video-player');
+                const playOverlay = videoCard.querySelector('.play-overlay');
+                
+                videoCard.addEventListener('click', (e) => {
+                    if (!e.target.closest('.video-source-badge')) {
                         toggleVideoPlayback(videoElement, playOverlay);
-                    });
-                    videoElement.addEventListener('ended', () => {
-                        playOverlay.classList.remove('hidden');
-                        currentlyPlayingVideo = null;
-                    });
-                    // Убран обработчик для replayIcon
-                }
-                // ДЛЯ IFRAME (YouTube, VK) - УПРАВЛЕНИЕ ЧЕРЕЗ КЛИК НА OVERLAY
-                else if (videoType === 'youtube' || videoType === 'vk') {
-                    const playOverlay = videoCard.querySelector('.play-overlay');
-                    const iframe = videoCard.querySelector('.video-iframe');
-                    if (playOverlay && iframe) {
-                        playOverlay.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            playOverlay.classList.add('hidden');
-                            // Для iframe автоматическое воспроизведение может быть ограничено браузером
-                            // Пользователь должен будет нажать play внутри iframe
-                        });
                     }
-                    // Обработчик клика на саму карточку (не на overlay)
-                    videoCard.addEventListener('click', (e) => {
-                        if (!e.target.closest('.play-overlay') && !e.target.closest('.video-source-badge')) {
-                            // При клике на карточку переходим к этому видео
-                            goToVideo(index);
-                        }
-                    });
-                }
+                });
+                
+                videoElement.addEventListener('ended', () => {
+                    playOverlay.classList.remove('hidden');
+                    currentlyPlayingVideo = null;
+                });
+                
                 fragment.appendChild(videoCard);
             });
+            
             carousel.appendChild(fragment);
             createProgressDots();
         }
+
         function createProgressDots() {
             const progressDots = document.getElementById('progressDots');
             progressDots.innerHTML = '';
+            
             videos.forEach((_, index) => {
                 const dot = document.createElement('div');
                 dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
@@ -887,6 +817,7 @@
                 progressDots.appendChild(dot);
             });
         }
+
         function toggleVideoPlayback(videoElement, playOverlay) {
             if (currentlyPlayingVideo && currentlyPlayingVideo !== videoElement) {
                 currentlyPlayingVideo.pause();
@@ -894,6 +825,7 @@
                 const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
                 if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
             }
+            
             if (videoElement.paused) {
                 videoElement.play().then(() => {
                     playOverlay.classList.add('hidden');
@@ -907,13 +839,14 @@
                 currentlyPlayingVideo = null;
             }
         }
-        // УБРАНО: restartVideo (теперь не используется)
+
         function updateCarousel() {
             const carousel = document.getElementById('carousel');
             const progressDots = document.getElementById('progressDots');
             const cards = carousel.children;
             const dots = progressDots.children;
             const totalCards = cards.length;
+            
             for (let i = 0; i < totalCards; i++) {
                 const card = cards[i];
                 const position = (i - currentIndex + totalCards) % totalCards;
@@ -921,6 +854,7 @@
                 card.style.opacity = '1';
                 card.style.zIndex = '1';
                 card.style.pointerEvents = 'auto';
+                
                 if (position === 0) {
                     card.style.transform = 'translateZ(0)';
                     card.style.zIndex = '10';
@@ -947,41 +881,41 @@
                     card.style.pointerEvents = 'none';
                 }
             }
+            
             for (let i = 0; i < dots.length; i++) {
                 dots[i].className = `dot ${i === currentIndex ? 'active' : ''}`;
             }
         }
+
         function updateArticle() {
             const articleTitle = document.getElementById('articleTitle');
             const articleContent = document.getElementById('articleContent');
+            
             if (videos.length > 0 && currentIndex < videos.length) {
                 const currentVideo = videos[currentIndex];
                 articleTitle.textContent = currentVideo.article.title;
                 articleContent.innerHTML = currentVideo.article.content;
             }
         }
+
         function goToVideo(index) {
-            // Останавливаем текущее видео если оно MP4
-            if (currentlyPlayingVideo && currentlyPlayingVideo.tagName === 'VIDEO') {
+            if (currentlyPlayingVideo) {
                 currentlyPlayingVideo.pause();
                 currentlyPlayingVideo.currentTime = 0;
                 const playOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
                 if (playOverlay) playOverlay.classList.remove('hidden');
             }
-            // Скрываем overlay для iframe видео
-            const currentCard = document.querySelector(`.video-card[data-index="${currentIndex}"]`);
-            if (currentCard) {
-                const playOverlay = currentCard.querySelector('.play-overlay');
-                if (playOverlay) playOverlay.classList.remove('hidden');
-            }
+            
             currentlyPlayingVideo = null;
             currentIndex = index;
             updateCarousel();
             updateArticle();
         }
+
         function nextVideo() {
             goToVideo((currentIndex + 1) % videos.length);
         }
+
         function prevVideo() {
             goToVideo((currentIndex - 1 + videos.length) % videos.length);
         }
