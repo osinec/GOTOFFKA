@@ -731,8 +731,13 @@
             }, { passive: true });
             carousel.addEventListener('touchend', (e) => {
                 const endX = e.changedTouches[0].clientX;
-                if (startX - endX > 50) nextVideo();
-                else if (endX - startX > 50) prevVideo();
+                if (Math.abs(startX - endX) > 50) { // Порог для срабатывания свайпа
+                    if (startX - endX > 0) {
+                        nextVideo();
+                    } else {
+                        prevVideo();
+                    }
+                }
             }, { passive: true });
         });
         function createParticles() {
