@@ -1,39 +1,27 @@
 {
   "videos": [
     {
-      "id": 1,
-      "title": "Морской закат",
-      "videoUrl": "https://rutube.ru/shorts/1da3074fef7167480840ea8ecb55cb5f/?r=wd",
+      "title": "Искусство минимализма",
+      "videoUrl": "minimalism.mp4",
       "article": {
-        "title": "Искусство визуального повествования",
-        "content": "<div class=\"article-text\"><p>В современном цифровом мире <span class=\"highlight-primary\">короткие видео</span> стали мощным инструментом для передачи эмоций, идей и историй.</p><div class=\"important-note\"><strong>Важно:</strong> Первые <span class=\"text-warning\">3 секунды</span> видео критически важны для удержания внимания зрителя.</div><h3 class=\"article-subtitle\">Сила краткости</h3><p>Короткие видео, продолжительностью <span class=\"highlight-warning\">от 15 до 60 секунд</span>, обладают уникальной способностью захватывать внимание зрителя с первых же кадров.</p><div class=\"article-quote\">\"<span class=\"highlight-accent\">Видео</span> — это не просто движущиеся картинки. Это возможность создать <span class=\"text-success\">эмоциональную связь</span> со зрителем за считанные секунды.\"</div></div>"
+        "title": "Искусство минимализма в современном дизайне",
+        "content": "<div class=\"article-text\"><p>Минимализм — это не просто стиль, это философия, которая находит отражение в дизайне, архитектуре и образе жизни. <span class=\"highlight-primary\">Простота и функциональность</span> становятся ключевыми принципами современного творчества.</p><div class=\"article-image\"><img src=\"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80\" alt=\"Минималистичный интерьер\"></div><h3 class=\"article-subtitle\">Основные принципы минимализма</h3><ul class=\"article-list\"><li><span class=\"text-primary\">Простота форм</span> — отсутствие лишних деталей и декора</li><li><span class=\"text-accent\">Функциональность</span> — каждая деталь имеет своё назначение</li><li><span class=\"text-success\">Чистота пространства</span> — свобода от ненужных предметов</li><li><span class=\"text-warning\">Качественные материалы</span> — акцент на текстуры и фактуры</li></ul><div class=\"article-quote\">\"Меньше — значит больше. Простота — это высшая степень утонченности.\"</div><div class=\"success-note\"><p><strong>Совет:</strong> Начните с малого — уберите лишние предметы с рабочего стола и обратите внимание, как это повлияет на вашу продуктивность.</p></div></div>"
       }
     },
     {
-      "id": 2,
-      "title": "Ночной город",
-      "videoUrl": "https://rutube.ru/shorts/1da3074fef7167480840ea8ecb55cb5f/?r=wd",
+      "title": "Цифровая графика",
+      "videoUrl": "digital-art.mp4",
       "article": {
-        "title": "Городская эстетика в цифровую эпоху",
-        "content": "<div class=\"article-text\"><p>Городские пейзажи всегда вдохновляли художников и фотографов. В эпоху цифровых технологий эта тема обрела новое звучание через <span class=\"highlight-accent\">короткие видеоформаты</span>.</p><div class=\"info-note\"><strong>Интересный факт:</strong> <span class=\"text-primary\">Ночная съемка</span> требует особого подхода к освещению и настройкам камеры.</div><h3 class=\"article-subtitle\">Неоновая поэзия</h3><p>Ночной город с его <span class=\"highlight-warning\">неоновыми огнями</span> создает уникальную атмосферу, которую так сложно передать словами.</p><div class=\"article-quote\">\"Каждый огонек в ночном городе рассказывает свою собственную историю.\"</div></div>"
+        "title": "Эволюция цифрового искусства: от пикселей к нейросетям",
+        "content": "<div class=\"article-text\"><p>Цифровое искусство прошло впечатляющий путь от простых <span class=\"highlight-accent\">8-битных изображений</span> до сложнейших произведений, созданных искусственным интеллектом.</p><h3 class=\"article-subtitle\">Ключевые этапы развития</h3><p>История цифрового искусства насчитывает несколько десятилетий, каждый из которых принес свои уникальные технологии и стили:</p><ul class=\"article-list\"><li><span class=\"badge badge-primary\">1980-е</span> — появление первых графических редакторов</li><li><span class=\"badge badge-accent\">1990-е</span> — развитие 3D-графики и анимации</li><li><span class=\"badge badge-success\">2000-е</span> — расцвет цифровой живописи</li><li><span class=\"badge badge-warning\">2010-е</span> — интерактивное и генеративное искусство</li><li><span class=\"badge badge-error\">2020-е</span> — искусственный интеллект в творчестве</li></ul><div class=\"article-image\"><img src=\"https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80\" alt=\"Цифровое искусство\"></div><div class=\"important-note\"><p><strong>Интересный факт:</strong> Первое цифровое искусство было создано в 1960-х годах, когда компьютеры занимали целые комнаты, а для создания простого изображения требовались дни программирования.</p></div><h3 class=\"article-subtitle\">Будущее цифрового искусства</h3><p>С развитием технологий <span class=\"highlight-warning\">VR и AR</span> искусство становится все более иммерсивным, позволяя зрителю буквально погружаться в произведение.</p></div>"
       }
     },
     {
-      "id": 3,
-      "title": "Горные вершины", 
-      "videoUrl": "https://rutube.ru/shorts/1da3074fef7167480840ea8ecb55cb5f/?r=wd",
+      "title": "Урбанистика будущего",
+      "videoUrl": "future-cities.mp4",
       "article": {
-        "title": "Природа как источник вдохновения",
-        "content": "<div class=\"article-text\"><p>Горные пейзажи обладают особой магией — они одновременно умиротворяют и вдохновляют на свершения. <span class=\"highlight-success\">Видеосъемка в горах</span> требует особого подхода и подготовки.</p><div class=\"success-note\"><strong>Успех:</strong> Правильно выбранный <span class=\"text-accent\">ракурс съемки</span> может превратить обычный пейзаж в шедевр.</div><h3 class=\"article-subtitle\">Высота и перспектива</h3><p>Съемка на высоте открывает <span class=\"highlight-primary\">уникальные ракурсы</span> и возможности для создания захватывающего контента.</p><ul class=\"article-list\"><li><span class=\"badge badge-primary\">1</span> <strong>Широкоугольные объективы</strong> — подчеркивают масштаб</li><li><span class=\"badge badge-accent\">2</span> <strong>Золотые часы</strong> — лучшее время для съемки</li><li><span class=\"badge badge-success\">3</span> <strong>Стабилизация</strong> — ключ к качественному видео</li></ul></div>"
-      }
-    },
-    {
-      "id": 4,
-      "title": "Видео из ВК",
-      "videoUrl": "https://rutube.ru/shorts/1da3074fef7167480840ea8ecb55cb5f/?r=wd",
-      "article": {
-        "title": "Пример статьи для ВК видео",
-        "content": "<div class=\"article-text\"><p><strong>Это любовь</strong></p><p><span class=\"highlight-blue-preview\">пап</span></p><p><span class=\"highlight-orange-preview\">Ну неее</span></p><div class=\"article-quote\">Жизнь боль</div><div class=\"important-note\"><strong>Важно:</strong> важно</div><h3 class=\"article-subtitle\">Заголовок</h3><p>Текст статьи...</p></div>"
+        "title": "Города будущего: между технологиями и экологией",
+        "content": "<div class=\"article-text\"><p>Современные мегаполисы стоят на пороге революционных изменений. <span class=\"highlight-success\">Умные города</span> будущего будут сочетать передовые технологии с экологичными решениями.</p><div class=\"article-image\"><img src=\"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80\" alt=\"Город будущего\"></div><h3 class=\"article-subtitle\">Ключевые тенденции</h3><p>Архитекторы и урбанисты по всему миру работают над созданием городов, которые будут:</p><ul class=\"article-list\"><li><span class=\"text-primary\">Экологичными</span> — с зелеными зонами и возобновляемой энергией</li><li><span class=\"text-accent\">Умными</span> — с автоматизированными системами управления</li><li><span class=\"text-success\">Доступными</span> — с развитой инфраструктурой для всех жителей</li><li><span class=\"text-warning\">Устойчивыми</span> — способными противостоять климатическим изменениям</li></ul><div class=\"info-note\"><p><strong>Пример:</strong> Сингапур уже сегодня внедряет технологии \"умного города\", включая автоматизированный транспорт и энергоэффективные здания.</p></div><div class=\"article-quote\">\"Город будущего — это не просто скопление технологий, это гармоничная среда, где люди хотят жить, работать и творить.\"</div><h3 class=\"article-subtitle\">Вызовы и решения</h3><p>Создание городов будущего требует решения сложных задач, включая <span class=\"highlight-error\">перенаселение</span>, транспортные проблемы и экологические вызовы. Однако современные технологии предлагают инновационные решения для каждой из этих проблем.</p></div>"
       }
     }
   ]
