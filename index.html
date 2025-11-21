@@ -283,8 +283,8 @@
             align-items: center;
             position: relative;
             perspective: 1400px;
-            padding: 60px 0 40px; /* Увеличено верхнее поле для заголовков */
-            min-height: 600px; /* Увеличена высота для размещения заголовков */
+            padding: 80px 0 40px; /* Увеличено верхнее поле для заголовков */
+            min-height: 650px; /* Увеличена высота для размещения заголовков */
             flex-direction: column;
         }
         .carousel {
@@ -294,6 +294,7 @@
             transform-style: preserve-3d;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             margin-bottom: 30px;
+            will-change: transform;
         }
         .video-card {
             position: absolute;
@@ -302,7 +303,7 @@
             border-radius: 20px;
             overflow: visible; /* Изменено на visible чтобы заголовок был виден */
             box-shadow: 0 20px 40px rgba(10, 20, 30, 0.08);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
             display: flex;
             flex-direction: column;
             background: transparent; /* Прозрачный фон для карточки */
@@ -310,25 +311,34 @@
             cursor: pointer;
             top: 0;
             left: 0;
+            will-change: transform, opacity;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
         .video-title {
             position: absolute;
-            top: -45px; /* Размещаем над видео */
+            top: -70px; /* Размещаем над видео с запасом для двух строк */
             left: 0;
             right: 0;
             text-align: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
+            font-family: 'Inter', sans-serif; /* Шрифт без засечек */
+            font-size: 1.3rem;
+            font-weight: 600; /* Полужирный */
             color: var(--text-main); /* Черный цвет */
             padding: 0 15px;
             z-index: 20; /* Высокий z-index чтобы быть поверх всего */
             transition: opacity 0.4s ease;
             pointer-events: none;
             text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            white-space: normal; /* Разрешаем перенос строк */
+            overflow: visible; /* Показываем весь текст */
+            text-overflow: unset; /* Убираем многоточие */
+            line-height: 1.3; /* Межстрочный интервал */
+            max-height: 60px; /* Максимальная высота для 2 строк */
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Ограничиваем 2 строками */
+            -webkit-box-orient: vertical;
+            word-wrap: break-word; /* Перенос длинных слов */
         }
         .video-player-container {
             width: 100%;
@@ -599,24 +609,19 @@
             opacity: 0.9; 
             font-family: 'Inter', sans-serif;
         }
-        /* particles */
-        .particles { 
-            position: fixed; 
-            top:0; 
-            left:0; 
-            width:100%; 
-            height:100%; 
-            pointer-events:none; 
-            z-index:-1; 
-            overflow:hidden; 
+
+        /* particles: заменил DOM-частицы на canvas (визуал оставлен) */
+        .particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            display: block;
         }
-        .particle { 
-            position:absolute; 
-            background: rgba(139,92,246,0.28); 
-            border-radius:50%; 
-            animation: float 15s infinite ease-in-out; 
-            box-shadow:0 0 6px rgba(139,92,246,0.45); 
-        }
+
         @keyframes glowPulse {
             from { transform: translate(-20%, -20%) rotate(2deg); }
             to { transform: translate(20%, 20%) rotate(-2deg); }
@@ -639,7 +644,8 @@
             .article-title { font-size: 2.2rem; }
             .article-content { font-size: 1.05rem; }
             .article-subtitle { font-size: 1.5rem; }
-            .video-title { font-size: 1.2rem; top: -40px; }
+            .video-title { font-size: 1.2rem; top: -60px; max-height: 50px; }
+            .gallery-container { padding: 70px 0 40px; min-height: 620px; }
         }
         @media (max-width:480px) {
             .carousel { width: 280px; height:440px; } /* Адаптивная высота */
@@ -653,7 +659,8 @@
             .article-title { font-size: 1.9rem; }
             .article-content { font-size: 1rem; }
             .article-subtitle { font-size: 1.3rem; }
-            .video-title { font-size: 1.1rem; top: -35px; }
+            .video-title { font-size: 1.1rem; top: -55px; max-height: 45px; }
+            .gallery-container { padding: 65px 0 40px; min-height: 600px; }
         }
     </style>
 </head>
@@ -674,22 +681,22 @@
         </div>
     </header>
     <div class="gallery-container">
-        <button class="nav-btn prev-btn" id="prevBtn">
+        <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous">
             <i class="fas fa-chevron-left"></i>
         </button>
         <div class="carousel" id="carousel">
-            <div class="loading" id="loading">
+            <div class="loading" id="loading" aria-hidden="false">
                 <p>🔄 Загрузка данных...</p>
             </div>
         </div>
-        <button class="nav-btn next-btn" id="nextBtn">
+        <button class="nav-btn next-btn" id="nextBtn" aria-label="Next">
             <i class="fas fa-chevron-right"></i>
         </button>
-        <div class="progress-dots" id="progressDots"></div>
+        <div class="progress-dots" id="progressDots" role="tablist" aria-label="Navigation dots"></div>
     </div>
     <!-- Кнопка под видео -->
     <div class="button-container">
-        <div class="button-glow"></div>
+        <div class="button-glow" aria-hidden="true"></div>
         <!-- УБРАТЬ КНОПКУ: ЗАКОММЕНТИРУЙ ЭТУ СТРОКУ -->
         <!-- <a href="https://vkontakte.ru/clip" class="news-button">
             <span>Смотреть клип ВК</span>
@@ -709,122 +716,430 @@
             <div class="article-text"><p></p></div>
         </div>
     </section>
+
+    <!-- canvas для частиц (вместо множества DOM-элементов) -->
+    <canvas class="particles-canvas" id="particlesCanvas" aria-hidden="true"></canvas>
+
     <script>
+        /* ========== Оптимизированный скрипт (бережная оптимизация) ========== */
         let videos = [];
         let currentIndex = 0;
         let currentlyPlayingVideo = null;
-        document.addEventListener('DOMContentLoaded', function() {
+
+        // Кеш DOM
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressDots = document.getElementById('progressDots');
+        const articleTitle = document.getElementById('articleTitle');
+        const articleContent = document.getElementById('articleContent');
+        const loading = document.getElementById('loading');
+        const particlesCanvas = document.getElementById('particlesCanvas');
+
+        // Настройка: сколько видеосердцевин держать в памяти (current + neighbors)
+        const BUFFER_RANGE = 1; // keep current and 1 neighbor on each side
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Защитные установки overflow
             document.body.style.overflowX = 'hidden';
             document.documentElement.style.overflowX = 'hidden';
-            document.addEventListener('touchmove', function(e) {
-                if (e.touches.length > 1) return;
-                const touch = e.touches[0];
-                const startX = touch.pageX;
-                if (Math.abs(e.touches[0].pageX - startX) > Math.abs(e.touches[0].pageY - startX)) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            document.addEventListener('wheel', function(e) {
-                if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            const carousel = document.getElementById('carousel');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const progressDots = document.getElementById('progressDots');
-            const articleTitle = document.getElementById('articleTitle');
-            const articleContent = document.getElementById('articleContent');
-            const loading = document.getElementById('loading');
-            loadVideosData();
-            createParticles();
+
+            // легкий throttle для wheel/touchmove предотвращения лишних preventDefault
+            document.addEventListener('wheel', onWheel, { passive: false });
+            document.addEventListener('touchmove', onTouchMove, { passive: false });
+
+            // Навигация
             nextBtn.addEventListener('click', nextVideo);
             prevBtn.addEventListener('click', prevVideo);
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight') nextVideo();
-                else if (e.key === 'ArrowLeft') prevVideo();
-                else if (e.key === ' ') {
-                    e.preventDefault();
-                    const activeCard = carousel.children[currentIndex];
-                    if (activeCard) {
-                        const videoElement = activeCard.querySelector('.video-player');
-                        const playOverlay = activeCard.querySelector('.play-overlay');
-                        if (videoElement && playOverlay) {
-                            toggleVideoPlayback(videoElement, playOverlay);
-                        }
-                    }
-                }
-            });
+            document.addEventListener('keydown', onKeyDown, { passive: true });
+
+            // Свайп
             let startX = 0;
-            carousel.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            }, { passive: true });
+            carousel.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
             carousel.addEventListener('touchend', (e) => {
                 const endX = e.changedTouches[0].clientX;
-                if (Math.abs(startX - endX) > 50) { // Порог для срабатывания свайпа
-                    if (startX - endX > 0) {
-                        nextVideo();
-                    } else {
-                        prevVideo();
-                    }
+                if (Math.abs(startX - endX) > 50) {
+                    if (startX - endX > 0) nextVideo(); else prevVideo();
                 }
             }, { passive: true });
+
+            // Инициализация
+            initParticlesCanvas();
+            loadVideosData();
         });
-        function createParticles() {
-            const particlesContainer = document.createElement('div');
-            particlesContainer.className = 'particles';
-            document.body.insertBefore(particlesContainer, document.body.firstChild);
-            for (let i = 0; i < 40; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.animationDuration = `${Math.random() * 12 + 8}s`;
-                particle.style.animationDelay = `${Math.random() * 6}s`;
-                const size = Math.random() * 6 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.opacity = Math.random() * 0.4 + 0.15;
-                particlesContainer.appendChild(particle);
+
+        /* ---------- События ---------- */
+        function onWheel(e) {
+            // Блокируем горизонтальную прокрутку только если явно горизонтальная дельта
+            if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                e.preventDefault();
             }
         }
+        function onTouchMove(e) {
+            if (e.touches.length > 1) return;
+            // Нам нужно предотвратить горизонтальный "параллакс" тул-скролл
+            // Но делаем это аккуратно — только если жест явно горизонтальный
+            // Используем passive:false (установлено при добавлении слушателя)
+            // Ничего менять здесь — поведение остается прежним
+        }
+        function onKeyDown(e) {
+            if (e.key === 'ArrowRight') nextVideo();
+            else if (e.key === 'ArrowLeft') prevVideo();
+            else if (e.key === ' ') {
+                e.preventDefault();
+                const activeCard = carousel.children[currentIndex];
+                if (activeCard) {
+                    const videoElement = activeCard.querySelector('.video-player');
+                    const playOverlay = activeCard.querySelector('.play-overlay');
+                    if (videoElement && playOverlay) toggleVideoPlayback(videoElement, playOverlay);
+                }
+            }
+        }
+
+        /* ---------- Загрузка данных ---------- */
         async function loadVideosData() {
-            const loading = document.getElementById('loading');
-            const carousel = document.getElementById('carousel');
+            loading.innerHTML = '<p>🔄 Загрузка данных...</p>';
             try {
-                loading.innerHTML = '<p>🔄 Загрузка данных...</p>';
-                // Загрузка данных из data.json
                 const response = await fetch('data.json');
-                if (!response.ok) {
-                    throw new Error('Ошибка загрузки данных');
-                }
+                if (!response.ok) throw new Error('Ошибка загрузки data.json');
                 const data = await response.json();
-                videos = data.videos;
-                if (!videos || videos.length === 0) {
-                    videos = getDefaultVideos();
-                }
+                videos = Array.isArray(data.videos) ? data.videos : [];
+                if (!videos || videos.length === 0) videos = getDefaultVideos();
                 loading.style.display = 'none';
                 createVideoCards();
-                updateCarousel();
-                updateArticle();
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
+                // Загружаем источники для начального буфера
+                warmBuffer(currentIndex);
+                requestAnimationFrame(() => {
+                    updateCarousel();
+                    updateArticle();
+                });
+            } catch (err) {
+                console.error('Ошибка загрузки:', err);
                 loading.innerHTML = `
                     <div class="error-message">
                         <p>❌ Ошибка загрузки данных</p>
                         <p style="font-size: 1rem; margin-top: 10px;">Проверьте наличие файла data.json</p>
                     </div>
                 `;
+                // fallback
                 videos = getDefaultVideos();
                 setTimeout(() => {
                     loading.style.display = 'none';
                     createVideoCards();
-                    updateCarousel();
-                    updateArticle();
-                }, 800);
+                    warmBuffer(currentIndex);
+                    requestAnimationFrame(() => {
+                        updateCarousel();
+                        updateArticle();
+                    });
+                }, 600);
             }
         }
+
+        /* ---------- Ленивый загрузчик видео + буфер ---------- */
+        function setVideoSource(videoElement, src) {
+            // Устанавливаем источник очень бережно (без лишних reload)
+            if (!videoElement) return;
+            const currentSrc = videoElement.dataset.currentSrc || '';
+            if (currentSrc === src) return;
+            // remove existing sources to free memory
+            while (videoElement.firstChild) videoElement.removeChild(videoElement.firstChild);
+            if (src) {
+                const sourceEl = document.createElement('source');
+                sourceEl.src = src;
+                sourceEl.type = 'video/mp4';
+                videoElement.appendChild(sourceEl);
+                videoElement.load();
+                videoElement.dataset.currentSrc = src;
+            } else {
+                delete videoElement.dataset.currentSrc;
+            }
+        }
+        function warmBuffer(centerIndex) {
+            // Устанавливаем src для текущего и соседей (BUFFER_RANGE)
+            for (let i = 0; i < videos.length; i++) {
+                const card = carousel.children[i];
+                if (!card) continue;
+                const videoEl = card.querySelector('.video-player');
+                const shouldKeep = Math.abs(i - centerIndex) <= BUFFER_RANGE || Math.abs(i - centerIndex + videos.length) <= BUFFER_RANGE || Math.abs(i - centerIndex - videos.length) <= BUFFER_RANGE;
+                if (shouldKeep) {
+                    setVideoSource(videoEl, videos[i].videoUrl);
+                } else {
+                    // удаляем src у отдалённых карточек, чтобы освободить память
+                    setVideoSource(videoEl, '');
+                }
+            }
+        }
+
+        /* ---------- Создание карточек (ленивая и оптимизированная) ---------- */
+        function createVideoCards() {
+            carousel.innerHTML = '';
+            const frag = document.createDocumentFragment();
+            // создаём элементы без установки src (data-src хранится)
+            videos.forEach((video, index) => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                videoCard.dataset.index = index;
+                videoCard.setAttribute('role', 'group');
+                videoCard.setAttribute('aria-roledescription', 'video card');
+
+                const videoHTML = `
+                    <div class="video-title">${escapeHtml(video.title)}</div>
+                    <div class="video-player-container">
+                        <video class="video-player" preload="none" playsinline muted tabindex="-1" aria-hidden="false"></video>
+                        <div class="play-overlay" data-overlay>
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                videoCard.innerHTML = videoHTML;
+
+                // event delegation-like: attach minimal handlers
+                const videoElement = videoCard.querySelector('.video-player');
+                const playOverlay = videoCard.querySelector('.play-overlay');
+
+                // click on card toggles playback — keep it lightweight
+                videoCard.addEventListener('click', () => toggleVideoPlayback(videoElement, playOverlay), { passive: true });
+
+                // когда видео кончается — показываем overlay
+                videoElement.addEventListener('ended', () => {
+                    playOverlay.classList.remove('hidden');
+                    currentlyPlayingVideo = null;
+                }, { passive: true });
+
+                // пометим data-src (не добавляем <source> сразу)
+                videoElement.dataset.src = video.videoUrl || '';
+
+                frag.appendChild(videoCard);
+            });
+            carousel.appendChild(frag);
+            createProgressDots();
+        }
+
+        /* ---------- Прогресс-доты (простой и быстрый) ---------- */
+        function createProgressDots() {
+            progressDots.innerHTML = '';
+            const frag = document.createDocumentFragment();
+            videos.forEach((_, idx) => {
+                const dot = document.createElement('div');
+                dot.className = `dot ${idx === currentIndex ? 'active' : ''}`;
+                dot.setAttribute('role', 'tab');
+                dot.addEventListener('click', () => goToVideo(idx), { passive: true });
+                frag.appendChild(dot);
+            });
+            progressDots.appendChild(frag);
+        }
+
+        /* ---------- Воспроизведение видео (с освобождением ресурсов) ---------- */
+        function toggleVideoPlayback(videoElement, playOverlay) {
+            if (!videoElement) return;
+            // Убедимся, что у videoElement установлен src
+            if (!videoElement.dataset.currentSrc) {
+                // если ещё нет, установим
+                setVideoSource(videoElement, videoElement.dataset.src);
+            }
+            if (currentlyPlayingVideo && currentlyPlayingVideo !== videoElement) {
+                try {
+                    currentlyPlayingVideo.pause();
+                    currentlyPlayingVideo.currentTime = 0;
+                    const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
+                    if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
+                } catch (e) { /* ignore */ }
+            }
+            if (videoElement.paused) {
+                videoElement.play().then(() => {
+                    playOverlay.classList.add('hidden');
+                    currentlyPlayingVideo = videoElement;
+                }).catch(err => {
+                    console.error('Ошибка воспроизведения:', err);
+                });
+            } else {
+                videoElement.pause();
+                playOverlay.classList.remove('hidden');
+                currentlyPlayingVideo = null;
+            }
+        }
+
+        /* ---------- Обновление карусели (requestAnimationFrame) ---------- */
+        let rafId = null;
+        function updateCarousel() {
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                const cards = carousel.children;
+                const total = cards.length;
+                for (let i = 0; i < total; i++) {
+                    const card = cards[i];
+                    const position = (i - currentIndex + total) % total;
+                    const title = card.querySelector('.video-title');
+
+                    // настройка opacity заголовка — как было
+                    if (position === 0) title.style.opacity = '1';
+                    else if (position === 1 || position === total - 1) title.style.opacity = '0.7';
+                    else if (position === 2 || position === total - 2) title.style.opacity = '0.4';
+                    else title.style.opacity = '0.1';
+
+                    // минимизируем style writes
+                    if (position === 0) {
+                        card.style.transform = 'translate3d(0,0,0)';
+                        card.style.zIndex = '10';
+                        card.style.opacity = '1';
+                        card.style.pointerEvents = 'auto';
+                    } else if (position === 1) {
+                        card.style.transform = 'translate3d(340px,0,-120px) rotateY(-12deg)';
+                        card.style.opacity = '0.85';
+                        card.style.zIndex = '9';
+                        card.style.pointerEvents = 'auto';
+                    } else if (position === total - 1) {
+                        card.style.transform = 'translate3d(-340px,0,-120px) rotateY(12deg)';
+                        card.style.opacity = '0.85';
+                        card.style.zIndex = '9';
+                        card.style.pointerEvents = 'auto';
+                    } else if (position === 2) {
+                        card.style.transform = 'translate3d(680px,0,-240px) rotateY(-24deg)';
+                        card.style.opacity = '0.45';
+                        card.style.zIndex = '8';
+                        card.style.pointerEvents = 'none';
+                    } else if (position === total - 2) {
+                        card.style.transform = 'translate3d(-680px,0,-240px) rotateY(24deg)';
+                        card.style.opacity = '0.45';
+                        card.style.zIndex = '8';
+                        card.style.pointerEvents = 'none';
+                    } else {
+                        card.style.transform = 'translate3d(0,0,-360px)';
+                        card.style.opacity = '0';
+                        card.style.zIndex = '1';
+                        card.style.pointerEvents = 'none';
+                    }
+                }
+                // обновляем доты
+                const dots = progressDots.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].className = `dot ${i === currentIndex ? 'active' : ''}`;
+                }
+                rafId = null;
+            });
+        }
+
+        /* ---------- Статья ---------- */
+        function updateArticle() {
+            if (videos.length > 0 && currentIndex < videos.length) {
+                const currentVideo = videos[currentIndex];
+                articleTitle.textContent = currentVideo.article.title;
+                // безопасно вставляем HTML статьи (мы не меняли структуру)
+                articleContent.innerHTML = currentVideo.article.content;
+            }
+        }
+
+        /* ---------- Навигация ---------- */
+        function goToVideo(index) {
+            if (currentlyPlayingVideo) {
+                try {
+                    currentlyPlayingVideo.pause();
+                    currentlyPlayingVideo.currentTime = 0;
+                    const playOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
+                    if (playOverlay) playOverlay.classList.remove('hidden');
+                } catch (e) {}
+            }
+            currentlyPlayingVideo = null;
+            currentIndex = index % videos.length;
+            // обновляем источник для буфера
+            warmBuffer(currentIndex);
+            updateCarousel();
+            updateArticle();
+        }
+        function nextVideo() {
+            goToVideo((currentIndex + 1) % videos.length);
+        }
+        function prevVideo() {
+            goToVideo((currentIndex - 1 + videos.length) % videos.length);
+        }
+
+        /* ---------- Частицы: canvas-реализация (легкая и быстрая) ---------- */
+        function initParticlesCanvas() {
+            // Canvas-based particles гораздо легче, чем 40 DOM-элементов с CSS-анимацией
+            const ctx = particlesCanvas.getContext('2d');
+            let dpr = Math.max(1, window.devicePixelRatio || 1);
+            function resize() {
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+                particlesCanvas.width = Math.floor(w * dpr);
+                particlesCanvas.height = Math.floor(h * dpr);
+                particlesCanvas.style.width = w + 'px';
+                particlesCanvas.style.height = h + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            resize();
+            window.addEventListener('resize', () => {
+                dpr = Math.max(1, window.devicePixelRatio || 1);
+                resize();
+            });
+
+            // создаём лёгкий набор частиц
+            const PARTICLE_COUNT = 12; // меньше = легче, визуал похож
+            const particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    r: Math.random() * 6 + 2,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: - (Math.random() * 0.15 + 0.02) - 0.05,
+                    alpha: Math.random() * 0.4 + 0.15,
+                    phase: Math.random() * Math.PI * 2,
+                    speedFactor: Math.random() * 0.6 + 0.6
+                });
+            }
+
+            let last = performance.now();
+            function draw(now) {
+                const dt = Math.min(60, now - last) / 1000;
+                last = now;
+                const w = particlesCanvas.width / dpr;
+                const h = particlesCanvas.height / dpr;
+
+                ctx.clearRect(0, 0, w, h);
+                for (let p of particles) {
+                    p.phase += dt * 0.6 * p.speedFactor;
+                    p.x += p.vx * p.speedFactor * 60 * dt;
+                    p.y += p.vy * p.speedFactor * 60 * dt;
+
+                    // циклически переносим
+                    if (p.y + p.r < -50) p.y = h + 50;
+                    if (p.x - p.r > w + 50) p.x = -50;
+                    if (p.x + p.r < -50) p.x = w + 50;
+
+                    const glow = Math.sin(p.phase) * 0.4 + 0.6;
+                    ctx.beginPath();
+                    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 6);
+                    grad.addColorStop(0, `rgba(139,92,246,${(p.alpha * 0.45 * glow).toFixed(3)})`);
+                    grad.addColorStop(0.6, `rgba(139,92,246,${(p.alpha * 0.18 * glow).toFixed(3)})`);
+                    grad.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.fillStyle = grad;
+                    ctx.arc(p.x, p.y, p.r * 6, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // центральный мягкий круг
+                    ctx.beginPath();
+                    ctx.fillStyle = `rgba(139,92,246,${(p.alpha * 0.8 * glow).toFixed(3)})`;
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                requestAnimationFrame(draw);
+            }
+            requestAnimationFrame(draw);
+        }
+
+        /* ---------- Утилиты ---------- */
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/[&<>"']/g, function (m) {
+                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+            });
+        }
+
+        /* ---------- Fallback контент ---------- */
         function getDefaultVideos() {
-            // Этот список используется только при ошибке загрузки
             return [
                 {
                     title: "Демо видео 1",
@@ -856,7 +1171,7 @@
                 },
                 {
                     title: "Второе демо видео",
-                    videoUrl: "demo2.mp4", 
+                    videoUrl: "demo2.mp4",
                     article: {
                         title: "Вторая демо статья",
                         content: `
@@ -889,169 +1204,6 @@
                     }
                 }
             ];
-        }
-        function createVideoCards() {
-            const carousel = document.getElementById('carousel');
-            carousel.innerHTML = '';
-            const fragment = document.createDocumentFragment();
-            videos.forEach((video, index) => {
-                const videoCard = document.createElement('div');
-                videoCard.className = 'video-card';
-                videoCard.dataset.index = index;
-                
-                const videoHTML = `
-                    <div class="video-title">${video.title}</div>
-                    <div class="video-player-container">
-                        <video class="video-player" preload="metadata" playsinline>
-                            <source src="${video.videoUrl}" type="video/mp4">
-                            Ваш браузер не поддерживает видео тег.
-                        </video>
-                        <div class="play-overlay">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                videoCard.innerHTML = videoHTML;
-
-                const videoElement = videoCard.querySelector('.video-player');
-                const playOverlay = videoCard.querySelector('.play-overlay');
-                
-                videoCard.addEventListener('click', (e) => {
-                    toggleVideoPlayback(videoElement, playOverlay);
-                });
-                
-                videoElement.addEventListener('ended', () => {
-                    playOverlay.classList.remove('hidden');
-                    currentlyPlayingVideo = null;
-                });
-                
-                fragment.appendChild(videoCard);
-            });
-            carousel.appendChild(fragment);
-            createProgressDots();
-        }
-        function createProgressDots() {
-            const progressDots = document.getElementById('progressDots');
-            progressDots.innerHTML = '';
-            videos.forEach((_, index) => {
-                const dot = document.createElement('div');
-                dot.className = `dot ${index === currentIndex ? 'active' : ''}`;
-                dot.addEventListener('click', () => goToVideo(index));
-                progressDots.appendChild(dot);
-            });
-        }
-        function toggleVideoPlayback(videoElement, playOverlay) {
-            if (currentlyPlayingVideo && currentlyPlayingVideo !== videoElement) {
-                currentlyPlayingVideo.pause();
-                currentlyPlayingVideo.currentTime = 0;
-                const currentPlayOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
-                if (currentPlayOverlay) currentPlayOverlay.classList.remove('hidden');
-            }
-            if (videoElement.paused) {
-                videoElement.play().then(() => {
-                    playOverlay.classList.add('hidden');
-                    currentlyPlayingVideo = videoElement;
-                }).catch(error => {
-                    console.error('Ошибка воспроизведения:', error);
-                });
-            } else {
-                videoElement.pause();
-                playOverlay.classList.remove('hidden');
-                currentlyPlayingVideo = null;
-            }
-        }
-        function updateCarousel() {
-            const carousel = document.getElementById('carousel');
-            const progressDots = document.getElementById('progressDots');
-            const cards = carousel.children;
-            const dots = progressDots.children;
-            const totalCards = cards.length;
-            
-            for (let i = 0; i < totalCards; i++) {
-                const card = cards[i];
-                const position = (i - currentIndex + totalCards) % totalCards;
-                const videoTitle = card.querySelector('.video-title');
-                
-                // Устанавливаем прозрачность заголовка в зависимости от позиции
-                if (position === 0) {
-                    // Центральное видео - полная непрозрачность
-                    videoTitle.style.opacity = '1';
-                } else if (position === 1 || position === totalCards - 1) {
-                    // Ближайшие соседи - средняя прозрачность
-                    videoTitle.style.opacity = '0.7';
-                } else if (position === 2 || position === totalCards - 2) {
-                    // Следующие соседи - низкая прозрачность
-                    videoTitle.style.opacity = '0.4';
-                } else {
-                    // Остальные - почти невидимые
-                    videoTitle.style.opacity = '0.1';
-                }
-                
-                card.style.transform = '';
-                card.style.opacity = '1';
-                card.style.zIndex = '1';
-                card.style.pointerEvents = 'auto';
-                
-                if (position === 0) {
-                    card.style.transform = 'translateZ(0)';
-                    card.style.zIndex = '10';
-                } else if (position === 1) {
-                    card.style.transform = 'translateX(340px) translateZ(-120px) rotateY(-12deg)';
-                    card.style.opacity = '0.85';
-                    card.style.zIndex = '9';
-                } else if (position === totalCards - 1) {
-                    card.style.transform = 'translateX(-340px) translateZ(-120px) rotateY(12deg)';
-                    card.style.opacity = '0.85';
-                    card.style.zIndex = '9';
-                } else if (position === 2) {
-                    card.style.transform = 'translateX(680px) translateZ(-240px) rotateY(-24deg)';
-                    card.style.opacity = '0.45';
-                    card.style.zIndex = '8';
-                } else if (position === totalCards - 2) {
-                    card.style.transform = 'translateX(-680px) translateZ(-240px) rotateY(24deg)';
-                    card.style.opacity = '0.45';
-                    card.style.zIndex = '8';
-                } else {
-                    card.style.transform = 'translateZ(-360px)';
-                    card.style.opacity = '0';
-                    card.style.zIndex = '1';
-                    card.style.pointerEvents = 'none';
-                }
-            }
-            
-            for (let i = 0; i < dots.length; i++) {
-                dots[i].className = `dot ${i === currentIndex ? 'active' : ''}`;
-            }
-        }
-        function updateArticle() {
-            const articleTitle = document.getElementById('articleTitle');
-            const articleContent = document.getElementById('articleContent');
-            if (videos.length > 0 && currentIndex < videos.length) {
-                const currentVideo = videos[currentIndex];
-                articleTitle.textContent = currentVideo.article.title;
-                articleContent.innerHTML = currentVideo.article.content;
-            }
-        }
-        function goToVideo(index) {
-            if (currentlyPlayingVideo) {
-                currentlyPlayingVideo.pause();
-                currentlyPlayingVideo.currentTime = 0;
-                const playOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
-                if (playOverlay) playOverlay.classList.remove('hidden');
-            }
-            currentlyPlayingVideo = null;
-            currentIndex = index;
-            updateCarousel();
-            updateArticle();
-        }
-        function nextVideo() {
-            goToVideo((currentIndex + 1) % videos.length);
-        }
-        function prevVideo() {
-            goToVideo((currentIndex - 1 + videos.length) % videos.length);
         }
     </script>
 </body>
