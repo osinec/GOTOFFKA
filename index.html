@@ -766,6 +766,7 @@
             const carousel = document.getElementById('carousel');
             try {
                 loading.innerHTML = '<p>🔄 Загрузка данных...</p>';
+                // Загрузка данных из data.json
                 const response = await fetch('data.json');
                 if (!response.ok) {
                     throw new Error('Ошибка загрузки данных');
