@@ -17,6 +17,14 @@
       }
     },
     {
+      "title": "Дизайн интерфейсов",
+      "videoUrl": "https://example.com/video2.mp4",
+      "article": {
+        "title": "Принципы UX/UI дизайна",
+        "content": "<div class=\"article-text\"><p>UX/UI дизайн играет важную роль в создании удобных и привлекательных интерфейсов. В этой статье мы изучим основные принципы проектирования пользовательского опыта.</p><h3 class=\"article-subtitle\">Ключевые элементы</h3><ul class=\"article-list\"><li>Эстетика и функциональность</li><li>Пользовательский путь</li><li>Адаптивность</li><li>Тестирование и обратная связь</li></ul><div class=\"success-note\"><p><strong>Совет:</strong> Всегда начинайте с потребностей пользователя.</p></div></div>"
+      }
+    },
+    {
       "title": "Финансовая грамотность",
       "videoUrl": "https://example.com/video3.mp4",
       "article": {
