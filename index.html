@@ -350,6 +350,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            cursor: pointer;
         }
         .video-preview::before {
             content: '';
@@ -802,11 +803,6 @@
                                     <div class="preview-text">Нажмите для воспроизведения</div>
                                 </div>
                             </div>
-                            <div class="play-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
                         </div>
                     `;
                 } else {
@@ -814,9 +810,10 @@
                         <div class="video-title">${escapeHtml(video.title)}</div>
                         <div class="video-player-container">
                             <video class="video-player" preload="none" playsinline muted tabindex="-1" poster="${previewImage}"></video>
-                            <div class="play-overlay">
-                                <div class="play-icon">
-                                    <i class="fas fa-play"></i>
+                            <div class="video-preview" style="background-image: url('${previewImage}')">
+                                <div class="preview-content">
+                                    <div class="preview-play-icon">▶</div>
+                                    <div class="preview-text">Нажмите для воспроизведения</div>
                                 </div>
                             </div>
                         </div>
@@ -828,7 +825,6 @@
                     const iframeContainer = videoCard.querySelector('.yandex-player-container');
                     const iframe = videoCard.querySelector('.yandex-player-iframe');
                     const preview = videoCard.querySelector('.video-preview');
-                    const playOverlay = videoCard.querySelector('.play-overlay');
                     
                     const playHandler = (e) => {
                         e.stopPropagation();
@@ -836,7 +832,6 @@
                         
                         iframeContainer.style.display = 'block';
                         preview.style.display = 'none';
-                        playOverlay.classList.add('hidden');
                         
                         if (!iframe.src) {
                             let videoUrl = video.videoUrl;
@@ -855,23 +850,22 @@
                         currentlyPlayingVideo = iframe;
                     };
                     
-                    playOverlay.addEventListener('click', playHandler, { passive: true });
                     preview.addEventListener('click', playHandler, { passive: true });
                     
                 } else {
                     const videoElement = videoCard.querySelector('.video-player');
-                    const playOverlay = videoCard.querySelector('.play-overlay');
+                    const preview = videoCard.querySelector('.video-preview');
                     videoElement.dataset.src = video.videoUrl || '';
                     
                     const playHandler = (e) => {
                         e.stopPropagation();
-                        toggleVideoPlayback(videoElement, playOverlay);
+                        toggleVideoPlayback(videoElement, preview);
                     };
                     
-                    playOverlay.addEventListener('click', playHandler, { passive: true });
+                    preview.addEventListener('click', playHandler, { passive: true });
                     
                     videoElement.addEventListener('ended', () => {
-                        playOverlay.classList.remove('hidden');
+                        preview.style.display = 'block';
                         currentlyPlayingVideo = null;
                     }, { passive: true });
                 }
@@ -886,8 +880,8 @@
                 try {
                     currentlyPlayingVideo.pause();
                     currentlyPlayingVideo.currentTime = 0;
-                    const playOverlay = currentlyPlayingVideo.parentElement.querySelector('.play-overlay');
-                    if (playOverlay) playOverlay.classList.remove('hidden');
+                    const preview = currentlyPlayingVideo.parentElement.querySelector('.video-preview');
+                    if (preview) preview.style.display = 'block';
                 } catch (e) {}
             }
             
@@ -899,10 +893,8 @@
                         iframe.src = src;
                         const container = iframe.closest('.yandex-player-container');
                         const preview = container.parentElement.querySelector('.video-preview');
-                        const playOverlay = container.parentElement.querySelector('.play-overlay');
                         if (container) container.style.display = 'none';
                         if (preview) preview.style.display = 'block';
-                        if (playOverlay) playOverlay.classList.remove('hidden');
                     } catch (e) {}
                 }
             });
@@ -910,7 +902,7 @@
             currentlyPlayingVideo = null;
         }
 
-        function toggleVideoPlayback(videoElement, playOverlay) {
+        function toggleVideoPlayback(videoElement, preview) {
             if (!videoElement) return;
             const container = videoElement.parentElement;
             const errorDiv = container.querySelector('.video-error');
@@ -928,7 +920,7 @@
 
             if (videoElement.paused) {
                 videoElement.play().then(() => {
-                    playOverlay.classList.add('hidden');
+                    preview.style.display = 'none';
                     currentlyPlayingVideo = videoElement;
                 }).catch(err => {
                     console.error('Ошибка воспроизведения:', err);
@@ -942,7 +934,7 @@
                 });
             } else {
                 videoElement.pause();
-                playOverlay.classList.remove('hidden');
+                preview.style.display = 'block';
                 currentlyPlayingVideo = null;
             }
         }
