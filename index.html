@@ -10,15 +10,23 @@
         :root {
             --primary: #8B5CF6;
             --primary-light: #A78BFA;
+            --primary-dark: #7C3AED;
             --accent: #06B6D4;
+            --accent-light: #22D3EE;
             --success: #10B981;
             --warning: #F59E0B;
             --error: #EF4444;
             --darker: #E9EEF8;
             --text-main: #0F1724;
+            --text-light: #64748B;
             --text-dark: #0A0F1A;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8FAFC;
             --glass: rgba(255,255,255,0.25);
             --glass-border: rgba(255,255,255,0.35);
+            --shadow-sm: 0 2px 8px rgba(10, 20, 30, 0.04);
+            --shadow-md: 0 4px 20px rgba(10, 20, 30, 0.08);
+            --shadow-lg: 0 8px 40px rgba(10, 20, 30, 0.12);
         }
         * {
             margin: 0;
@@ -31,53 +39,57 @@
             width: 100%;
             height: 100%;
             overflow-x: hidden;
-            background: linear-gradient(180deg, var(--darker), #ffffff);
+            background: linear-gradient(180deg, var(--darker), var(--bg-light) 100%);
             color: var(--text-main);
             font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            line-height: 1.6;
+            line-height: 1.7;
         }
         header {
             text-align: center;
-            padding: 20px 20px 5px;
+            padding: 30px 20px 10px;
         }
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #0b1220, var(--primary-light));
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #0b1220, var(--primary), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+            text-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
             letter-spacing: -0.5px;
         }
         .subtitle {
             font-family: 'Poppins', sans-serif;
             font-weight: 300;
-            color: rgba(15,23,36,0.75);
-            font-size: 0.95rem;
-            margin-bottom: 10px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
             line-height: 1.6;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.3px;
         }
         .news-container {
-            max-width: 650px;
-            margin: 0 auto 40px;
-            padding: 0 20px;
+            max-width: 680px;
+            margin: 0 auto 50px;
+            padding: 0 25px;
             position: relative;
         }
         .news-frame {
-            background: linear-gradient(135deg, #0D9488, #10B981);
-            border-radius: 16px;
-            padding: 22px;
-            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.3);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, #0D9488, #10B981, #06B6D4);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255,255,255,0.3);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
             color: white;
-            transition: all 0.3s ease-out;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .news-frame:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 45px rgba(16, 185, 129, 0.4);
         }
         .news-frame::before {
             content: '';
@@ -86,60 +98,61 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%);
-            animation: glowPulse 4s infinite alternate;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: glowPulse 6s infinite alternate;
             pointer-events: none;
             border-radius: 50%;
-            opacity: 0.6;
+            opacity: 0.4;
         }
         .news-content {
             position: relative;
             z-index: 2;
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.6;
         }
         .news-content h3 {
             font-family: 'Poppins', sans-serif;
-            font-weight: 300;
-            font-size: 1.2rem;
-            margin-bottom: 8px;
+            font-weight: 400;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
             color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            letter-spacing: -0.5px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
         }
         .news-content p {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             opacity: 0.95;
             word-wrap: break-word;
             hyphens: auto;
-            letter-spacing: 0.1px;
+            letter-spacing: 0.2px;
+            font-size: 0.98rem;
         }
         .news-button {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: linear-gradient(135deg, #FF6B6B, #FF8E53, #FF6B6B, #FF8E53);
             background-size: 400% 400%;
             color: white;
-            padding: 14px 28px;
+            padding: 16px 32px;
             border-radius: 50px;
             font-weight: 700;
             font-family: 'Poppins', sans-serif;
             text-decoration: none;
             box-shadow: 
-                0 6px 25px rgba(255, 107, 107, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.2),
-                0 0 25px rgba(255, 107, 107, 0.3);
+                0 8px 30px rgba(255, 107, 107, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(255, 107, 107, 0.4);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             border: none;
-            letter-spacing: 0.7px;
-            font-size: 1rem;
+            letter-spacing: 0.8px;
+            font-size: 1.05rem;
             position: relative;
             overflow: hidden;
             animation: 
-                shimmer 2.5s ease-in-out infinite,
-                gentlePulse 3s ease-in-out infinite;
+                shimmer 3s ease-in-out infinite,
+                gentlePulse 4s ease-in-out infinite;
         }
         .news-button::before {
             content: '';
@@ -151,16 +164,16 @@
             background: linear-gradient(
                 90deg,
                 transparent,
-                rgba(255, 255, 255, 0.5),
+                rgba(255, 255, 255, 0.6),
                 transparent
             );
-            animation: shine 3s ease-in-out infinite;
+            animation: shine 3.5s ease-in-out infinite;
         }
         .news-button .icon {
             transition: all 0.3s ease;
-            font-size: 1em;
+            font-size: 1.1em;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-            animation: iconPulse 2s ease-in-out infinite;
+            animation: iconPulse 2.5s ease-in-out infinite;
         }
         @keyframes shimmer {
             0%, 100% {
@@ -174,16 +187,16 @@
             0%, 100% {
                 transform: translateY(0) scale(1);
                 box-shadow: 
-                    0 6px 25px rgba(255, 107, 107, 0.4),
-                    0 0 0 1px rgba(255, 255, 255, 0.2),
-                    0 0 25px rgba(255, 107, 107, 0.3);
+                    0 8px 30px rgba(255, 107, 107, 0.5),
+                    0 0 0 1px rgba(255, 255, 255, 0.3),
+                    0 0 30px rgba(255, 107, 107, 0.4);
             }
             50% {
-                transform: translateY(-3px) scale(1.05);
+                transform: translateY(-4px) scale(1.06);
                 box-shadow: 
-                    0 10px 35px rgba(255, 107, 107, 0.6),
-                    0 0 0 1px rgba(255, 255, 255, 0.3),
-                    0 0 35px rgba(255, 107, 107, 0.5);
+                    0 12px 40px rgba(255, 107, 107, 0.7),
+                    0 0 0 1px rgba(255, 255, 255, 0.4),
+                    0 0 40px rgba(255, 107, 107, 0.6);
             }
         }
         @keyframes shine {
@@ -202,46 +215,46 @@
                 transform: translateX(0) scale(1);
             }
             50% {
-                transform: translateX(3px) scale(1.2);
+                transform: translateX(4px) scale(1.3);
             }
         }
         .news-button:hover {
             animation: 
-                shimmer 1s ease-in-out infinite,
-                gentlePulse 1.5s ease-in-out infinite;
-            transform: translateY(-4px) scale(1.08);
+                shimmer 1.2s ease-in-out infinite,
+                gentlePulse 2s ease-in-out infinite;
+            transform: translateY(-5px) scale(1.08);
             box-shadow: 
-                0 15px 45px rgba(255, 107, 107, 0.7),
-                0 0 0 1px rgba(255, 255, 255, 0.4),
-                0 0 50px rgba(255, 107, 107, 0.6);
+                0 20px 50px rgba(255, 107, 107, 0.8),
+                0 0 0 1px rgba(255, 255, 255, 0.5),
+                0 0 60px rgba(255, 107, 107, 0.7);
         }
         .gallery-container {
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            perspective: 800px;
-            padding: 60px 0 25px;
-            min-height: 420px;
+            perspective: 1000px;
+            padding: 70px 0 30px;
+            min-height: 480px;
             flex-direction: column;
         }
         .carousel {
             position: relative;
-            width: 270px;
-            height: 480px; /* 9:16 соотношение */
+            width: 300px;
+            height: 533px; /* 9:16 соотношение */
             transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 20px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 25px;
             will-change: transform;
         }
         .video-card {
             position: absolute;
             width: 100%;
             height: 100%;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: visible;
-            box-shadow: 0 10px 20px rgba(10, 20, 30, 0.08);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
             display: flex;
             flex-direction: column;
             background: transparent;
@@ -255,24 +268,24 @@
         }
         .video-title {
             position: absolute;
-            top: -70px;
+            top: -80px;
             left: 0;
             right: 0;
             text-align: center;
             font-family: 'Inter', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.3rem;
+            font-weight: 700;
             color: var(--text-main);
-            padding: 0 15px;
+            padding: 0 20px;
             z-index: 20;
-            transition: opacity 0.4s ease;
+            transition: all 0.4s ease;
             pointer-events: none;
-            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.9);
             white-space: normal;
             overflow: visible;
             text-overflow: unset;
-            line-height: 1.3;
-            max-height: 50px;
+            line-height: 1.4;
+            max-height: 60px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -287,22 +300,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(10, 20, 30, 0.08);
-            border: 1px solid rgba(10,20,30,0.05);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(10,20,30,0.08);
         }
         .video-player {
             width: 100%;
             height: 100%;
             object-fit: cover;
             background: #000;
-            border-radius: 12px;
+            border-radius: 16px;
             display: none;
         }
         .yandex-player-container {
             width: 100%;
             height: 100%;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
             display: none;
         }
@@ -310,7 +323,7 @@
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
         }
         .video-preview {
             width: 100%;
@@ -318,12 +331,13 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
         .video-preview::before {
             content: '';
@@ -332,24 +346,39 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(139, 92, 246, 0.2));
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        .video-preview:hover::before {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(139, 92, 246, 0.3));
         }
         .preview-content {
             position: relative;
             z-index: 2;
             text-align: center;
             color: white;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        .video-preview:hover .preview-content {
+            transform: translateY(-5px);
         }
         .preview-play-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            font-size: 3rem;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+            transition: all 0.3s ease;
+        }
+        .video-preview:hover .preview-play-icon {
+            transform: scale(1.1);
         }
         .preview-text {
-            font-size: 0.9rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            font-weight: 500;
+            font-size: 1rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         .video-error {
             position: absolute;
@@ -361,30 +390,30 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             color: white;
             text-align: center;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: 16px;
             z-index: 15;
             display: none;
         }
         .video-error i {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+            font-size: 2rem;
+            margin-bottom: 12px;
             color: var(--error);
         }
         .video-error p {
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             opacity: 0.9;
         }
         .nav-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0,0,0,0.05);
-            width: 40px;
-            height: 40px;
+            background: rgba(255,255,255,0.9);
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -392,156 +421,293 @@
             cursor: pointer;
             z-index: 100;
             border: none;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
         .nav-btn:hover {
-            background: rgba(139,92,246,0.12);
-            transform: translateY(-50%) scale(1.05);
+            background: rgba(139,92,246,0.15);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.3);
         }
-        .prev-btn { left: 5px; }
-        .next-btn { right: 5px; }
-        .nav-btn i { font-size: 1.1rem; color: var(--text-main); }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+        .nav-btn i { 
+            font-size: 1.3rem; 
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover i {
+            color: var(--primary);
+        }
         .progress-dots {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             position: relative;
             z-index: 10;
-            margin-top: 15px;
+            margin-top: 20px;
         }
         .dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: rgba(10,20,30,0.06);
-            transition: all 0.18s ease;
+            background: rgba(10,20,30,0.1);
+            transition: all 0.3s ease;
             cursor: pointer;
             border: none;
+            position: relative;
         }
         .dot.active {
             background: var(--primary);
-            transform: scale(1.2);
+            transform: scale(1.3);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
         }
-        .dot:hover { transform: scale(1.1); }
+        .dot:hover { 
+            transform: scale(1.2);
+            background: var(--primary-light);
+        }
+        
+        /* Улучшенные стили для статьи - БЕЗ ГРАДИЕНТОВ */
         .article-section {
             flex: 1;
-            max-width: 750px;
-            margin: 30px auto;
-            padding: 25px 20px;
-            background: linear-gradient(135deg, #E9EEF8, #ffffff, #F8FAFC);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 
-                0 10px 25px rgba(10, 20, 30, 0.05),
-                0 0 0 1px rgba(255, 255, 255, 0.8),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--bg-white);
+            border-radius: 24px;
+            border: 1px solid rgba(10, 20, 30, 0.08);
+            box-shadow: var(--shadow-lg);
             position: relative;
             z-index: 5;
         }
-        .article-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
-            border-radius: 16px;
-            pointer-events: none;
-        }
+
         .article-header { 
             text-align: center; 
-            margin-bottom: 20px;
+            margin-bottom: 35px;
             position: relative;
             z-index: 2;
         }
         .article-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 6px;
-            line-height: 1.1;
+            margin-bottom: 10px;
+            line-height: 1.2;
             letter-spacing: -0.5px;
-            text-shadow: 0 2px 6px rgba(139, 92, 246, 0.15);
-            background: linear-gradient(135deg, #0b1220, var(--primary-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            position: relative;
+        }
+        .article-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
         }
         .article-content {
-            max-width: 650px;
+            max-width: 700px;
             margin: 0 auto;
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-size: 1.05rem;
+            line-height: 1.8;
             color: var(--text-main);
             position: relative;
             z-index: 2;
         }
+        .article-text { 
+            margin-bottom: 25px; 
+        }
         .article-text p { 
-            margin-bottom: 16px; 
+            margin-bottom: 20px; 
             letter-spacing: 0.1px;
             color: var(--text-main);
+            font-size: 1.05rem;
+            text-align: justify;
         }
         .article-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             color: var(--text-main);
-            margin: 18px 0 12px 0;
-            border-left: 3px solid var(--primary);
-            padding-left: 12px;
+            margin: 30px 0 18px 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 16px;
             letter-spacing: -0.3px;
         }
         .article-list { 
-            margin: 16px 0; 
-            padding-left: 18px; 
+            margin: 20px 0; 
+            padding-left: 24px; 
         }
         .article-list li { 
-            margin-bottom: 10px; 
-            font-size: 0.9rem;
+            margin-bottom: 12px; 
+            font-size: 1.05rem;
             letter-spacing: 0.05px;
             color: var(--text-main);
-            line-height: 1.5;
+            line-height: 1.6;
+            position: relative;
+        }
+        .article-list li::before {
+            content: '▸';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -18px;
         }
         .article-image { 
             width: 100%; 
-            max-width: 550px; 
-            margin: 16px auto; 
-            border-radius: 10px; 
+            max-width: 600px; 
+            margin: 25px auto; 
+            border-radius: 16px; 
             overflow: hidden; 
-            box-shadow: 0 8px 20px rgba(10, 20, 30, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(10, 20, 30, 0.1);
+            position: relative;
         }
         .article-image img { 
             width: 100%; 
             height: auto; 
             display:block; 
+            transition: transform 0.5s ease;
         }
+        .article-image:hover img {
+            transform: scale(1.03);
+        }
+        
+        /* Улучшенный стиль для цитаты */
         .article-quote {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.05));
-            border-left: 3px solid var(--primary);
-            padding: 16px;
-            margin: 18px 0;
-            border-radius: 0 10px 10px 0;
-            font-style: italic;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            background: rgba(139, 92, 246, 0.05);
+            border-left: 5px solid var(--primary);
+            padding: 25px 30px;
+            margin: 30px 0;
+            border-radius: 0 16px 16px 0;
+            font-style: normal;
+            font-size: 1.1rem;
+            line-height: 1.7;
             color: var(--text-main);
-            letter-spacing: 0.2px;
-            box-shadow: 0 4px 15px rgba(10, 20, 30, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.1px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
         }
+        
+        .article-quote::before {
+            content: '"';
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.3;
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+        
+        /* Улучшенный стиль для рамки */
+        .article-frame {
+            background: var(--bg-light);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+        
+        /* Улучшенный стиль для текста с градиентом */
+        .highlight-orange-preview {
+            background: #FF6B6B;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            font-size: 1.3rem;
+            display: inline-block;
+            margin: 25px 0;
+            padding: 8px 0;
+            position: relative;
+            letter-spacing: 0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .highlight-orange-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #FF6B6B;
+            border-radius: 2px;
+            opacity: 0.8;
+        }
+        
+        /* Улучшенный стиль для важных заметок */
+        .important-note {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .important-note::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px 0 0 3px;
+        }
+        
+        .important-note p {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        
+        .article-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            padding: 2px 0;
+            position: relative;
+        }
+        
+        .article-text a:hover {
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .article-text a::after {
+            content: '↗';
+            margin-left: 4px;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+        
         .loading { 
             text-align:center; 
-            padding: 20px; 
-            font-size:0.9rem; 
+            padding: 30px; 
+            font-size:1.1rem; 
             opacity: 0.9; 
             font-family: 'Inter', sans-serif;
+            color: var(--text-light);
         }
         .particles-canvas {
             position: fixed;
@@ -554,74 +720,79 @@
             display: block;
         }
         
-        /* Добавленные стили для элементов из data.json */
-        .highlight-orange-preview {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 600;
-            font-size: 1.1rem;
-            display: inline-block;
-            margin: 10px 0;
-        }
-        
-        .important-note {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.08));
-            border-left: 3px solid var(--primary);
-            padding: 16px;
-            margin: 18px 0;
-            border-radius: 0 10px 10px 0;
-            box-shadow: 0 4px 15px rgba(10, 20, 30, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        
-        .important-note p {
-            margin-bottom: 0;
-        }
-        
-        .article-text a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border-bottom: 1px solid transparent;
-        }
-        
-        .article-text a:hover {
-            color: var(--primary-light);
-            border-bottom: 1px solid var(--primary-light);
-        }
-        
         @keyframes glowPulse {
             from { transform: translate(-20%, -20%) rotate(2deg); }
             to { transform: translate(20%, 20%) rotate(-2deg); }
         }
+        
         @media (max-width:768px) {
-            .carousel { width:240px; height:426px; } /* Сохраняем 9:16 */
+            .carousel { width:280px; height:497px; }
+            h1 { font-size:2.8rem; }
+            .news-frame { padding: 24px; }
+            .news-button { padding: 14px 28px; font-size: 1rem; }
+            .article-section { padding: 30px 20px; margin: 30px 20px; }
+            .article-title { font-size: 1.8rem; }
+            .video-title { font-size: 1.2rem; top: -70px; }
+            .gallery-container { padding: 60px 0 25px; min-height: 450px; }
+            .preview-play-icon { font-size: 2.5rem; }
+            .nav-btn { width: 45px; height: 45px; }
+            .nav-btn i { font-size: 1.2rem; }
+            
+            .article-quote {
+                padding: 20px 24px;
+                margin: 25px 0;
+                font-size: 1.05rem;
+            }
+            
+            .article-frame {
+                padding: 20px;
+                margin: 25px 0;
+            }
+            
+            .highlight-orange-preview {
+                font-size: 1.2rem;
+                margin: 20px 0;
+            }
+            
+            .important-note {
+                padding: 20px;
+                margin: 25px 0;
+            }
+        }
+        
+        @media (max-width:480px) {
+            .carousel { width: 250px; height:444px; }
             h1 { font-size:2.2rem; }
-            .news-frame { padding: 18px; }
+            .news-frame { padding: 20px; }
             .news-button { padding: 12px 24px; font-size: 0.95rem; }
-            .article-section { padding: 20px 16px; margin: 25px; }
+            .article-section { padding: 25px 16px; margin: 25px 15px; }
             .article-title { font-size: 1.5rem; }
             .video-title { font-size: 1.1rem; top: -65px; }
-            .gallery-container { padding: 50px 0 20px; min-height: 400px; }
-            .preview-play-icon { font-size: 1.8rem; }
-            .nav-btn { width: 35px; height: 35px; }
-            .nav-btn i { font-size: 1rem; }
-        }
-        @media (max-width:480px) {
-            .carousel { width: 210px; height:373px; } /* Сохраняем 9:16 */
-            h1 { font-size:1.8rem; }
-            .news-frame { padding: 16px; }
-            .news-button { padding: 10px 20px; font-size: 0.9rem; }
-            .article-section { padding: 16px 12px; margin: 20px; }
-            .article-title { font-size: 1.3rem; }
-            .video-title { font-size: 1rem; top: -60px; }
-            .gallery-container { padding: 45px 0 15px; min-height: 380px; }
-            .preview-play-icon { font-size: 1.6rem; }
-            .nav-btn { width: 30px; height: 30px; }
-            .nav-btn i { font-size: 0.9rem; }
+            .gallery-container { padding: 50px 0 20px; min-height: 420px; }
+            .preview-play-icon { font-size: 2rem; }
+            .nav-btn { width: 40px; height: 40px; }
+            .nav-btn i { font-size: 1.1rem; }
+            
+            .article-quote {
+                padding: 18px 20px;
+                margin: 20px 0;
+                font-size: 1rem;
+            }
+            
+            .article-frame {
+                padding: 18px;
+                margin: 20px 0;
+            }
+            
+            .highlight-orange-preview {
+                font-size: 1.1rem;
+                margin: 18px 0;
+            }
+            
+            .important-note {
+                padding: 18px;
+                margin: 20px 0;
+            }
         }
     </style>
 </head>
@@ -665,7 +836,6 @@
     </section>
     <canvas class="particles-canvas" id="particlesCanvas" aria-hidden="true"></canvas>
     <script>
-        // JavaScript код остается без изменений
         let videos = [];
         let currentIndex = 0;
         let currentlyPlayingVideo = null;
@@ -966,27 +1136,27 @@
                         card.style.opacity = '1';
                         card.style.pointerEvents = 'auto';
                     } else if (position === 1) {
-                        card.style.transform = 'translate3d(240px,0,-60px) rotateY(-12deg)';
+                        card.style.transform = 'translate3d(280px,0,-80px) rotateY(-15deg)';
                         card.style.opacity = '0.85';
                         card.style.zIndex = '9';
                         card.style.pointerEvents = 'auto';
                     } else if (position === total - 1) {
-                        card.style.transform = 'translate3d(-240px,0,-60px) rotateY(12deg)';
+                        card.style.transform = 'translate3d(-280px,0,-80px) rotateY(15deg)';
                         card.style.opacity = '0.85';
                         card.style.zIndex = '9';
                         card.style.pointerEvents = 'auto';
                     } else if (position === 2) {
-                        card.style.transform = 'translate3d(480px,0,-120px) rotateY(-24deg)';
+                        card.style.transform = 'translate3d(560px,0,-160px) rotateY(-30deg)';
                         card.style.opacity = '0.45';
                         card.style.zIndex = '8';
                         card.style.pointerEvents = 'none';
                     } else if (position === total - 2) {
-                        card.style.transform = 'translate3d(-480px,0,-120px) rotateY(24deg)';
+                        card.style.transform = 'translate3d(-560px,0,-160px) rotateY(30deg)';
                         card.style.opacity = '0.45';
                         card.style.zIndex = '8';
                         card.style.pointerEvents = 'none';
                     } else {
-                        card.style.transform = 'translate3d(0,0,-180px)';
+                        card.style.transform = 'translate3d(0,0,-240px)';
                         card.style.opacity = '0';
                         card.style.zIndex = '1';
                         card.style.pointerEvents = 'none';
@@ -1032,18 +1202,18 @@
             resize();
             window.addEventListener('resize', resize);
             
-            const PARTICLE_COUNT = 6;
+            const PARTICLE_COUNT = 8;
             const particles = [];
             for (let i = 0; i < PARTICLE_COUNT; i++) {
                 particles.push({
                     x: Math.random() * window.innerWidth,
                     y: Math.random() * window.innerHeight,
-                    r: Math.random() * 2 + 1,
-                    vx: (Math.random() - 0.5) * 0.2,
-                    vy: - (Math.random() * 0.1 + 0.02),
-                    alpha: Math.random() * 0.3 + 0.1,
+                    r: Math.random() * 3 + 1,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: - (Math.random() * 0.15 + 0.03),
+                    alpha: Math.random() * 0.4 + 0.1,
                     phase: Math.random() * Math.PI * 2,
-                    speedFactor: Math.random() * 0.5 + 0.5
+                    speedFactor: Math.random() * 0.6 + 0.4
                 });
             }
             
@@ -1052,19 +1222,20 @@
                 const h = particlesCanvas.height / dpr;
                 ctx.clearRect(0, 0, w, h);
                 for (let p of particles) {
-                    p.phase += 0.01 * p.speedFactor;
+                    p.phase += 0.015 * p.speedFactor;
                     p.x += p.vx * p.speedFactor;
                     p.y += p.vy * p.speedFactor;
                     if (p.y + p.r < -50) p.y = h + 50;
                     if (p.x - p.r > w + 50) p.x = -50;
                     if (p.x + p.r < -50) p.x = w + 50;
-                    const glow = Math.sin(p.phase) * 0.3 + 0.7;
+                    const glow = Math.sin(p.phase) * 0.4 + 0.6;
                     ctx.beginPath();
-                    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-                    grad.addColorStop(0, `rgba(139,92,246,${(p.alpha * 0.4 * glow).toFixed(3)})`);
+                    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+                    grad.addColorStop(0, `rgba(139,92,246,${(p.alpha * 0.5 * glow).toFixed(3)})`);
+                    grad.addColorStop(0.7, `rgba(139,92,246,${(p.alpha * 0.2 * glow).toFixed(3)})`);
                     grad.addColorStop(1, 'rgba(0,0,0,0)');
                     ctx.fillStyle = grad;
-                    ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+                    ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
                     ctx.fill();
                 }
                 requestAnimationFrame(draw);
@@ -1080,53 +1251,59 @@
         function getDefaultVideos() {
             return [
                 {
-                    title: "Как развить стойкость в сложные времена",
-                    videoUrl: "https://runtime.video.cloud.yandex.net/player/video/vplvscsviln3pecevi4w",
+                    title: "Лидерство во льдах",
+                    videoUrl: "https://runtime.video.cloud.yandex.net/player/video/vplvscsviln3pecevi4w?autoplay=0&mute=0",
                     previewImage: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
                     article: {
-                        title: "Как развить стойкость в сложные времена",
+                        title: "Принципы великого лидерства",
                         content: `
                             <div class="article-text">
-                                <p>Стойкость - это не просто умение выживать, а способность процветать в условиях неопределенности. В этой статье мы рассмотрим практические шаги для развития внутренней устойчивости.</p>
-                                <div class="article-image">
-                                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Развитие стойкости">
+                                <div class="article-quote">
+                                    Каждый раз когда случается непонятная и пугающая ситуация глаза людей мечутся из угла в угол в поисках того, кто тверд, решителен, деятелен. В поисках того, за кем можно идти. Не важно куда.... просто идти.
                                 </div>
-                                <h3 class="article-subtitle">Ключевые принципы стойкости</h3>
-                                <p>Осознанность, принятие и адаптивность - три кита, на которых строится настоящая психологическая устойчивость.</p>
+                                
+                                <p>Случаются моменты, когда твой мир сужается до размера льдины, которая где-то дрейфует в океане. Где есть только ты, твоя команда, ищущая в тебе ответы и никакой поддержки из вне. Ты и сам-то не до конца понимаешь что делать - но что-то делаешь, чтобы передать дух другим.</p>
+                                
+                                <span class="highlight-orange-preview">Лидерству можно научиться</span>
+                                
+                                <div class="important-note">
+                                    <p>Лидерство, как и большинство других качеств что-то значат, да и вообще существуют только благодаря тому, что они к чему-то применимы.</p>
+                                </div>
+                                
+                                <div class="article-frame">
+                                    <p><strong>Ключевой принцип:</strong> Характеристика «Мужчина» применима именно потому, что есть «Женщина». Характеристика «Ум» применима потому, что есть задача, к которой это требуется. Точно также с характеристикой «Лидерство»... Она применима, так как есть люди.</p>
+                                </div>
+                                
+                                <p>Я подготовил для тебя <a href="https://docs.yandex.ru/docs/view?url=ya-disk%3A%2F%2F%2Fdisk%2F%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20-%20%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8%2F%D0%9B%D0%B8%D0%B4%D0%B5%D1%80%D1%81%D1%82%D0%B2%D0%BE%20%D0%B2%D0%BE%20%D0%BB%D1%8C%D0%B4%D0%B0%D1%85.docx.pdf&name=%D0%9B%D0%B8%D0%B4%D0%B5%D1%80%D1%81%D1%82%D0%B2%D0%BE%20%D0%B2%D0%BE%20%D0%BB%D1%8C%D0%B4%D0%B0%D1%85.docx.pdf&uid=1423291133&nosw=1" target="_blank">принципы великого лидерства - от великого мореплавателя.</a></p>
                             </div>
                         `
                     }
                 },
                 {
-                    title: "Практики осознанности для повседневной жизни",
-                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                    title: "Как читать людей?",
+                    videoUrl: "https://runtime.video.cloud.yandex.net/player/video/vplvscsviln3pecevi4w?autoplay=0&mute=0",
                     previewImage: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
                     article: {
-                        title: "Практики осознанности для повседневной жизни",
-                        content: `<div class="article-text">
-                            <p>Осознанность - это искусство присутствовать здесь и сейчас. Простые практики, которые можно внедрить в свою жизнь уже сегодня.</p>
-                            <div class="article-image">
-                                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Практики осознанности">
+                        title: "Читай людей, как книгу",
+                        content: `
+                            <div class="article-text">
+                                <div class="important-note">
+                                    <p><em>Умы взрослых закрыты. Они думают, что видят все. Но они не видят. У них запрограммированный взгляд на вещи.</em></p>
+                                </div>
+                                
+                                <p>Чтобы читать мысли людей, скорее всего, требуются особые способности. Но ничто не мешает нам наблюдать за телом. Ты можешь контролировать свое поведение, но все движения тела разом.</p>
+                                
+                                <span class="highlight-orange-preview">Незаметный кивок, движение ноги, глаз... это то, что говорит твое тело, твое бессознательное.</span>
+                                
+                                <div class="article-quote">
+                                    А бессознательное говорит правду
+                                </div>
+                                
+                                <div class="article-frame">
+                                    <p>Вот несколько <strong><em><a href="https://docs.yandex.ru/docs/view?url=ya-disk%3A%2F%2F%2Fdisk%2F%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20-%20%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8%2F%D0%9C%D0%B8%D0%BB%D1%82%D0%BE%D0%BD%20%D0%AD%D1%80%D0%B8%D0%BA%D1%81%D0%BE%D0%BD.pdf&name=%D0%9C%D0%B8%D0%BB%D1%82%D0%BE%D0%BD%20%D0%AD%D1%80%D0%B8%D0%BA%D1%81%D0%BE%D0%BD.pdf&uid=1423291133&nosw=1" target="_blank">принципов</a></em></strong>, которые помогут лучше разбираться в людях.</p>
+                                </div>
                             </div>
-                            <h3 class="article-subtitle">Ежедневные ритуалы</h3>
-                            <p>Утренняя медитация, осознанное дыхание и ведение дневника - простые, но эффективные инструменты для развития осознанности.</p>
-                        </div>`
-                    }
-                },
-                {
-                    title: "Эмоциональный интеллект: ключ к успеху",
-                    videoUrl: "https://example.com/video3.mp4",
-                    previewImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-                    article: {
-                        title: "Эмоциональный интеллект: ключ к успеху",
-                        content: `<div class="article-text">
-                            <p>Эмоциональный интеллект - это способность понимать и управлять своими эмоциями, а также распознавать эмоции других людей.</p>
-                            <div class="article-image">
-                                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Эмоциональный интеллект">
-                            </div>
-                            <h3 class="article-subtitle">Развитие EQ</h3>
-                            <p>Упражнения для развития самосознания, эмпатии и навыков социального взаимодействия.</p>
-                        </div>`
+                        `
                     }
                 }
             ];
