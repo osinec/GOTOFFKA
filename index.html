@@ -553,6 +553,46 @@
             z-index: -1;
             display: block;
         }
+        
+        /* Добавленные стили для элементов из data.json */
+        .highlight-orange-preview {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        
+        .important-note {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.08));
+            border-left: 3px solid var(--primary);
+            padding: 16px;
+            margin: 18px 0;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 4px 15px rgba(10, 20, 30, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        
+        .important-note p {
+            margin-bottom: 0;
+        }
+        
+        .article-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+        
+        .article-text a:hover {
+            color: var(--primary-light);
+            border-bottom: 1px solid var(--primary-light);
+        }
+        
         @keyframes glowPulse {
             from { transform: translate(-20%, -20%) rotate(2deg); }
             to { transform: translate(20%, 20%) rotate(-2deg); }
@@ -625,6 +665,7 @@
     </section>
     <canvas class="particles-canvas" id="particlesCanvas" aria-hidden="true"></canvas>
     <script>
+        // JavaScript код остается без изменений
         let videos = [];
         let currentIndex = 0;
         let currentlyPlayingVideo = null;
