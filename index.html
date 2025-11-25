@@ -468,19 +468,19 @@
             background: var(--primary-light);
         }
         
-        /* Стили статьи как в предыдущем коде - С ГРАДИЕНТНЫМ ФОНОМ */
+        /* Стили статьи как в предыдущем коде */
         .article-section {
             flex: 1;
             max-width: 750px;
-            margin: 20px auto;
-            padding: 25px 20px;
+            margin: 40px auto;
+            padding: 40px 35px;
             background: linear-gradient(135deg, #E9EEF8, #ffffff, #F8FAFC);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-radius: 16px;
+            border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 
-                0 10px 25px rgba(10, 20, 30, 0.05),
+                0 12px 40px rgba(10, 20, 30, 0.08),
                 0 0 0 1px rgba(255, 255, 255, 0.8),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
             position: relative;
@@ -496,100 +496,210 @@
             background: 
                 radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%);
-            border-radius: 16px;
+            border-radius: 20px;
             pointer-events: none;
+            z-index: 1;
         }
         .article-header { 
             text-align: center; 
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             position: relative;
             z-index: 2;
         }
         .article-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 6px;
-            line-height: 1.1;
+            margin-bottom: 8px;
+            line-height: 1.2;
             letter-spacing: -0.5px;
-            text-shadow: 0 2px 6px rgba(139, 92, 246, 0.15);
             background: linear-gradient(135deg, #0b1220, var(--primary-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+            position: relative;
+            display: inline-block;
+        }
+        .article-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
         }
         .article-content {
-            max-width: 650px;
+            max-width: 680px;
             margin: 0 auto;
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-size: 1.05rem;
+            line-height: 1.75;
             color: var(--text-main);
             position: relative;
             z-index: 2;
         }
+        .article-text { 
+            margin-bottom: 25px; 
+        }
         .article-text p { 
-            margin-bottom: 16px; 
+            margin-bottom: 20px; 
             letter-spacing: 0.1px;
             color: var(--text-main);
+            font-size: 1.05rem;
+            text-align: left;
         }
         .article-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.35rem;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             color: var(--text-main);
-            margin: 18px 0 12px 0;
-            border-left: 3px solid var(--primary);
-            padding-left: 12px;
+            margin: 28px 0 16px 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 16px;
             letter-spacing: -0.3px;
+            line-height: 1.4;
         }
         .article-list { 
-            margin: 16px 0; 
-            padding-left: 18px; 
+            margin: 20px 0 25px 0; 
+            padding-left: 24px; 
         }
         .article-list li { 
-            margin-bottom: 10px; 
-            font-size: 0.9rem;
+            margin-bottom: 12px; 
+            font-size: 1.05rem;
             letter-spacing: 0.05px;
             color: var(--text-main);
-            line-height: 1.5;
+            line-height: 1.6;
+            position: relative;
+        }
+        .article-list li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -18px;
+            font-size: 1.2rem;
         }
         .article-image { 
             width: 100%; 
-            max-width: 550px; 
-            margin: 16px auto; 
-            border-radius: 10px; 
+            max-width: 600px; 
+            margin: 25px auto; 
+            border-radius: 12px; 
             overflow: hidden; 
-            box-shadow: 0 8px 20px rgba(10, 20, 30, 0.08);
+            box-shadow: 0 8px 25px rgba(10, 20, 30, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
         .article-image img { 
             width: 100%; 
             height: auto; 
-            display:block; 
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .article-image:hover img {
+            transform: scale(1.02);
         }
         .article-quote {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.05));
-            border-left: 3px solid var(--primary);
-            padding: 16px;
-            margin: 18px 0;
-            border-radius: 0 10px 10px 0;
+            border-left: 4px solid var(--primary);
+            padding: 24px 28px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
             font-style: italic;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 1.1rem;
+            line-height: 1.65;
             color: var(--text-main);
-            letter-spacing: 0.2px;
+            letter-spacing: 0.15px;
             box-shadow: 0 4px 15px rgba(10, 20, 30, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+        }
+        .article-quote::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 3.5rem;
+            color: var(--primary);
+            opacity: 0.2;
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+        .article-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            padding: 2px 0;
+        }
+        .article-text a:hover {
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--primary);
+        }
+        .article-frame {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 24px 0;
+            box-shadow: 0 4px 15px rgba(10, 20, 30, 0.05);
+        }
+        .article-frame p {
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+        .highlight-orange-preview {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: inline-block;
+            margin: 20px 0;
+            padding: 8px 0;
+            position: relative;
+            letter-spacing: 0.3px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .important-note {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 24px 0;
+            box-shadow: 0 4px 15px rgba(10, 20, 30, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        .important-note::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px 0 0 3px;
+        }
+        .important-note p {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            line-height: 1.6;
         }
         
         .loading { 
             text-align:center; 
-            padding: 20px; 
-            font-size:0.9rem; 
+            padding: 30px; 
+            font-size:1.1rem; 
             opacity: 0.9; 
             font-family: 'Inter', sans-serif;
+            color: var(--text-light);
         }
         .particles-canvas {
             position: fixed;
@@ -612,8 +722,32 @@
             h1 { font-size:2.8rem; }
             .news-frame { padding: 24px; }
             .news-button { padding: 14px 28px; font-size: 1rem; }
-            .article-section { padding: 20px 16px; margin: 16px; }
-            .article-title { font-size: 1.5rem; }
+            .article-section { 
+                padding: 30px 25px; 
+                margin: 30px 20px;
+                border-radius: 18px;
+            }
+            .article-title { 
+                font-size: 1.9rem; 
+                margin-bottom: 6px;
+            }
+            .article-title::after {
+                bottom: -10px;
+                width: 70px;
+            }
+            .article-content {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+            .article-subtitle {
+                font-size: 1.25rem;
+                margin: 24px 0 14px 0;
+            }
+            .article-quote {
+                padding: 20px 24px;
+                margin: 24px 0;
+                font-size: 1.05rem;
+            }
             .video-title { font-size: 1.2rem; top: -70px; }
             .gallery-container { padding: 60px 0 25px; min-height: 450px; }
             .preview-play-icon { font-size: 2.5rem; }
@@ -626,8 +760,39 @@
             h1 { font-size:2.2rem; }
             .news-frame { padding: 20px; }
             .news-button { padding: 12px 24px; font-size: 0.95rem; }
-            .article-section { padding: 16px 12px; margin: 12px; }
-            .article-title { font-size: 1.3rem; }
+            .article-section { 
+                padding: 25px 20px; 
+                margin: 25px 15px;
+                border-radius: 16px;
+            }
+            .article-title { 
+                font-size: 1.6rem; 
+                margin-bottom: 4px;
+            }
+            .article-title::after {
+                bottom: -8px;
+                width: 60px;
+                height: 2px;
+            }
+            .article-content {
+                font-size: 0.95rem;
+                line-height: 1.65;
+            }
+            .article-subtitle {
+                font-size: 1.15rem;
+                margin: 20px 0 12px 0;
+                padding-left: 12px;
+            }
+            .article-quote {
+                padding: 18px 20px;
+                margin: 20px 0;
+                font-size: 1rem;
+            }
+            .article-quote::before {
+                font-size: 2.5rem;
+                top: 8px;
+                left: 12px;
+            }
             .video-title { font-size: 1.1rem; top: -65px; }
             .gallery-container { padding: 50px 0 20px; min-height: 420px; }
             .preview-play-icon { font-size: 2rem; }
@@ -1104,11 +1269,15 @@
                                 
                                 <p>Случаются моменты, когда твой мир сужается до размера льдины, которая где-то дрейфует в океане. Где есть только ты, твоя команда, ищущая в тебе ответы и никакой поддержки из вне. Ты и сам-то не до конца понимаешь что делать - но что-то делаешь, чтобы передать дух другим.</p>
                                 
-                                <h3 class="article-subtitle">Лидерству можно научиться</h3>
+                                <span class="highlight-orange-preview">Лидерству можно научиться</span>
                                 
-                                <p>Лидерство, как и большинство других качеств что-то значат, да и вообще существуют только благодаря тому, что они к чему-то применимы.</p>
+                                <div class="important-note">
+                                    <p>Лидерство, как и большинство других качеств что-то значат, да и вообще существуют только благодаря тому, что они к чему-то применимы.</p>
+                                </div>
                                 
-                                <p><strong>Ключевой принцип:</strong> Характеристика «Мужчина» применима именно потому, что есть «Женщина». Характеристика «Ум» применима потому, что есть задача, к которой это требуется. Точно также с характеристикой «Лидерство»... Она применима, так как есть люди.</p>
+                                <div class="article-frame">
+                                    <p><strong>Ключевой принцип:</strong> Характеристика «Мужчина» применима именно потому, что есть «Женщина». Характеристика «Ум» применима потому, что есть задача, к которой это требуется. Точно также с характеристикой «Лидерство»... Она применима, так как есть люди.</p>
+                                </div>
                                 
                                 <p>Я подготовил для тебя <a href="https://docs.yandex.ru/docs/view?url=ya-disk%3A%2F%2F%2Fdisk%2F%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20-%20%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8%2F%D0%9B%D0%B8%D0%B4%D0%B5%D1%80%D1%81%D1%82%D0%B2%D0%BE%20%D0%B2%D0%BE%20%D0%BB%D1%8C%D0%B4%D0%B0%D1%85.docx.pdf&name=%D0%9B%D0%B8%D0%B4%D0%B5%D1%80%D1%81%D1%82%D0%B2%D0%BE%20%D0%B2%D0%BE%20%D0%BB%D1%8C%D0%B4%D0%B0%D1%85.docx.pdf&uid=1423291133&nosw=1" target="_blank">принципы великого лидерства - от великого мореплавателя.</a></p>
                             </div>
@@ -1123,17 +1292,21 @@
                         title: "Читай людей, как книгу",
                         content: `
                             <div class="article-text">
-                                <div class="article-quote">
-                                    Умы взрослых закрыты. Они думают, что видят все. Но они не видят. У них запрограммированный взгляд на вещи.
+                                <div class="important-note">
+                                    <p><em>Умы взрослых закрыты. Они думают, что видят все. Но они не видят. У них запрограммированный взгляд на вещи.</em></p>
                                 </div>
                                 
                                 <p>Чтобы читать мысли людей, скорее всего, требуются особые способности. Но ничто не мешает нам наблюдать за телом. Ты можешь контролировать свое поведение, но все движения тела разом.</p>
                                 
-                                <h3 class="article-subtitle">Незаметный кивок, движение ноги, глаз...</h3>
+                                <span class="highlight-orange-preview">Незаметный кивок, движение ноги, глаз... это то, что говорит твое тело, твое бессознательное.</span>
                                 
-                                <p>Это то, что говорит твое тело, твое бессознательное. А бессознательное говорит правду.</p>
+                                <div class="article-quote">
+                                    А бессознательное говорит правду
+                                </div>
                                 
-                                <p>Вот несколько <a href="https://docs.yandex.ru/docs/view?url=ya-disk%3A%2F%2F%2Fdisk%2F%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20-%20%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8%2F%D0%9C%D0%B8%D0%BB%D1%82%D0%BE%D0%BD%20%D0%AD%D1%80%D0%B8%D0%BA%D1%81%D0%BE%D0%BD.pdf&name=%D0%9C%D0%B8%D0%BB%D1%82%D0%BE%D0%BD%20%D0%AD%D1%80%D0%B8%D0%BA%D1%81%D0%BE%D0%BD.pdf&uid=1423291133&nosw=1" target="_blank">принципов</a>, которые помогут лучше разбираться в людях.</p>
+                                <div class="article-frame">
+                                    <p>Вот несколько <strong><em><a href="https://docs.yandex.ru/docs/view?url=ya-disk%3A%2F%2F%2Fdisk%2F%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20-%20%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D0%B8%2F%D0%9C%D0%B8%D0%BB%D1%82%D0%BE%D0%BD%20%D0%AD%D1%80%D0%B8%D0%BA%D1%81%D0%BE%D0%BD.pdf&name=%D0%9C%D0%B8%D0%BB%D1%82%D0%BE%D0%BD%20%D0%AD%D1%80%D0%B8%D0%BA%D1%81%D0%BE%D0%BD.pdf&uid=1423291133&nosw=1" target="_blank">принципов</a></em></strong>, которые помогут лучше разбираться в людях.</p>
+                                </div>
                             </div>
                         `
                     }
