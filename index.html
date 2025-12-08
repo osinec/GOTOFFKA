@@ -4,20 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>OSINEC | Истории стойкости</title>
-
-    <!-- Предзагрузка критических ресурсов -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap">
-    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p1uR3l8550u2QQ6y1L2g9n6T5u4j..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <noscript>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    </noscript>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preload" as="image" href="./prewi.png"> <!-- Предзагрузка твоей локальной превью -->
     <style>
         :root {
             --primary: #8B5CF6;
@@ -40,70 +29,76 @@
             --shadow-md: 0 4px 20px rgba(10, 20, 30, 0.08);
             --shadow-lg: 0 8px 40px rgba(10, 20, 30, 0.12);
         }
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-        html, body { width:100%; height:100%; overflow-x:hidden; background:linear-gradient(180deg,var(--darker),var(--bg-light) 100%); color:var(--text-main); font-family:'Inter',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; line-height:1.7; }
-        header { text-align:center; padding:30px 20px 10px; }
-        h1 { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:700; margin-bottom:12px; background:linear-gradient(135deg,#0b1220,var(--primary),var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:0 4px 20px rgba(139,92,246,0.2); letter-spacing:-0.5px; }
-        .subtitle { font-family:'Poppins',sans-serif; font-weight:300; color:var(--text-light); font-size:1.1rem; margin-bottom:15px; line-height:1.6; letter-spacing:0.3px; }
-        .news-container { max-width:680px; margin:0 auto 50px; padding:0 25px; position:relative; }
-        .news-frame { background:linear-gradient(135deg,#0D9488,#10B981,#06B6D4); border-radius:20px; padding:28px; box-shadow:var(--shadow-lg); border:1px solid rgba(255,255,255,0.3); position:relative; overflow:hidden; backdrop-filter:blur(12px); color:white; transition:all .4s cubic-bezier(.25,.46,.45,.94); }
-        .news-frame:hover { transform:translateY(-3px); box-shadow:0 15px 45px rgba(16,185,129,.4); }
-        .news-frame::before { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle at center,rgba(255,255,255,.2) 0%,transparent 70%); animation:glowPulse 6s infinite alternate; pointer-events:none; border-radius:50%; opacity:.4; }
-        .news-content { position:relative; z-index:2; font-family:'Inter',sans-serif; font-size:1rem; line-height:1.6; }
-        .news-content h3 { font-family:'Poppins',sans-serif; font-weight:400; font-size:1.3rem; margin-bottom:12px; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.2); letter-spacing:.5px; }
-        .news-content p { margin-bottom:20px; opacity:.95; word-wrap:break-word; hyphens:auto; letter-spacing:.2px; font-size:.98rem; }
-        .news-button { display:inline-flex; align-items:center; gap:12px; background:linear-gradient(135deg,#FF6B6B,#FF8E53,#FF6B6B,#FF8E53); background-size:400% 400%; color:white; padding:16px 32px; border-radius:50px; font-weight:700; font-family:'Poppins',sans-serif; text-decoration:none; box-shadow:0 8px 30px rgba(255,107,107,.5),0 0 0 1px rgba(255,255,255,.3),0 0 30px rgba(255,107,107,.4); transition:all .4s cubic-bezier(.25,.46,.45,.94); border:none; letter-spacing:.8px; font-size:1.05rem; position:relative; overflow:hidden; animation:shimmer 3s ease-in-out infinite,gentlePulse 4s ease-in-out infinite; }
-        .news-button::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent); animation:shine 3.5s ease-in-out infinite; }
-        .news-button .icon { transition:all .3s ease; font-size:1.1em; filter:drop-shadow(0 2px 4px rgba(0,0,0,.3)); animation:iconPulse 2.5s ease-in-out infinite; }
-        @keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-        @keyframes gentlePulse { 0%,100%{transform:translateY(0) scale(1);box-shadow:0 8px 30px rgba(255,107,107,.5),0 0 0 1px rgba(255,255,255,.3),0 0 30px rgba(255,107,107,.4)} 50%{transform:translateY(-4px) scale(1.06);box-shadow:0 12px 40px rgba(255,107,107,.7),0 0 0 1px rgba(255,255,255,.4),0 0 40px rgba(255,107,107,.6)} }
-        @keyframes shine { 0%{left:-100%} 20%{left:100%} 100%{left:100%} }
-        @keyframes iconPulse { 0%,100%{transform:translateX(0) scale(1)} 50%{transform:translateX(4px) scale(1.3)} }
-        .news-button:hover { animation:shimmer 1.2s ease-in-out infinite,gentlePulse 2s ease-in-out infinite; transform:translateY(-5px) scale(1.08); box-shadow:0 20px 50px rgba(255,107,107,.8),0 0 0 1px rgba(255,255,255,.5),0 0 60px rgba(255,107,107,.7); }
-        .gallery-container { display:flex; justify-content:center; align-items:center; position:relative; perspective:1000px; padding:70px 0 30px; min-height:480px; flex-direction:column; }
-        .carousel { position:relative; width:300px; height:533px; transform-style:preserve-3d; transition:transform .5s cubic-bezier(.4,0,.2,1); margin-bottom:25px; will-change:transform; }
-        .video-card { position:absolute; width:100%; height:100%; border-radius:16px; overflow:visible; box-shadow:var(--shadow-lg); transition:transform .4s cubic-bezier(.4,0,.2,1),opacity .3s ease; display:flex; flex-direction:column; background:transparent; border:none; cursor:pointer; top:0; left:0; will-change:transform,opacity; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
-        .video-title { position:absolute; top:-80px; left:0; right:0; text-align:center; font-family:'Inter',sans-serif; font-size:1.3rem; font-weight:700; color:var(--text-main); padding:0 20px; z-index:20; transition:all .4s ease; pointer-events:none; text-shadow:0 2px 10px rgba(255,255,255,.9); white-space:normal; overflow:visible; text-overflow:unset; line-height:1.4; max-height:60px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; word-wrap:break-word; }
-        .video-player-container { width:100%; height:100%; position:relative; background:#000; overflow:hidden; display:flex; justify-content:center; align-items:center; border-radius:16px; box-shadow:var(--shadow-md); border:1px solid rgba(10,20,30,.08); }
-        .video-player { width:100%; height:100%; object-fit:cover; background:#000; border-radius:16px; display:none; }
-        .yandex-player-container { width:100%; height:100%; border-radius:16px; overflow:hidden; display:none; }
-        .yandex-player-iframe { width:100%; height:100%; border:none; border-radius:16px; }
-        .video-preview { width:100%; height:100%; background-size:cover; background-position:center; background-repeat:no-repeat; border-radius:16px; display:flex; justify-content:center; align-items:center; position:relative; cursor:pointer; transition:all .3s ease; }
-        .video-preview::before { content:''; position:absolute; top:0; left:0; right:0; bottom:0; background:linear-gradient(135deg,rgba(0,0,0,.4),rgba(139,92,246,.2)); border-radius:16px; transition:all .3s ease; }
-        .video-preview:hover::before { background:linear-gradient(135deg,rgba(0,0,0,.3),rgba(139,92,246,.3)); }
-        .preview-content { position:relative; z-index:2; text-align:center; color:white; transform:translateY(0); transition:all .3s ease; }
-        .video-preview:hover .preview-content { transform:translateY(-5px); }
-        .preview-play-icon { font-size:3rem; margin-bottom:12px; text-shadow:0 4px 15px rgba(0,0,0,.5); filter:drop-shadow(0 2px 8px rgba(0,0,0,.3)); transition:all .3s ease; }
-        .video-preview:hover .preview-play-icon { transform:scale(1.1); }
-        .preview-text { font-size:1rem; text-shadow:0 2px 8px rgba(0,0,0,.5); font-weight:600; letter-spacing:.5px; }
-        .video-error { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; background:rgba(0,0,0,.8); color:white; text-align:center; padding:20px; border-radius:16px; z-index:15; display:none; }
-        .video-error i { font-size:2rem; margin-bottom:12px; color:var(--error); }
-        .video-error p { font-size:.95rem; opacity:.9; }
-        .nav-btn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.9); width:50px; height:50px; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:100; border:none; box-shadow:var(--shadow-md); transition:all .3s ease; backdrop-filter:blur(10px); }
-        .nav-btn:hover { background:rgba(139,92,246,.15); transform:translateY(-50%) scale(1.1); box-shadow:0 6px 25px rgba(139,92,246,.3); }
-        .prev-btn { left:10px; } .next-btn { right:10px; }
-        .nav-btn i { font-size:1.3rem; color:var(--text-main); transition:all .3s ease; }
-        .nav-btn:hover i { color:var(--primary); }
-        .progress-dots { display:flex; justify-content:center; gap:10px; position:relative; z-index:10; margin-top:20px; }
-        .dot { width:10px; height:10px; border-radius:50%; background:rgba(10,20,30,.1); transition:all .3s ease; cursor:pointer; border:none; }
-        .dot.active { background:var(--primary); transform:scale(1.3); box-shadow:0 2px 8px rgba(139,92,246,.4); }
-        .dot:hover { transform:scale(1.2); background:var(--primary-light); }
-        .article-section { flex:1; max-width:750px; margin:20px auto; padding:25px 20px; background:linear-gradient(135deg,#E9EEF8,#ffffff,#F8FAFC); backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); border-radius:16px; border:1px solid rgba(255,255,255,.6); box-shadow:0 10px 25px rgba(10,20,30,.05),0 0 0 1px rgba(255,255,255,.8),inset 0 1px 0 rgba(255,255,255,.8); position:relative; z-index:5; }
-        .article-section::before { content:''; position:absolute; top:0; left:0; right:0; bottom:0; background:radial-gradient(circle at 20% 80%,rgba(139,92,246,.08) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(6,182,212,.06) 0%,transparent 50%); border-radius:16px; pointer-events:none; }
-        .article-header { text-align:center; margin-bottom:20px; position:relative; z-index:2; }
-        .article-title { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--text-main); margin-bottom:6px; line-height:1.1; letter-spacing:-.5px; text-shadow:0 2px 6px rgba(139,92,246,.15); background:linear-gradient(135deg,#0b1220,var(--primary-light)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-        .article-content { max-width:650px; margin:0 auto; font-family:'Inter',sans-serif; font-size:.95rem; line-height:1.6; color:var(--text-main); position:relative; z-index:2; }
-        .article-text p { margin-bottom:16px; letter-spacing:.1px; color:var(--text-main); }
-        .article-subtitle { font-size:1.2rem; font-family:'Poppins',sans-serif; font-weight:600; color:var(--text-main); margin:18px 0 12px 0; border-left:3px solid var(--primary); padding-left:12px; letter-spacing:-.3px; }
-        .highlight-orange-preview { color:#FF8E53; font-weight:600; background:rgba(255,142,83,.1); padding:2px 6px; border-radius:4px; }
-        .frame-orange,.frame-purple { background:rgba(255,142,83,.1); border-left:3px solid #FF8E53; padding:14px; margin:20px 0; border-radius:0 10px 10px 0; font-weight:600; line-height:1.5; }
-        .frame-purple { background:rgba(139,92,246,.1); border-left-color:var(--primary); }
-        .important-note { background:rgba(6,182,212,.1); border-left:3px solid var(--accent); padding:14px; margin:20px 0; border-radius:0 10px 10px 0; font-style:italic; line-height:1.5; }
-        .loading { text-align:center; padding:20px; font-size:.9rem; opacity:.9; font-family:'Inter',sans-serif; }
-        .particles-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-1; }
-        @keyframes glowPulse { from{transform:translate(-20%,-20%) rotate(2deg)} to{transform:translate(20%,20%) rotate(-2deg)} }
-        @media (max-width:768px){ .carousel{width:280px;height:497px} h1{font-size:2.8rem} }
-        @media (max-width:480px){ .carousel{width:250px;height:444px} h1{font-size:2.2rem} }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        html, body { width: 100%; height: 100%; overflow-x: hidden; background: linear-gradient(180deg, var(--darker), var(--bg-light) 100%); color: var(--text-main); font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; line-height: 1.7; }
+        header { text-align: center; padding: 30px 20px 10px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; margin-bottom: 12px; background: linear-gradient(135deg, #0b1220, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 4px 20px rgba(139, 92, 246, 0.2); letter-spacing: -0.5px; }
+        .subtitle { font-family: 'Poppins', sans-serif; font-weight: 300; color: var(--text-light); font-size: 1.1rem; margin-bottom: 15px; line-height: 1.6; letter-spacing: 0.3px; }
+        .news-container { max-width: 680px; margin: 0 auto 50px; padding: 0 25px; position: relative; }
+        .news-frame { background: linear-gradient(135deg, #0D9488, #10B981, #06B6D4); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.3); position: relative; overflow: hidden; backdrop-filter: blur(12px); color: white; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .news-frame:hover { transform: translateY(-3px); box-shadow: 0 15px 45px rgba(16, 185, 129, 0.4); }
+        .news-frame::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%); animation: glowPulse 6s infinite alternate; pointer-events: none; border-radius: 50%; opacity: 0.4; }
+        .news-content { position: relative; z-index: 2; font-family: 'Inter', sans-serif; font-size: 1rem; line-height: 1.6; }
+        .news-content h3 { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 1.3rem; margin-bottom: 12px; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.2); letter-spacing: 0.5px; }
+        .news-content p { margin-bottom: 20px; opacity: 0.95; word-wrap: break-word; hyphens: auto; letter-spacing: 0.2px; font-size: 0.98rem; }
+        .news-button { display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #FF6B6B, #FF8E53, #FF6B6B, #FF8E53); background-size: 400% 400%; color: white; padding: 16px 32px; border-radius: 50px; font-weight: 700; font-family: 'Poppins', sans-serif; text-decoration: none; box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.3), 0 0 30px rgba(255, 107, 107, 0.4); transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); border: none; letter-spacing: 0.8px; font-size: 1.05rem; position: relative; overflow: hidden; animation: shimmer 3s ease-in-out infinite, gentlePulse 4s ease-in-out infinite; }
+        .news-button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); animation: shine 3.5s ease-in-out infinite; }
+        .news-button .icon { transition: all 0.3s ease; font-size: 1.1em; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); animation: iconPulse 2.5s ease-in-out infinite; }
+        @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes gentlePulse { 0%,100% { transform: translateY(0) scale(1); box-shadow: 0 8px 30px rgba(255,107,107,0.5),0 0 0 1px rgba(255,255,255,0.3),0 0 30px rgba(255,107,107,0.4); } 50% { transform: translateY(-4px) scale(1.06); box-shadow: 0 12px 40px rgba(255,107,107,0.7),0 0 0 1px rgba(255,255,255,0.4),0 0 40px rgba(255,107,107,0.6); } }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+        @keyframes iconPulse { 0%,100% { transform: translateX(0) scale(1); } 50% { transform: translateX(4px) scale(1.3); } }
+        .news-button:hover { animation: shimmer 1.2s ease-in-out infinite, gentlePulse 2s ease-in-out infinite; transform: translateY(-5px) scale(1.08); box-shadow: 0 20px 50px rgba(255,107,107,0.8),0 0 0 1px rgba(255,255,255,0.5),0 0 60px rgba(255,107,107,0.7); }
+        .gallery-container { display: flex; justify-content: center; align-items: center; position: relative; perspective: 1000px; padding: 70px 0 30px; min-height: 480px; flex-direction: column; }
+        .carousel { position: relative; width: 300px; height: 533px; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 25px; will-change: transform; }
+        .video-card { position: absolute; width: 100%; height: 100%; border-radius: 16px; overflow: visible; box-shadow: var(--shadow-lg); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; display: flex; flex-direction: column; background: transparent; border: none; cursor: pointer; top: 0; left: 0; will-change: transform, opacity; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+        .video-title { position: absolute; top: -80px; left: 0; right: 0; text-align: center; font-family: 'Inter', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--text-main); padding: 0 20px; z-index: 20; transition: all 0.4s ease; pointer-events: none; text-shadow: 0 2px 10px rgba(255, 255, 255, 0.9); white-space: normal; overflow: visible; text-overflow: unset; line-height: 1.4; max-height: 60px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-wrap: break-word; }
+        .video-player-container { width: 100%; height: 100%; position: relative; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; border-radius: 16px; box-shadow: var(--shadow-md); border: 1px solid rgba(10,20,30,0.08); }
+        .video-player { width: 100%; height: 100%; object-fit: cover; background: #000; border-radius: 16px; display: none; }
+        .yandex-player-container { width: 100%; height: 100%; border-radius: 16px; overflow: hidden; display: none; }
+        .yandex-player-iframe { width: 100%; height: 100%; border: none; border-radius: 16px; }
+        .video-preview { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 16px; display: flex; justify-content: center; align-items: center; position: relative; cursor: pointer; transition: all 0.3s ease; }
+        .video-preview::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(139, 92, 246, 0.2)); border-radius: 16px; transition: all 0.3s ease; }
+        .video-preview:hover::before { background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(139, 92, 246, 0.3)); }
+        .preview-content { position: relative; z-index: 2; text-align: center; color: white; transform: translateY(0); transition: all 0.3s ease; }
+        .video-preview:hover .preview-content { transform: translateY(-5px); }
+        .preview-play-icon { font-size: 3rem; margin-bottom: 12px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3)); transition: all 0.3s ease; }
+        .video-preview:hover .preview-play-icon { transform: scale(1.1); }
+        .preview-text { font-size: 1rem; text-shadow: 0 2px 8px rgba(0,0,0,0.5); font-weight: 600; letter-spacing: 0.5px; }
+        .video-error { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.8); color: white; text-align: center; padding: 20px; border-radius: 16px; z-index: 15; display: none; }
+        .video-error i { font-size: 2rem; margin-bottom: 12px; color: var(--error); }
+        .video-error p { font-size: 0.95rem; opacity: 0.9; }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; border: none; box-shadow: var(--shadow-md); transition: all 0.3s ease; backdrop-filter: blur(10px); }
+        .nav-btn:hover { background: rgba(139,92,246,0.15); transform: translateY(-50%) scale(1.1); box-shadow: 0 6px 25px rgba(139, 92, 246, 0.3); }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+        .nav-btn i { font-size: 1.3rem; color: var(--text-main); transition: all 0.3s ease; }
+        .nav-btn:hover i { color: var(--primary); }
+        .progress-dots { display: flex; justify-content: center; gap: 10px; position: relative; z-index: 10; margin-top: 20px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(10,20,30,0.1); transition: all 0.3s ease; cursor: pointer; border: none; }
+        .dot.active { background: var(--primary); transform: scale(1.3); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4); }
+        .dot:hover { transform: scale(1.2); background: var(--primary-light); }
+        .article-section { flex: 1; max-width: 750px; margin: 20px auto; padding: 25px 20px; background: linear-gradient(135deg, #E9EEF8, #ffffff, #F8FAFC); backdrop-filter: blur(20px) saturate(180%); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px rgba(10, 20, 30, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.8); position: relative; z-index: 5; }
+        .article-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%); border-radius: 16px; pointer-events: none; }
+        .article-header { text-align: center; margin-bottom: 20px; position: relative; z-index: 2; }
+        .article-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; line-height: 1.1; letter-spacing: -0.5px; text-shadow: 0 2px 6px rgba(139, 92, 246, 0.15); background: linear-gradient(135deg, #0b1220, var(--primary-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .article-content { max-width: 650px; margin: 0 auto; font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: var(--text-main); position: relative; z-index: 2; }
+        .article-text p { margin-bottom: 16px; letter-spacing: 0.1px; color: var(--text-main); }
+        .article-subtitle { font-size: 1.2rem; font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--text-main); margin: 18px 0 12px 0; border-left: 3px solid var(--primary); padding-left: 12px; letter-spacing: -0.3px; }
+        .article-list { margin: 16px 0; padding-left: 18px; }
+        .article-list li { margin-bottom: 10px; font-size: 0.9rem; letter-spacing: 0.05px; color: var(--text-main); line-height: 1.5; }
+        .article-image { width: 100%; max-width: 550px; margin: 16px auto; border-radius: 10px; overflow: hidden; box-shadow: 0 8px 20px rgba(10, 20, 30, 0.08); border: 1px solid rgba(255, 255, 255, 0.8); }
+        .article-image img { width: 100%; height: auto; display: block; }
+        .article-quote { background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(6, 182, 212, 0.05)); border-left: 3px solid var(--primary); padding: 16px; margin: 18px 0; border-radius: 0 10px 10px 0; font-style: italic; font-size: 0.95rem; line-height: 1.5; color: var(--text-main); letter-spacing: 0.2px; box-shadow: 0 4px 15px rgba(10, 20, 30, 0.05); border: 1px solid rgba(255, 255, 255, 0.6); }
+        .highlight-orange-preview { color: #FF8E53; font-weight: 600; background: rgba(255, 142, 83, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .frame-orange, .frame-purple { background: rgba(255, 142, 83, 0.1); border-left: 3px solid #FF8E53; padding: 14px; margin: 20px 0; border-radius: 0 10px 10px 0; font-weight: 600; line-height: 1.5; }
+        .frame-purple { background: rgba(139, 92, 246, 0.1); border-left-color: var(--primary); }
+        .important-note { background: rgba(6, 182, 212, 0.1); border-left: 3px solid var(--accent); padding: 14px; margin: 20px 0; border-radius: 0 10px 10px 0; font-style: italic; line-height: 1.5; }
+        .loading { text-align:center; padding:20px; font-size:0.9rem; opacity:0.9; font-family:'Inter',sans-serif; }
+        .particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; display: block; }
+        @keyframes glowPulse { from { transform: translate(-20%, -20%) rotate(2deg); } to { transform: translate(20%, 20%) rotate(-2deg); } }
+        @media (max-width:768px) { .carousel { width:280px; height:497px; } h1 { font-size:2.8rem; } }
+        @media (max-width:480px) { .carousel { width: 250px; height:444px; } h1 { font-size:2.2rem; } }
     </style>
 </head>
 <body>
@@ -115,7 +110,7 @@
                     <h3>Новости</h3>
                     <p>Фундаментальные истории о стойкости, которые делают тебя увереннее и устойчивее в фоновом режиме. Истории с пошаговым алгоритмом действий</p>
                     <a href="https://vibeshorts.example.com/special-issue" class="news-button">
-                        <span>"Искусство быть достойным"</span>
+                        <span>Читать спецвыпуск</span>
                         <i class="fas fa-arrow-right icon"></i>
                     </a>
                 </div>
@@ -124,24 +119,33 @@
     </header>
 
     <div class="gallery-container">
-        <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous">
+            <i class="fas fa-chevron-left"></i>
+        </button>
         <div class="carousel" id="carousel">
             <div class="loading" id="loading"><p>Загрузка данных...</p></div>
         </div>
-        <button class="nav-btn next-btn" id="nextBtn" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+        <button class="nav-btn next-btn" id="nextBtn" aria-label="Next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
         <div class="progress-dots" id="progressDots"></div>
     </div>
 
     <section class="article-section">
-        <div class="article-header"><h2 class="article-title" id="articleTitle"></h2></div>
-        <div class="article-content" id="articleContent"><div class="article-text"><p></p></div></div>
+        <div class="article-header">
+            <h2 class="article-title" id="articleTitle"></h2>
+        </div>
+        <div class="article-content" id="articleContent">
+            <div class="article-text"><p></p></div>
+        </div>
     </section>
 
     <canvas class="particles-canvas" id="particlesCanvas"></canvas>
 
     <script>
-        // === МАКСИМАЛЬНО ОПТИМИЗИРОВАННЫЙ СКРИПТ ===
-        let videos = [], currentIndex = 0, currentlyPlayingVideo = null;
+        let videos = [];
+        let currentIndex = 0;
+        let currentlyPlayingVideo = null;
         const carousel = document.getElementById('carousel');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
@@ -151,72 +155,81 @@
         const loading = document.getElementById('loading');
         const particlesCanvas = document.getElementById('particlesCanvas');
 
-        // Кешируем данные в localStorage — второй визит мгновенный
-        const CACHE_KEY = 'osinec_videos_v3';
-        const cached = localStorage.getItem(CACHE_KEY);
+        // ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+        // Единственное изменение: локальная превью-картинка
+        const LOCAL_PREVIEW = './prewi.png';
+        // ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
 
         document.addEventListener('DOMContentLoaded', () => {
             prevBtn.onclick = prevVideo;
             nextBtn.onclick = nextVideo;
-            document.addEventListener('keydown', e => { if(e.key==='ArrowRight') nextVideo(); if(e.key==='ArrowLeft') prevVideo(); });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight') nextVideo();
+                if (e.key === 'ArrowLeft') prevVideo();
+            });
 
             initParticlesCanvas();
-            if (cached) {
-                videos = JSON.parse(cached);
-                buildCarousel();
-            } else {
-                loadVideosData();
-            }
+            loadVideosData();
         });
 
         async function loadVideosData() {
             try {
-                const r = await fetch('data.json?t=' + Date.now(), {cache: "no-store"});
-                if (!r.ok) throw new Error();
-                videos = (await r.json()).videos || getDefaultVideos();
-            } catch { videos = getDefaultVideos(); }
-            localStorage.setItem(CACHE_KEY, JSON.stringify(videos));
-            buildCarousel();
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error();
+                const data = await response.json();
+                videos = Array.isArray(data.videos) ? data.videos : getDefaultVideos();
+            } catch {
+                videos = getDefaultVideos();
+            }
+            loading.remove();
+            createVideoCards();
+            updateCarousel();
+            updateArticle();
         }
 
-        function buildCarousel() {
-            loading.remove();
+        function createVideoCards() {
             const frag = document.createDocumentFragment();
-            videos.forEach((v,i) => {
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                card.dataset.index = i;
-                const preview = v.previewImage || 'https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
-                card.innerHTML = `
-                    <div class="video-title">${escapeHtml(v.title)}</div>
+            videos.forEach((video, index) => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'video-card';
+                videoCard.dataset.index = index;
+
+                const isYandex = video.videoUrl.includes('yandex') || video.videoUrl.includes('youtube');
+
+                videoCard.innerHTML = `
+                    <div class="video-title">${escapeHtml(video.title)}</div>
                     <div class="video-player-container">
-                        ${v.videoUrl.includes('yandex') || v.videoUrl.includes('youtube') ? 
-                            `<div class="yandex-player-container"><iframe class="yandex-player-iframe" loading="lazy" allowfullscreen></iframe></div>` :
-                            `<video class="video-player" preload="none" playsinline muted poster="${preview}" loading="lazy"></video>`
+                        ${isYandex ? `
+                            <div class="yandex-player-container">
+                                <iframe class="yandex-player-iframe" loading="lazy" allowfullscreen></iframe>
+                            </div>` : `
+                            <video class="video-player" preload="none" playsinline muted poster="${LOCAL_PREVIEW}" loading="lazy"></video>`
                         }
-                        <div class="video-preview" style="background-image:url('${preview}')">
+                        <div class="video-preview" style="background-image: url('${LOCAL_PREVIEW}')">
                             <div class="preview-content">
-                                <div class="preview-play-icon">▶</div>
+                                <div class="preview-play-icon">Play</div>
                                 <div class="preview-text">Нажмите для воспроизведения</div>
                             </div>
                         </div>
-                        <div class="video-error"><i class="fas fa-exclamation-triangle"></i><p>Ошибка загрузки видео</p></div>
+                        <div class="video-error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Ошибка загрузки видео</p>
+                        </div>
                     </div>`;
-                
-                const previewDiv = card.querySelector('.video-preview');
-                if (v.videoUrl.includes('yandex') || v.videoUrl.includes('youtube')) {
-                    previewDiv.onclick = () => playIframe(card, v.videoUrl);
+
+                const preview = videoCard.querySelector('.video-preview');
+                if (isYandex) {
+                    preview.onclick = () => playIframe(videoCard, video.videoUrl);
                 } else {
-                    const video = card.querySelector('.video-player');
-                    video.dataset.src = v.videoUrl;
-                    previewDiv.onclick = () => playVideo(video, previewDiv, card.querySelector('.video-error'));
+                    const videoEl = videoCard.querySelector('.video-player');
+                    videoEl.dataset.src = video.videoUrl;
+                    preview.onclick = () => playVideo(videoEl, preview, videoCard.querySelector('.video-error'));
                 }
-                frag.appendChild(card);
+
+                frag.appendChild(videoCard);
             });
             carousel.appendChild(frag);
-            createDots();
-            updateCarousel();
-            updateArticle();
+            createProgressDots();
         }
 
         function playIframe(card, url) {
@@ -230,19 +243,19 @@
             currentlyPlayingVideo = iframe;
         }
 
-        function playVideo(video, preview, errorDiv) {
+        function playVideo(videoEl, preview, errorDiv) {
             stopAllVideos();
-            if (!video.src && video.dataset.src) {
-                video.src = video.dataset.src;
-                video.load();
+            if (!videoEl.src && videoEl.dataset.src) {
+                videoEl.src = videoEl.dataset.src;
+                videoEl.load();
             }
-            video.play().then(() => {
+            videoEl.play().then(() => {
                 preview.style.display = 'none';
-                video.style.display = 'block';
-                currentlyPlayingVideo = video;
+                videoEl.style.display = 'block';
             }).catch(() => {
                 errorDiv.style.display = 'flex';
             });
+            currentlyPlayingVideo = videoEl;
         }
 
         function stopAllVideos() {
@@ -260,49 +273,51 @@
             currentlyPlayingVideo = null;
         }
 
-        function createDots() {
+        function createProgressDots() {
             progressDots.innerHTML = '';
-            videos.forEach((_,i) => {
-                const d = document.createElement('div');
-                d.className = 'dot' + (i===0?' active':'');
-                d.onclick = () => goTo(i);
-                progressDots.appendChild(d);
+            videos.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToVideo(i);
+                progressDots.appendChild(dot);
             });
         }
 
-        let ticking = false;
         function updateCarousel() {
-            if (ticking) return;
-            ticking = true;
             requestAnimationFrame(() => {
                 const cards = carousel.children;
                 for (let i = 0; i < cards.length; i++) {
                     const diff = ((i - currentIndex + cards.length) % cards.length);
-                    let transform = '', opacity = 1, z = 10, pointer = 'auto';
+                    let transform = '', opacity = 1, zIndex = 10, pointer = 'auto';
                     if (diff === 0) { transform = 'translate3d(0,0,0)'; }
-                    else if (diff === 1) { transform = 'translate3d(280px,0,-80px) rotateY(-15deg)'; opacity = 0.85; z = 9; }
-                    else if (diff === cards.length-1) { transform = 'translate3d(-280px,0,-80px) rotateY(15deg)'; opacity = 0.85; z = 9; }
-                    else if (diff === 2 || diff === cards.length-2) { transform = 'translate3d(0,0,-160px)'; opacity = 0.45; z = 8; pointer = 'none'; }
+                    else if (diff === 1) { transform = 'translate3d(280px,0,-80px) rotateY(-15deg)'; opacity = 0.85; zIndex = 9; }
+                    else if (diff === cards.length - 1) { transform = 'translate3d(-280px,0,-80px) rotateY(15deg)'; opacity = 0.85; zIndex = 9; }
+                    else if (diff === 2 || diff === cards.length - 2) { transform = 'translate3d(0,0,-160px)'; opacity = 0.45; zIndex = 8; pointer = 'none'; }
                     else { opacity = 0; pointer = 'none'; }
                     cards[i].style.transform = transform;
                     cards[i].style.opacity = opacity;
-                    cards[i].style.zIndex = z;
+                    cards[i].style.zIndex = zIndex;
                     cards[i].style.pointerEvents = pointer;
                 }
-                progressDots.querySelectorAll('.dot').forEach((d,j) => d.classList.toggle('active', j===currentIndex));
-                ticking = false;
+                progressDots.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === currentIndex));
             });
         }
 
         function updateArticle() {
-            const v = videos[currentIndex];
-            articleTitle.textContent = v.article.title;
-            articleContent.innerHTML = v.article.content;
+            if (videos.length && currentIndex < videos.length) {
+                articleTitle.textContent = videos[currentIndex].article.title;
+                articleContent.innerHTML = videos[currentIndex].article.content;
+            }
         }
 
-        function goTo(i) { stopAllVideos(); currentIndex = i; updateCarousel(); updateArticle(); }
-        function nextVideo() { goTo((currentIndex + 1) % videos.length); }
-        function prevVideo() { goTo((currentIndex - 1 + videos.length) % videos.length); }
+        function goToVideo(i) {
+            stopAllVideos();
+            currentIndex = i;
+            updateCarousel();
+            updateArticle();
+        }
+        function nextVideo() { goToVideo((currentIndex + 1) % videos.length); }
+        function prevVideo() { goToVideo((currentIndex - 1 + videos.length) % videos.length); }
 
         function initParticlesCanvas() {
             const ctx = particlesCanvas.getContext('2d');
@@ -310,7 +325,6 @@
             const dpr = window.devicePixelRatio || 1;
             particlesCanvas.width = w * dpr; particlesCanvas.height = h * dpr;
             ctx.scale(dpr, dpr);
-            particlesCanvas.style.width = w + 'px'; particlesCanvas.style.height = h + 'px';
 
             const particles = Array.from({length: 6}, () => ({
                 x: Math.random() * w, y: Math.random() * h,
@@ -326,7 +340,7 @@
                     p.x += p.vx; p.y += p.vy;
                     if (p.y < -50) p.y = h + 50;
                     if (p.x > w + 50) p.x = -50;
-                    if (p.x < -50) p.x = w + 50;
+                    if (p.x < -50) p.x =w + 50;
                     const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
                     grad.addColorStop(0, `rgba(139,92,246,${p.alpha})`);
                     grad.addColorStop(1, 'transparent');
@@ -335,6 +349,7 @@
                 });
                 requestAnimationFrame(draw);
             })();
+
             window.addEventListener('resize', () => {
                 w = window.innerWidth; h = window.innerHeight;
                 particlesCanvas.width = w * dpr; particlesCanvas.height = h * dpr;
@@ -342,13 +357,15 @@
             });
         }
 
-        function escapeHtml(t) { return t ? t.replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : ''; }
+        function escapeHtml(text) { return text ? text.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : ''; }
 
-        function getDefaultVideos() { return [ /* твой массив по умолчанию — оставлен без изменений */ 
-            { "title":"Принципы великого лидерства","videoUrl":"https://runtime.video.cloud.yandex.net/player/video/vplvuxjj5y7z5xysene4?autoplay=0&mute=1","previewImage":"prewi.png","article":{"title":"Лидерство во льдах","content":"<div class=\"article-text\"><div class=\"article-quote\">Каждый раз когда случается непонятная и пугающая ситуация глаза людей мечутся из угла в угол в поисках того, кто тверд, решителен, деятелен. В поисках того, за кем можно идти. Не важно куда.... просто идти.</div><br>Случаются моменты, когда твой мир сужается до размера льдины, которая где-то дрейфует в океане. Где есть только ты, твоя команда, ищущая в тебе ответы и никакой поддержки из вне. Ты и сам-то не до конца понимаешь что делать - но что-то делаешь, чтобы передать дух другим.<br><span class=\"highlight-orange-preview\">Лидерству можно научиться</span><br><br><div class=\"frame-orange\"><strong><em>Лидерство, как и большинство других качеств что-то значат, да и вообще существуют только благодаря тому, что они к чему-то применимы</em></strong>.</div><br>Характеристика «Мужчина» применима именно потому, что есть «Женщина». Характеристика «Ум» применима потому, что есть задача, к которой это требуется. Точно также с характеристикой «Лидерство»... Она применима, так как есть люди.<br><br><span class=\"highlight-orange-preview\"><strong><a href=\"https://disk.yandex.ru/i/UI6wl1IQNBVtHQ\" target=\"_blank\">Я подготовил для тебя принципы великого лидерства - от великого мореплавателя.</a></strong></span></div>"}},
-            { "title":"Как читать людей?","videoUrl":"https://runtime.video.cloud.yandex.net/player/video/vplvscsviln3pecevi4w?autoplay=0&mute=1","previewImage":"https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80","article":{"title":"Читай людей, как книгу","content":"<div class=\"article-text\"><div class=\"article-quote\">Умы взрослых закрыты. Они думают, что видят все. Но они не видят. У них запрограммированный взгляд на вещи.<br></div><br>Чтобы читать мысли людей, скорее всего, требуются особые способности. Но ничто не мешает нам наблюдать за телом. Ты можешь контролировать свое поведение, но все все движения тела разом.<br><br><span class=\"highlight-orange-preview\">Незаметный кивок, движение ноги, глаз... это то, что говорит твое тело, твое бессознательное.</span><br><br>А бессознательное говорит правду<br><br><span class=\"highlight-orange-preview\"><a href=\"https://disk.yandex.ru/i/HzT23YyUJAbaaA\" target=\"_blank\">Вот несколько принципов, которые помогут лучше разбираться в людях</a>.</span></div>"}},
-            { "title":"Стратегия победы","videoUrl":"https://runtime.video.cloud.yandex.net/player/video/vplvkzdmj37cl6zmcttu?autoplay=0&mute=0","previewImage":"https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80","article":{"title":"Почему стратеги выигрывают тактиков?","content":"<div class=\"article-text\">Любое наше столкновение с чем-то в жизни - это сражение. Сражение против кого-то или просто против обстоятельств. <span class=\"highlight-orange-preview\">Полководцы прошлого ни раз оказывались в сложных ситуациях: </span><br>маленькая армия, жесткие погодные условия, ограничение ландшафта, худшая подготовка и т.д<br><div class=\"important-note\"><p> <strong><em>Некоторых таких ограничения и сложности привели к поражению, а некоторые вынесли из этого пользу</em></strong>.</p></div><br>Это приводит нас к тому, что<span class=\"highlight-orange-preview\"> есть нечто отвечающее за победу  в сложностях.</span> Римская империя поняла это, но очень большой ценой. <span class=\"highlight-blue-preview\">Узнай, как одерживать победу в<a href=\"https://disk.yandex.ru/i/YoZziBTwIDfGfQ\" target=\"_blank\"> этой статье</a></span></div>"}}
-        ]; }
+        function getDefaultVideos() {
+            return [
+                { "title": "Принципы великого лидерства", "videoUrl": "https://runtime.video.cloud.yandex.net/player/video/vplvuxjj5y7z5xysene4?autoplay=0&mute=1", "article": { "title": "Лидерство во льдах", "content": "<div class=\"article-text\"><div class=\"article-quote\">Каждый раз когда случается непонятная и пугающая ситуация глаза людей мечутся из угла в угол в поисках того, кто тверд, решителен, деятелен. В поисках того, за кем можно идти. Не важно куда.... просто идти.</div><br>Случаются моменты, когда твой мир сужается до размера льдины, которая где-то дрейфует в океане. Где есть только ты, твоя команда, ищущая в тебе ответы и никакой поддержки из вне. Ты и сам-то не до конца понимаешь что делать - но что-то делаешь, чтобы передать дух другим.<br><span class=\"highlight-orange-preview\">Лидерству можно научиться</span><br><br><div class=\"frame-orange\"><strong><em>Лидерство, как и большинство других качеств что-то значат, да и вообще существуют только благодаря тому, что они к чему-то применимы</em></strong>.</div><br>Характеристика «Мужчина» применима именно потому, что есть «Женщина». Характеристика «Ум» применима потому, что есть задача, к которой это требуется. Точно также с характеристикой «Лидерство»... Она применима, так как есть люди.<br><br><span class=\"highlight-orange-preview\"><strong><a href=\"https://disk.yandex.ru/i/UI6wl1IQNBVtHQ\" target=\"_blank\">Я подготовил для тебя принципы великого лидерства - от великого мореплавателя.</a></strong></span></div>" }},
+                { "title": "Как читать людей?", "videoUrl": "https://runtime.video.cloud.yandex.net/player/video/vplvscsviln3pecevi4w?autoplay=0&mute=1", "article": { "title": "Читай людей, как книгу", "content": "<div class=\"article-text\"><div class=\"article-quote\">Умы взрослых закрыты. Они думают, что видят все. Но они не видят. У них запрограммированный взгляд на вещи.<br></div><br>Чтобы читать мысли людей, скорее всего, требуются особые способности. Но ничто не мешает нам наблюдать за телом. Ты можешь контролировать свое поведение, но все все движения тела разом.<br><br><span class=\"highlight-orange-preview\">Незаметный кивок, движение ноги, глаз... это то, что говорит твое тело, твое бессознательное.</span><br><br>А бессознательное говорит правду<br><br><span class=\"highlight-orange-preview\"><a href=\"https://disk.yandex.ru/i/HzT23YyUJAbaaA\" target=\"_blank\">Вот несколько принципов, которые помогут лучше разбираться в людях</a>.</span></div>" }},
+                { "title": "Стратегия победы", "videoUrl": "https://runtime.video.cloud.yandex.net/player/video/vplvkzdmj37cl6zmcttu?autoplay=0&mute=0", "article": { "title": "Почему стратеги выигрывают тактиков?", "content": "<div class=\"article-text\">Любое наше столкновение с чем-то в жизни - это сражение. Сражение против кого-то или просто против обстоятельств. <span class=\"highlight-orange-preview\">Полководцы прошлого ни раз оказывались в сложных ситуациях: </span><br>маленькая армия, жесткие погодные условия, ограничение ландшафта, худшая подготовка и т.д<br><div class=\"important-note\"><p> <strong><em>Некоторых таких ограничения и сложности привели к поражению, а некоторые вынесли из этого пользу</em></strong>.</p></div><br>Это приводит нас к тому, что<span class=\"highlight-orange-preview\"> есть нечто отвечающее за победу  в сложностях.</span> Римская империя поняла это, но очень большой ценой. <span class=\"highlight-blue-preview\">Узнай, как одерживать победу в<a href=\"https://disk.yandex.ru/i/YoZziBTwIDfGfQ\" target=\"_blank\"> этой статье</a></span></div>" }}
+            ];
+        }
     </script>
 </body>
 </html>
