@@ -1,106 +1,183 @@
-let currentCategory = null;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Генератор рецептов</title>
 
-const data = {
-    breakfast: [
-        {
-            title: "Омлет с сыром",
-            photo: "https://images.unsplash.com/photo-1601050690462-6f105289b9c4",
-            ingredients: ["2 яйца", "50 г сыра", "щепотка соли", "масло для жарки"],
-            steps: [
-                { step: "Взбейте яйца с щепоткой соли.", time: "2 мин" },
-                { step: "Разогрейте сковороду с маслом.", time: "1 мин" },
-                { step: "Вылейте яйца и готовьте на среднем огне.", time: "5 мин" },
-                { step: "Добавьте сыр, накройте крышкой на 2 минуты.", time: "2 мин" }
-            ],
-            time: "10 минут",
-            calories: 250
-        }
-    ],
-    lunch: [
-        {
-            title: "Паста с томатным соусом",
-            photo: "https://images.unsplash.com/photo-1603074171968-8f0a2a8b7221",
-            ingredients: ["100 г пасты", "100 мл томатного соуса", "сыр", "базилик"],
-            steps: [
-                { step: "Отварите пасту согласно инструкции.", time: "10 мин" },
-                { step: "Разогрейте соус и смешайте с пастой.", time: "5 мин" },
-                { step: "Посыпьте сыром и базиликом.", time: "2 мин" }
-            ],
-            time: "17 минут",
-            calories: 400
-        }
-    ],
-    dinner: [
-        {
-            title: "Запечённый лосось",
-            photo: "https://images.unsplash.com/photo-1604908177520-9ff9c4aeb1d0",
-            ingredients: ["200 г лосося", "специи", "лимон"],
-            steps: [
-                { step: "Разогрейте духовку до 180°C.", time: "5 мин" },
-                { step: "Приправьте лосось специями и лимоном.", time: "2 мин" },
-                { step: "Запеките лосось 15 минут.", time: "15 мин" }
-            ],
-            time: "22 минуты",
-            calories: 350
-        }
-    ],
-    dessert: [
-        {
-            title: "Шоколадный мусс",
-            photo: "https://images.unsplash.com/photo-1615475277807-b89ecb00e3a4",
-            ingredients: ["100 г шоколада", "2 яйца", "50 мл сливок", "сахар по вкусу"],
-            steps: [
-                { step: "Растопите шоколад на водяной бане.", time: "5 мин" },
-                { step: "Взбейте яйца со сливками и сахаром.", time: "3 мин" },
-                { step: "Смешайте шоколад с взбитой массой.", time: "2 мин" },
-                { step: "Охладите в холодильнике минимум 5 минут.", time: "5 мин" }
-            ],
-            time: "15 минут",
-            calories: 300
-        }
-    ]
-};
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 
-function openModal() {
-    document.getElementById("modal").style.display = "flex";
-}
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #ffecd2, #fcb69f);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    .card {
+        width: 440px;
+        padding: 32px 28px;
+        border-radius: 24px;
+        background: rgba(255,255,255,0.95);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        text-align: center;
+        animation: fadeIn 0.6s ease;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .main-btn {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(135deg, #c7903d, #f0c27b);
+        border: none;
+        border-radius: 50px;
+        padding: 14px 34px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f1f1f;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(199,144,61,0.4);
+        transition: 0.3s;
+    }
+    .main-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(199,144,61,0.6);
+    }
+    .refresh {
+        margin-top: 14px;
+        border: none;
+        padding: 8px 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        border-radius: 40px;
+        cursor: pointer;
+        background: linear-gradient(45deg, #ff6a00, #ee0979);
+        box-shadow: 0 6px 15px rgba(238,9,121,0.4);
+        transition: all 0.3s ease;
+        display: none;
+    }
+    .refresh:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 10px 20px rgba(238,9,121,0.6);
+        background: linear-gradient(45deg, #ee0979, #ff6a00);
+    }
+    .category {
+        margin-top: 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        color: #c7903d;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    h2 {
+        margin: 10px 0 20px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 24px;
+        color: #222;
+    }
+    .recipe-photo {
+        width: 100%;
+        height: 220px;
+        border-radius: 16px;
+        object-fit: cover;
+        margin: 18px 0;
+    }
+    .info {
+        text-align: left;
+        margin-bottom: 12px;
+        font-size: 15px;
+        color: #555;
+    }
+    .info span {
+        font-weight: 600;
+        color: #333;
+    }
+    .steps {
+        list-style: decimal inside;
+        text-align: left;
+        margin: 12px 0;
+        padding-left: 12px;
+    }
+    .steps li {
+        margin-bottom: 8px;
+    }
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(8px);
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-box {
+        background: #ffffff;
+        padding: 32px;
+        width: 330px;
+        border-radius: 24px;
+        text-align: center;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+    }
+    .modal-box h3 {
+        margin-bottom: 22px;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        color: #222;
+    }
+    .choice-btn {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 14px;
+        border-radius: 16px;
+        border: none;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        background: linear-gradient(135deg, #e6b980, #eacda3);
+        color: #222;
+        transition: 0.25s;
+    }
+    .choice-btn:hover {
+        transform: scale(1.03);
+    }
+</style>
+</head>
+<body>
 
-function closeModal() {
-    document.getElementById("modal").style.display = "none";
-}
+<div class="card">
+    <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
+    <button class="refresh" id="refresh" onclick="generateRecipe()">Обновить рецепт 🔄</button>
 
-function selectCategory(category) {
-    currentCategory = category;
-    document.getElementById("category").innerText = category.toUpperCase();
-    generateRecipe();
-    closeModal();
-    document.getElementById("refresh").style.display = "inline-block";
-}
+    <div class="category" id="category"></div>
+    <h2 id="title">Выберите категорию 🍽️</h2>
+    <img id="photo" class="recipe-photo" src="" alt="Фото рецепта" style="display:none;">
+    <div id="ingredients" class="info"></div>
+    <ul id="steps" class="steps"></ul>
+    <div id="time" class="info"></div>
+    <div id="calories" class="info"></div>
+</div>
 
-function random(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <h3>Выберите приём пищи</h3>
+        <button class="choice-btn" onclick="selectCategory('breakfast')">🍳 Завтрак</button>
+        <button class="choice-btn" onclick="selectCategory('lunch')">🍝 Обед</button>
+        <button class="choice-btn" onclick="selectCategory('dinner')">🍽️ Ужин</button>
+        <button class="choice-btn" onclick="selectCategory('dessert')">🍰 Десерт</button>
+    </div>
+</div>
 
-function generateRecipe() {
-    if (!currentCategory) return;
-    const c = random(data[currentCategory]);
-
-    document.getElementById("title").innerText = c.title;
-
-    const photoEl = document.getElementById("photo");
-    photoEl.src = c.photo;
-    photoEl.style.display = "block";
-
-    document.getElementById("ingredients").innerHTML = `<span>Ингредиенты:</span> ${c.ingredients.join(", ")}`;
-
-    const stepsEl = document.getElementById("steps");
-    stepsEl.innerHTML = "";
-    c.steps.forEach(s => {
-        const li = document.createElement("li");
-        li.innerText = `${s.step} (${s.time})`;
-        stepsEl.appendChild(li);
-    });
-
-    document.getElementById("time").innerHTML = `<span>Общее время:</span> ${c.time}`;
-    document.getElementById("calories").innerHTML = `<span>Калории:</span> ${c.calories} ккал`;
-}
+<!-- Подключаем внешний JS -->
+<script src="recipes.js"></script>
+</body>
+</html>
