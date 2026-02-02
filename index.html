@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f3f3f3;
+            background: #f2f2f2;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -14,7 +14,7 @@
         }
 
         .card {
-            background: #fff;
+            background: white;
             padding: 25px;
             width: 380px;
             border-radius: 14px;
@@ -23,14 +23,13 @@
         }
 
         button {
-            padding: 12px 25px;
+            padding: 12px 20px;
             font-size: 16px;
             border: none;
             border-radius: 10px;
             background: #ff8c00;
             color: white;
             cursor: pointer;
-            margin-bottom: 20px;
         }
 
         button:hover {
@@ -39,65 +38,84 @@
 
         .category {
             font-weight: bold;
-            color: #777;
-            margin-bottom: 8px;
+            color: #666;
+            margin-top: 15px;
         }
 
         h2 {
             margin: 10px 0;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            margin-bottom: 10px;
+            background: #ffa726;
+        }
+
+        .modal-content button:hover {
+            background: #fb8c00;
         }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <button onclick="getRandomRecipe()">Случайный рецепт</button>
+    <button onclick="openModal()">Случайный рецепт</button>
     <div class="category" id="category"></div>
-    <h2 id="title">Нажми кнопку 🍽️</h2>
+    <h2 id="title">Выбери категорию 🍽️</h2>
     <p id="recipe"></p>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h3>Выберите приём пищи</h3>
+        <button onclick="selectCategory('breakfast')">Завтрак</button>
+        <button onclick="selectCategory('lunch')">Обед</button>
+        <button onclick="selectCategory('dinner')">Ужин</button>
+        <button onclick="selectCategory('dessert')">Десерт</button>
+    </div>
 </div>
 
 <script>
     const recipes = {
         breakfast: [
-            {
-                title: "Омлет с сыром",
-                text: "Взбить яйца, посолить, обжарить на сковороде и посыпать сыром."
-            },
-            {
-                title: "Овсянка с фруктами",
-                text: "Сварить овсянку и добавить банан или ягоды."
-            }
+            { title: "Омлет с сыром", text: "Взбить яйца, посолить и обжарить с сыром." },
+            { title: "Овсянка с фруктами", text: "Сварить овсянку и добавить фрукты." }
         ],
         lunch: [
-            {
-                title: "Куриный суп",
-                text: "Сварить курицу с овощами и лапшой."
-            },
-            {
-                title: "Паста с томатами",
-                text: "Отварить пасту, обжарить помидоры с чесноком и смешать."
-            }
+            { title: "Куриный суп", text: "Сварить курицу с овощами и лапшой." },
+            { title: "Паста с томатами", text: "Отварить пасту и смешать с соусом." }
         ],
         dinner: [
-            {
-                title: "Запечённая рыба",
-                text: "Рыбу посолить, добавить лимон и запечь в духовке."
-            },
-            {
-                title: "Рис с овощами",
-                text: "Отварить рис и обжарить с овощами."
-            }
+            { title: "Запечённая рыба", text: "Запечь рыбу с лимоном в духовке." },
+            { title: "Рис с овощами", text: "Обжарить овощи и смешать с рисом." }
         ],
         dessert: [
-            {
-                title: "Банановый смузи",
-                text: "Банан, молоко и мёд взбить в блендере."
-            },
-            {
-                title: "Шоколадные тосты",
-                text: "Поджарить хлеб и намазать шоколадной пастой."
-            }
+            { title: "Банановый смузи", text: "Банан, молоко и мёд взбить." },
+            { title: "Шоколадные тосты", text: "Поджарить хлеб и намазать пастой." }
         ]
     };
 
@@ -108,15 +126,23 @@
         dessert: "Десерт"
     };
 
-    function getRandomRecipe() {
-        const categories = Object.keys(recipes);
-        const randomCategoryKey = categories[Math.floor(Math.random() * categories.length)];
-        const categoryRecipes = recipes[randomCategoryKey];
-        const randomRecipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
+    function openModal() {
+        document.getElementById("modal").style.display = "flex";
+    }
 
-        document.getElementById("category").innerText = categoryNames[randomCategoryKey];
-        document.getElementById("title").innerText = randomRecipe.title;
-        document.getElementById("recipe").innerText = randomRecipe.text;
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+    function selectCategory(category) {
+        const list = recipes[category];
+        const recipe = list[Math.floor(Math.random() * list.length)];
+
+        document.getElementById("category").innerText = categoryNames[category];
+        document.getElementById("title").innerText = recipe.title;
+        document.getElementById("recipe").innerText = recipe.text;
+
+        closeModal();
     }
 </script>
 
