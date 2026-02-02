@@ -70,19 +70,31 @@
         min-height: 70px;
     }
 
+    /* Новая стильная кнопка для обновления рецепта */
     .refresh {
         margin-top: 22px;
-        background: none;
         border: none;
-        font-size: 28px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #fff;
+        border-radius: 50px;
         cursor: pointer;
-        color: #c7903d;
-        transition: transform 0.3s;
+        background: linear-gradient(45deg, #ff6a00, #ee0979);
+        box-shadow: 0 8px 20px rgba(238,9,121,0.4);
+        transition: all 0.3s ease;
         display: none;
     }
 
     .refresh:hover {
-        transform: rotate(180deg);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 25px rgba(238,9,121,0.6);
+        background: linear-gradient(45deg, #ee0979, #ff6a00);
+    }
+
+    .refresh:active {
+        transform: scale(0.98);
+        box-shadow: 0 6px 15px rgba(238,9,121,0.4);
     }
 
     /* Modal */
@@ -138,7 +150,7 @@
     <h2 id="title">Выберите категорию 🍽️</h2>
     <p id="recipe"></p>
 
-    <button class="refresh" id="refresh" onclick="generateRecipe()">🔄</button>
+    <button class="refresh" id="refresh" onclick="generateRecipe()">Обновить рецепт 🔄</button>
 </div>
 
 <div class="modal" id="modal">
