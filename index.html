@@ -1,129 +1,163 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Случайный рецепт</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+<meta charset="UTF-8">
+<title>Случайный рецепт</title>
 
-        .card {
-            background: white;
-            padding: 25px;
-            width: 380px;
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            text-align: center;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        button {
-            padding: 12px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 10px;
-            background: #ff8c00;
-            color: white;
-            cursor: pointer;
-        }
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        height: 100vh;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        button:hover {
-            background: #e67e00;
-        }
+    .card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        padding: 35px;
+        width: 420px;
+        border-radius: 24px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        text-align: center;
+        animation: fadeIn 0.8s ease;
+    }
 
-        .category {
-            font-weight: bold;
-            color: #666;
-            margin-top: 15px;
-        }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        h2 {
-            margin: 10px 0;
-        }
+    .main-btn {
+        background: linear-gradient(135deg, #ff7a18, #ffb347);
+        border: none;
+        border-radius: 50px;
+        padding: 14px 32px;
+        font-size: 17px;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(255,122,24,0.4);
+        transition: 0.3s;
+    }
 
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-        }
+    .main-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(255,122,24,0.5);
+    }
 
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 14px;
-            width: 300px;
-            text-align: center;
-        }
+    .category {
+        margin-top: 18px;
+        font-weight: 600;
+        color: #ff7a18;
+        letter-spacing: 1px;
+    }
 
-        .modal-content h3 {
-            margin-bottom: 15px;
-        }
+    h2 {
+        margin: 12px 0;
+        font-size: 26px;
+        color: #333;
+    }
 
-        .modal-content button {
-            width: 100%;
-            margin-bottom: 10px;
-            background: #ffa726;
-        }
+    p {
+        color: #555;
+        line-height: 1.5;
+    }
 
-        .modal-content button:hover {
-            background: #fb8c00;
-        }
-    </style>
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        backdrop-filter: blur(5px);
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .modal-box {
+        background: white;
+        padding: 30px;
+        width: 320px;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        text-align: center;
+    }
+
+    .modal-box h3 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .choice-btn {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 14px;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        background: linear-gradient(135deg, #ffd194, #ff9a9e);
+        color: #333;
+        transition: 0.25s;
+    }
+
+    .choice-btn:hover {
+        transform: scale(1.03);
+    }
+</style>
 </head>
 <body>
 
 <div class="card">
-    <button onclick="openModal()">Случайный рецепт</button>
+    <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
     <div class="category" id="category"></div>
-    <h2 id="title">Выбери категорию 🍽️</h2>
+    <h2 id="title">Выберите категорию 🍽️</h2>
     <p id="recipe"></p>
 </div>
 
-<!-- Модальное окно -->
 <div class="modal" id="modal">
-    <div class="modal-content">
-        <h3>Выберите приём пищи</h3>
-        <button onclick="selectCategory('breakfast')">Завтрак</button>
-        <button onclick="selectCategory('lunch')">Обед</button>
-        <button onclick="selectCategory('dinner')">Ужин</button>
-        <button onclick="selectCategory('dessert')">Десерт</button>
+    <div class="modal-box">
+        <h3>Что будем готовить?</h3>
+        <button class="choice-btn" onclick="selectCategory('breakfast')">🍳 Завтрак</button>
+        <button class="choice-btn" onclick="selectCategory('lunch')">🍝 Обед</button>
+        <button class="choice-btn" onclick="selectCategory('dinner')">🍽️ Ужин</button>
+        <button class="choice-btn" onclick="selectCategory('dessert')">🍰 Десерт</button>
     </div>
 </div>
 
 <script>
     const recipes = {
         breakfast: [
-            { title: "Омлет с сыром", text: "Взбить яйца, посолить и обжарить с сыром." },
-            { title: "Овсянка с фруктами", text: "Сварить овсянку и добавить фрукты." }
+            { title: "Омлет с пармезаном", text: "Взбей яйца, добавь пармезан и приготовь на сливочном масле." },
+            { title: "Греческий йогурт с мёдом", text: "Йогурт, мёд и орехи — идеально для утра." }
         ],
         lunch: [
-            { title: "Куриный суп", text: "Сварить курицу с овощами и лапшой." },
-            { title: "Паста с томатами", text: "Отварить пасту и смешать с соусом." }
+            { title: "Паста карбонара", text: "Паста, бекон, сливки и пармезан — классика." },
+            { title: "Крем-суп из тыквы", text: "Запечённая тыква, сливки и специи." }
         ],
         dinner: [
-            { title: "Запечённая рыба", text: "Запечь рыбу с лимоном в духовке." },
-            { title: "Рис с овощами", text: "Обжарить овощи и смешать с рисом." }
+            { title: "Лосось в духовке", text: "Запечь лосось с лимоном и травами." },
+            { title: "Ризотто с грибами", text: "Рис арборио, грибы и пармезан." }
         ],
         dessert: [
-            { title: "Банановый смузи", text: "Банан, молоко и мёд взбить." },
-            { title: "Шоколадные тосты", text: "Поджарить хлеб и намазать пастой." }
+            { title: "Шоколадный фондан", text: "Тёплый шоколадный десерт с жидкой серединой." },
+            { title: "Тирамису", text: "Савоярди, кофе, маскарпоне и какао." }
         ]
     };
 
     const categoryNames = {
-        breakfast: "Завтрак",
-        lunch: "Обед",
-        dinner: "Ужин",
-        dessert: "Десерт"
+        breakfast: "ЗАВТРАК",
+        lunch: "ОБЕД",
+        dinner: "УЖИН",
+        dessert: "ДЕСЕРТ"
     };
 
     function openModal() {
