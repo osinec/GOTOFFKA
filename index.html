@@ -19,7 +19,7 @@ body {
     background: #fff;
     border-radius: 24px;
     padding: 28px;
-    text-align: left;
+    text-align: center;
     box-shadow: 0 20px 50px rgba(0,0,0,.15);
 }
 .main-btn {
@@ -30,12 +30,14 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    display: block;
-    margin: 0 auto;
+}
+.main-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
 .refresh {
     display: none;
-    margin: 10px auto 0;
+    margin-top: 10px;
     background: linear-gradient(45deg, #ff6a00, #ee0979);
     color: #fff;
     border: none;
@@ -48,12 +50,10 @@ body {
     color: #c7903d;
     font-weight: 700;
     letter-spacing: 2px;
-    text-align: center;
 }
 h2 {
     margin: 10px 0 15px;
     font-family: 'Montserrat', sans-serif;
-    text-align: center;
 }
 .recipe-photo {
     width: 100%;
@@ -109,11 +109,16 @@ h2 {
     cursor: pointer;
     font-weight: 600;
 }
+.loading {
+    margin-top: 10px;
+    color: #999;
+}
 </style>
 </head>
 <body>
 <div class="card">
-    <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
+    <button class="main-btn" id="mainBtn" onclick="openModal()" disabled>Случайный рецепт</button>
+    <div id="loading" class="loading">Загрузка изображений...</div>
     <button class="refresh" id="refresh" onclick="generateRecipe()">Обновить рецепт 🔄</button>
     <div class="category" id="category"></div>
     <h2 id="title">Выберите категорию 🍽️</h2>
@@ -135,7 +140,6 @@ h2 {
 </div>
 <script>
 let currentCategory = null;
-// 🔥 Image cache
 const imageCache = {};
 const img = (id) => `https://images.unsplash.com/${id}?w=400&h=220&fit=crop&auto=format&q=75`;
 const data = {
@@ -160,12 +164,30 @@ const data = {
         { title:"Йогурт", photo:img("photo-1505253716362-afaea1a1d8f0"), ingredients:["Фрукты"], steps:["Нарезать","Смешать"], time:"5 мин", calories:220 }
     ]
 };
-// 🔥 PRELOAD ALL IMAGES
-Object.values(data).flat().forEach(r => {
-    const i = new Image();
-    i.src = r.photo;
-    imageCache[r.photo] = i;
+
+// Preload all images with Promises
+const preloadImages = () => {
+    const promises = Object.values(data).flat().map(r => {
+        return new Promise((resolve, reject) => {
+            const i = new Image();
+            i.src = r.photo;
+            i.onload = () => resolve();
+            i.onerror = () => reject();
+            imageCache[r.photo] = i;
+        });
+    });
+    return Promise.all(promises);
+};
+
+// Start preloading on page load
+preloadImages().then(() => {
+    document.getElementById('mainBtn').disabled = false;
+    document.getElementById('loading').style.display = 'none';
+}).catch(() => {
+    console.error('Error loading images');
+    document.getElementById('loading').innerText = 'Ошибка загрузки изображений';
 });
+
 function openModal() {
     modal.style.display = "flex";
 }
@@ -175,7 +197,7 @@ function closeModal(e) {
 function selectCategory(cat) {
     currentCategory = cat;
     category.innerText = cat.toUpperCase();
-    refresh.style.display = "block";
+    refresh.style.display = "inline-block";
     modal.style.display = "none";
     generateRecipe();
 }
