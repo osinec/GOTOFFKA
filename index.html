@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Генератор рецептов</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto&display=swap" rel="stylesheet">
-
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
     font-family: 'Roboto', sans-serif;
     background: linear-gradient(135deg, #ffecd2, #fcb69f);
@@ -17,16 +14,14 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 .card {
     width: 440px;
     background: #fff;
     border-radius: 24px;
     padding: 28px;
-    text-align: center;
+    text-align: left;
     box-shadow: 0 20px 50px rgba(0,0,0,.15);
 }
-
 .main-btn {
     background: linear-gradient(135deg, #c7903d, #f0c27b);
     border: none;
@@ -35,11 +30,12 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    display: block;
+    margin: 0 auto;
 }
-
 .refresh {
     display: none;
-    margin-top: 10px;
+    margin: 10px auto 0;
     background: linear-gradient(45deg, #ff6a00, #ee0979);
     color: #fff;
     border: none;
@@ -47,19 +43,18 @@ body {
     padding: 10px 22px;
     cursor: pointer;
 }
-
 .category {
     margin-top: 20px;
     color: #c7903d;
     font-weight: 700;
     letter-spacing: 2px;
+    text-align: center;
 }
-
 h2 {
     margin: 10px 0 15px;
     font-family: 'Montserrat', sans-serif;
+    text-align: center;
 }
-
 .recipe-photo {
     width: 100%;
     height: 220px;
@@ -67,22 +62,18 @@ h2 {
     border-radius: 16px;
     background: #eee;
 }
-
 .info {
     text-align: left;
     margin-top: 10px;
 }
-
 .info span {
     font-weight: 700;
 }
-
 .steps {
     text-align: left;
     margin-top: 10px;
     padding-left: 16px;
 }
-
 /* MODAL */
 .modal {
     display: none;
@@ -93,7 +84,6 @@ h2 {
     justify-content: center;
     align-items: center;
 }
-
 .modal-box {
     position: relative;
     background: #fff;
@@ -101,7 +91,6 @@ h2 {
     border-radius: 20px;
     width: 300px;
 }
-
 .close-btn {
     position: absolute;
     top: 12px;
@@ -110,7 +99,6 @@ h2 {
     cursor: pointer;
     color: #999;
 }
-
 .choice-btn {
     width: 100%;
     padding: 12px;
@@ -123,44 +111,33 @@ h2 {
 }
 </style>
 </head>
-
 <body>
-
 <div class="card">
     <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
     <button class="refresh" id="refresh" onclick="generateRecipe()">Обновить рецепт 🔄</button>
-
     <div class="category" id="category"></div>
     <h2 id="title">Выберите категорию 🍽️</h2>
-
     <img id="photo" class="recipe-photo">
-
     <div id="ingredients" class="info"></div>
     <ul id="steps" class="steps"></ul>
     <div id="time" class="info"></div>
     <div id="calories" class="info"></div>
 </div>
-
 <div class="modal" id="modal" onclick="closeModal(event)">
     <div class="modal-box">
         <div class="close-btn" onclick="closeModal()">✕</div>
         <h3>Выберите приём пищи</h3>
-
         <button class="choice-btn" onclick="selectCategory('breakfast')">🍳 Завтрак</button>
         <button class="choice-btn" onclick="selectCategory('lunch')">🍝 Обед</button>
         <button class="choice-btn" onclick="selectCategory('dinner')">🍽️ Ужин</button>
         <button class="choice-btn" onclick="selectCategory('dessert')">🍰 Десерт</button>
     </div>
 </div>
-
 <script>
 let currentCategory = null;
-
 // 🔥 Image cache
 const imageCache = {};
-
-const img = (id) => `https://images.unsplash.com/${id}?w=600&h=400&fit=crop&auto=format`;
-
+const img = (id) => `https://images.unsplash.com/${id}?w=400&h=220&fit=crop&auto=format&q=75`;
 const data = {
     breakfast: [
         { title:"Омлет", photo:img("photo-1601050690462-6f105289b9c4"), ingredients:["Яйца","Сыр"], steps:["Взбить","Обжарить"], time:"10 мин", calories:250 },
@@ -183,43 +160,35 @@ const data = {
         { title:"Йогурт", photo:img("photo-1505253716362-afaea1a1d8f0"), ingredients:["Фрукты"], steps:["Нарезать","Смешать"], time:"5 мин", calories:220 }
     ]
 };
-
 // 🔥 PRELOAD ALL IMAGES
 Object.values(data).flat().forEach(r => {
     const i = new Image();
     i.src = r.photo;
     imageCache[r.photo] = i;
 });
-
 function openModal() {
     modal.style.display = "flex";
 }
-
 function closeModal(e) {
     if (!e || e.target.id === "modal") modal.style.display = "none";
 }
-
 function selectCategory(cat) {
     currentCategory = cat;
     category.innerText = cat.toUpperCase();
-    refresh.style.display = "inline-block";
+    refresh.style.display = "block";
     modal.style.display = "none";
     generateRecipe();
 }
-
 function generateRecipe() {
     const list = data[currentCategory];
     const r = list[Math.floor(Math.random() * list.length)];
-
     title.innerText = r.title;
     photo.src = imageCache[r.photo].src;
-
     ingredients.innerHTML = `<span>Ингредиенты:</span> ${r.ingredients.join(", ")}`;
     steps.innerHTML = r.steps.map(s => `<li>${s}</li>`).join("");
     time.innerHTML = `<span>Время:</span> ${r.time}`;
     calories.innerHTML = `<span>Калории:</span> ${r.calories} ккал`;
 }
 </script>
-
 </body>
 </html>
