@@ -2,214 +2,247 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Генератор рецептов</title>
+<title>Рецепты</title>
 
 <style>
     * { box-sizing: border-box; }
 
     body {
         margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        height: 100vh;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #ffffff;
         display: flex;
         justify-content: center;
-        align-items: center;
+        padding: 40px 15px;
     }
 
-    .card {
-        width: 440px;
-        padding: 38px;
-        border-radius: 26px;
-        background: rgba(255,255,255,0.92);
-        backdrop-filter: blur(16px);
-        box-shadow: 0 30px 70px rgba(0,0,0,0.35);
-        text-align: center;
-        animation: fadeIn 0.6s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    .app {
+        width: 420px;
     }
 
     .main-btn {
-        background: linear-gradient(135deg, #c7903d, #f0c27b);
+        width: 100%;
+        padding: 16px;
+        border-radius: 14px;
         border: none;
-        border-radius: 60px;
-        padding: 15px 38px;
-        font-size: 17px;
+        background: #111;
+        color: #fff;
+        font-size: 16px;
         font-weight: 600;
-        color: #1f1f1f;
         cursor: pointer;
-        box-shadow: 0 12px 30px rgba(199,144,61,0.45);
-        transition: 0.3s;
+        margin-bottom: 20px;
     }
 
-    .main-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 16px 40px rgba(199,144,61,0.6);
-    }
-
-    .category {
-        margin-top: 20px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        color: #c7903d;
-    }
-
-    h2 {
-        margin: 14px 0;
-        font-size: 26px;
-        color: #222;
-    }
-
-    p {
-        color: #444;
-        line-height: 1.6;
-        min-height: 70px;
-    }
-
-    .refresh {
-        margin-top: 22px;
-        background: none;
-        border: none;
-        font-size: 28px;
-        cursor: pointer;
-        color: #c7903d;
-        transition: transform 0.3s;
+    .card {
+        border-radius: 20px;
+        border: 1px solid #eee;
+        overflow: hidden;
         display: none;
     }
 
-    .refresh:hover {
-        transform: rotate(180deg);
+    .card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    h2 {
+        margin: 0 0 10px;
+    }
+
+    .meta {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 15px;
+    }
+
+    h3 {
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    ul {
+        padding-left: 18px;
+        margin-top: 0;
+    }
+
+    .refresh {
+        margin-top: 15px;
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        background: #f9f9f9;
+        font-size: 16px;
+        cursor: pointer;
     }
 
     /* Modal */
     .modal {
-        display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.6);
-        backdrop-filter: blur(8px);
+        background: rgba(0,0,0,0.4);
+        display: none;
         justify-content: center;
         align-items: center;
     }
 
     .modal-box {
-        background: #ffffff;
-        padding: 32px;
-        width: 330px;
-        border-radius: 24px;
-        text-align: center;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+        background: #fff;
+        width: 300px;
+        border-radius: 18px;
+        padding: 20px;
     }
 
-    .modal-box h3 {
-        margin-bottom: 22px;
-        color: #222;
-    }
-
-    .choice-btn {
+    .modal-box button {
         width: 100%;
-        padding: 13px;
-        margin-bottom: 14px;
-        border-radius: 16px;
-        border: none;
-        font-size: 16px;
-        font-weight: 500;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+        background: #fff;
+        font-size: 15px;
         cursor: pointer;
-        background: linear-gradient(135deg, #e6b980, #eacda3);
-        color: #222;
-        transition: 0.25s;
-    }
-
-    .choice-btn:hover {
-        transform: scale(1.03);
     }
 </style>
 </head>
 <body>
 
-<div class="card">
+<div class="app">
     <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
 
-    <div class="category" id="category"></div>
-    <h2 id="title">Выберите категорию 🍽️</h2>
-    <p id="recipe"></p>
+    <div class="card" id="recipeCard">
+        <img id="image">
+        <div class="content">
+            <h2 id="title"></h2>
+            <div class="meta" id="meta"></div>
 
-    <button class="refresh" id="refresh" onclick="generateRecipe()">🔄</button>
+            <h3>Ингредиенты</h3>
+            <ul id="ingredients"></ul>
+
+            <h3>Приготовление</h3>
+            <p id="steps"></p>
+
+            <button class="refresh" onclick="generateRecipe()">🔄 Другой рецепт</button>
+        </div>
+    </div>
 </div>
 
+<!-- Modal -->
 <div class="modal" id="modal">
     <div class="modal-box">
-        <h3>Выберите приём пищи</h3>
-        <button class="choice-btn" onclick="selectCategory('breakfast')">🍳 Завтрак</button>
-        <button class="choice-btn" onclick="selectCategory('lunch')">🍝 Обед</button>
-        <button class="choice-btn" onclick="selectCategory('dinner')">🍽️ Ужин</button>
-        <button class="choice-btn" onclick="selectCategory('dessert')">🍰 Десерт</button>
+        <button onclick="selectCategory('breakfast')">🍳 Завтрак</button>
+        <button onclick="selectCategory('lunch')">🍝 Обед</button>
+        <button onclick="selectCategory('dinner')">🍽️ Ужин</button>
+        <button onclick="selectCategory('dessert')">🍰 Десерт</button>
     </div>
 </div>
 
 <script>
-    let currentCategory = null;
+let currentCategory = null;
 
-    const data = {
-        breakfast: {
-            titles: ["Омлет", "Овсянка", "Тосты", "Йогурт боул"],
-            bases: ["яйца", "овсяные хлопья", "хлеб", "греческий йогурт"],
-            extras: ["сыр", "ягоды", "авокадо", "мёд"],
-            actions: ["обжарить", "сварить", "подрумянить", "смешать"]
-        },
-        lunch: {
-            titles: ["Паста", "Суп", "Боул", "Ризотто"],
-            bases: ["макароны", "куриный бульон", "рис", "чечевицу"],
-            extras: ["овощи", "сливки", "томатный соус", "грибы"],
-            actions: ["отварить", "потушить", "смешать", "прогреть"]
-        },
-        dinner: {
-            titles: ["Лосось", "Курица", "Овощи", "Рис"],
-            bases: ["рыбу", "куриное филе", "овощи", "рис"],
-            extras: ["специи", "соус", "травы", "чеснок"],
-            actions: ["запечь", "обжарить", "потушить", "приготовить"]
-        },
-        dessert: {
-            titles: ["Десерт", "Крем", "Мусс", "Сладкий боул"],
-            bases: ["шоколад", "банан", "ягоды", "сливки"],
-            extras: ["какао", "мёд", "орехи", "ваниль"],
-            actions: ["взбить", "охладить", "смешать", "подать"]
+const recipes = {
+    breakfast: [
+        {
+            title: "Классический омлет",
+            image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141",
+            calories: "250 ккал",
+            time: "10 минут",
+            ingredients: [
+                "2 яйца",
+                "50 мл молока",
+                "Соль",
+                "Сливочное масло"
+            ],
+            steps: "Взбейте яйца с молоком и солью. Разогрейте сковороду со сливочным маслом и обжарьте омлет до готовности."
         }
-    };
+    ],
+    lunch: [
+        {
+            title: "Паста карбонара",
+            image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b",
+            calories: "520 ккал",
+            time: "20 минут",
+            ingredients: [
+                "Спагетти",
+                "Бекон",
+                "Яйцо",
+                "Пармезан",
+                "Чёрный перец"
+            ],
+            steps: "Отварите пасту. Обжарьте бекон. Смешайте яйцо с сыром, соедините всё с пастой."
+        }
+    ],
+    dinner: [
+        {
+            title: "Лосось в духовке",
+            image: "https://images.unsplash.com/photo-1588167056547-c183313da47c",
+            calories: "430 ккал",
+            time: "25 минут",
+            ingredients: [
+                "Филе лосося",
+                "Лимон",
+                "Оливковое масло",
+                "Соль, перец"
+            ],
+            steps: "Сбрызните рыбу маслом и лимоном, приправьте и запекайте при 180°C 20–25 минут."
+        }
+    ],
+    dessert: [
+        {
+            title: "Тирамису",
+            image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b",
+            calories: "450 ккал",
+            time: "30 минут",
+            ingredients: [
+                "Савоярди",
+                "Маскарпоне",
+                "Кофе",
+                "Какао",
+                "Сахар"
+            ],
+            steps: "Слоями выложите печенье, крем и кофе. Охладите перед подачей."
+        }
+    ]
+};
 
-    function openModal() {
-        document.getElementById("modal").style.display = "flex";
-    }
+function openModal() {
+    document.getElementById("modal").style.display = "flex";
+}
 
-    function closeModal() {
-        document.getElementById("modal").style.display = "none";
-    }
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
 
-    function selectCategory(category) {
-        currentCategory = category;
-        document.getElementById("category").innerText = category.toUpperCase();
-        generateRecipe();
-        closeModal();
-        document.getElementById("refresh").style.display = "inline";
-    }
+function selectCategory(cat) {
+    currentCategory = cat;
+    generateRecipe();
+    closeModal();
+}
 
-    function random(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
+function generateRecipe() {
+    const list = recipes[currentCategory];
+    const r = list[Math.floor(Math.random() * list.length)];
 
-    function generateRecipe() {
-        if (!currentCategory) return;
-        const c = data[currentCategory];
+    document.getElementById("recipeCard").style.display = "block";
+    document.getElementById("title").innerText = r.title;
+    document.getElementById("image").src = r.image;
+    document.getElementById("meta").innerText = `⏱ ${r.time} • 🔥 ${r.calories}`;
 
-        document.getElementById("title").innerText = random(c.titles);
-        document.getElementById("recipe").innerText =
-            `Возьмите ${random(c.bases)}, добавьте ${random(c.extras)} и аккуратно ${random(c.actions)}.
-            Подавайте свежим и наслаждайтесь ✨`;
-    }
+    const ul = document.getElementById("ingredients");
+    ul.innerHTML = "";
+    r.ingredients.forEach(i => {
+        const li = document.createElement("li");
+        li.innerText = i;
+        ul.appendChild(li);
+    });
+
+    document.getElementById("steps").innerText = r.steps;
+}
 </script>
 
 </body>
