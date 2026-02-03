@@ -37,12 +37,19 @@ button {
     border: none;
     border-radius: 40px;
     font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .main-btn {
     padding: 14px 30px;
     background: linear-gradient(135deg,#f6d365,#fda085);
     font-size: 16px;
+    color: #222;
+}
+
+.main-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,.15);
 }
 
 .refresh {
@@ -52,6 +59,11 @@ button {
     background: linear-gradient(135deg,#ff6a00,#ee0979);
     color: #fff;
     font-size: 14px;
+}
+
+.refresh:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(238, 9, 121, 0.3);
 }
 
 .category {
@@ -74,6 +86,7 @@ img {
     object-fit: cover;
     border-radius: 18px;
     display: none;
+    margin-top: 10px;
 }
 
 .info {
@@ -94,6 +107,7 @@ ul {
     padding-left: 18px;
     font-size: 14px;
     color: #444;
+    line-height: 1.5;
 }
 
 /* MODAL */
@@ -105,14 +119,27 @@ ul {
     backdrop-filter: blur(6px);
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 .modal-box {
     background: #fff;
     padding: 26px;
     border-radius: 22px;
-    width: 280px;
+    width: 300px;
     position: relative;
+    animation: modalAppear 0.3s ease;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .close {
@@ -122,6 +149,11 @@ ul {
     font-size: 20px;
     cursor: pointer;
     opacity: .6;
+    transition: opacity 0.2s;
+}
+
+.close:hover {
+    opacity: 1;
 }
 
 .choice {
@@ -131,10 +163,12 @@ ul {
     background: #f5f5f5;
     font-size: 14px;
     border-radius: 16px;
+    transition: all 0.3s ease;
 }
 
 .choice:hover {
     background: #eee;
+    transform: translateY(-2px);
 }
 </style>
 </head>
@@ -143,12 +177,12 @@ ul {
 
 <div class="card">
     <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
-    <button class="refresh" id="refresh">Обновить рецепт 🔄</button>
+    <button class="refresh" id="refresh" onclick="generateRecipe()">Обновить рецепт 🔄</button>
 
     <div class="category" id="category"></div>
     <h2 id="title">Выберите категорию</h2>
 
-    <img id="photo" src="sup.png" alt="recipe">
+    <img id="photo" alt="Фото рецепта">
 
     <div id="ingredients" class="info"></div>
     <ul id="steps"></ul>
@@ -159,6 +193,7 @@ ul {
 <div class="modal" id="modal">
     <div class="modal-box">
         <div class="close" onclick="closeModal()">✕</div>
+        <h3 style="margin-bottom: 15px;">Выберите категорию</h3>
         <button class="choice" onclick="selectCategory('breakfast')">🍳 Завтрак</button>
         <button class="choice" onclick="selectCategory('lunch')">🍝 Обед</button>
         <button class="choice" onclick="selectCategory('dinner')">🍽 Ужин</button>
@@ -166,7 +201,83 @@ ul {
     </div>
 </div>
 
-<script src="recipes.js" defer></script>
+<script src="recipes.js"></script>
+<script>
+// Функции для работы с модальным окном
+function openModal() {
+    document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+
+// Выбор категории
+function selectCategory(category) {
+    currentCategory = category;
+    closeModal();
+    generateRecipe();
+}
+
+// Генерация случайного рецепта
+function generateRecipe() {
+    if (!currentCategory) {
+        alert('Сначала выберите категорию!');
+        openModal();
+        return;
+    }
+
+    if (!recipes[currentCategory]) {
+        alert('Рецепты для этой категории не найдены!');
+        return;
+    }
+
+    const categoryRecipes = recipes[currentCategory];
+    const randomRecipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
+
+    // Обновляем данные на странице
+    document.getElementById('category').textContent = randomRecipe.category;
+    document.getElementById('title').textContent = randomRecipe.title;
+    document.getElementById('photo').src = randomRecipe.photo;
+    document.getElementById('photo').style.display = 'block';
+    document.getElementById('ingredients').innerHTML = `<span>Ингредиенты:</span> ${randomRecipe.ingredients}`;
+    document.getElementById('time').innerHTML = `<span>Время приготовления:</span> ${randomRecipe.time}`;
+    document.getElementById('calories').innerHTML = `<span>Калорийность:</span> ${randomRecipe.calories}`;
+
+    // Формируем список шагов
+    const stepsList = document.getElementById('steps');
+    stepsList.innerHTML = '';
+    randomRecipe.steps.forEach((step, index) => {
+        const li = document.createElement('li');
+        li.textContent = step;
+        stepsList.appendChild(li);
+    });
+
+    // Показываем кнопку обновления
+    document.getElementById('refresh').style.display = 'inline-block';
+}
+
+// Глобальная переменная для текущей категории
+let currentCategory = null;
+
+// Закрытие модального окна при клике вне его
+document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Генератор рецептов загружен!');
+    // Проверяем, загружены ли рецепты
+    if (typeof recipes !== 'undefined') {
+        console.log('База рецептов загружена успешно!');
+    } else {
+        console.error('База рецептов не загружена!');
+    }
+});
+</script>
 
 </body>
 </html>
