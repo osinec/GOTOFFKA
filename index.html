@@ -249,7 +249,7 @@
         <div class="category" id="category"></div>
         <h2 id="title">Выберите категорию</h2>
 
-        <img id="photo" alt="Фото рецепта" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQ+c3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+">
+        <img id="photo" alt="Фото рецепта" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+">
 
         <div id="ingredients" class="info"></div>
         <ul id="steps"></ul>
@@ -268,233 +268,12 @@
         </div>
     </div>
 
+    <!-- Подключаем внешний JS файл с рецептами -->
+    <script src="recipes.js"></script>
+    
     <script>
-        // База данных рецептов с быстрыми URL картинок
+        // Глобальная переменная для текущей категории
         let currentCategory = null;
-
-        const data = {
-            breakfast: [
-                {
-                    title: "Грибной омлет",
-                    photo: "https://images.unsplash.com/photo-1598214886806-c87b84b7078b?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["шампиньоны 100 - 150 гр", "2 яйца", "соль и специи", "лук 1/4"],
-                    steps: [
-                        { step: "Грибы режем произвольно, лук измельчаем" },
-                        { step: "Обжариваем на масле до золотистого цвета" },
-                        { step: "Яйца взбиваем вилкой и выливаем на обжаренные грибы" },
-                        { step: "Можно все перемешать - получится скрамбл / пожарить на каждой стороне, как блин" }
-                    ],
-                    time: "10 минут",
-                    calories: 250
-                },
-                {
-                    title: "Бутерброды из отрубей",
-                    photo: "https://images.unsplash.com/photo-1481070555726-e2fe8357725c?w=400&h=200&fit=crop&auto=format",
-                    ingredients: [
-                        "2 ст. л. отрубей (пшеничных или овсяных)",
-                        "1 яйцо",
-                        "1,5 ст. л. мягкого творога или сметаны",
-                        "1/3 ч. л. разрыхлителя",
-                        "соль, перец, зелень (по вкусу)"
-                    ],
-                    steps: [
-                        { step: "Смешать все ингредиенты." },
-                        { step: "Выпекать в микроволновке 4 минуты." },
-                        { step: "Дать остыть, затем намазать хлебную основу на кусок хруста." },
-                        { step: "Варианты начинки: ветчина 30 г + вареное яйцо + зелень; запеченные баклажаны с чесноком и помидором 100 г; тунец 50 г + яйцо + сметана + зелень; малосоленая рыба 30 г + сметана + зелень." }
-                    ],
-                    time: "4 минуты + остывание",
-                    calories: 180
-                },
-                {
-                    title: "Яичные котлетки с зелёным луком",
-                    photo: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop&auto=format",
-                    ingredients: [
-                        "2 яйца (сварить вкрутую)",
-                        "1 яичный белок (сырой)",
-                        "зелёный лук — по вкусу",
-                        "1 ст. ложка сметаны",
-                        "½ ст. ложки муки",
-                        "специи — по вкусу"
-                    ],
-                    steps: [
-                        { step: "Нарежьте варёные яйца кубиками, смешайте с мелко нарезанным луком." },
-                        { step: "В отдельной миске взбейте сырой белок со сметаной, мукой и специями." },
-                        { step: "Соедините обе смеси, аккуратно перемешайте." },
-                        { step: "Жарьте на сковороде под крышкой по 3 минуты с каждой стороны." }
-                    ],
-                    time: "15 минут",
-                    calories: 200
-                },
-                {
-                    title: "Блинчики с медом",
-                    photo: "https://images.unsplash.com/photo-1574894709925-b6c75c7daf6a?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["100 г муки", "1 яйцо", "100 мл молока", "мед"],
-                    steps: [
-                        { step: "Смешайте муку, яйцо и молоко до однородности." },
-                        { step: "Выпекайте блины на сковороде." },
-                        { step: "Полейте медом перед подачей." }
-                    ],
-                    time: "10 минут",
-                    calories: 220
-                },
-                {
-                    title: "Ленивые хачапури на кефире",
-                    photo: "https://images.unsplash.com/photo-1563379091339-03246963d9d6?w=400&h=200&fit=crop&auto=format",
-                    ingredients: [
-                        "100 г сыра (лучше сулугуни + мягкий сыр)",
-                        "1 яйцо",
-                        "100 мл кефира (или йогурт/сметана)",
-                        "50 г муки",
-                        "15 г сливочного масла",
-                        "соль (по необходимости — сулугуни и так солёный)"
-                    ],
-                    steps: [
-                        { step: "Натрите сыр на тёрке, добавьте яйцо и кефир, перемешайте." },
-                        { step: "Всыпьте муку до консистенции густой сметаны." },
-                        { step: "Вылейте тесто на сковороду с разогретым маслом, разровняйте." },
-                        { step: "Жарьте под крышкой на малом огне до сухости сверху (~5–7 мин)." },
-                        { step: "Переверните и дожарьте до золотистой корочки с другой стороны." },
-                        { step: "Остудите немного, нарежьте порциями, подавайте со сметаной или зеленью." }
-                    ],
-                    time: "20 минут",
-                    calories: 280
-                }
-            ],
-            lunch: [
-                {
-                    title: "Паста с томатным соусом",
-                    photo: "https://images.unsplash.com/photo-1598866594230-a7c12756260f?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["100 г пасты", "100 мл томатного соуса", "сыр", "базилик"],
-                    steps: [
-                        { step: "Отварите пасту согласно инструкции." },
-                        { step: "Разогрейте соус и смешайте с пастой." },
-                        { step: "Посыпьте сыром и базиликом." }
-                    ],
-                    time: "17 минут",
-                    calories: 400
-                },
-                {
-                    title: "Салат Цезарь",
-                    photo: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["Листья салата", "Курица", "Сыр Пармезан", "Сухарики", "Соус Цезарь"],
-                    steps: [
-                        { step: "Нарежьте курицу и обжарьте." },
-                        { step: "Смешайте салат, курицу, сыр и сухарики." },
-                        { step: "Добавьте соус Цезарь." }
-                    ],
-                    time: "14 минут",
-                    calories: 350
-                },
-                {
-                    title: "Рис с овощами",
-                    photo: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["100 г риса", "100 г овощей", "масло", "соевый соус"],
-                    steps: [
-                        { step: "Отварите рис." },
-                        { step: "Обжарьте овощи на масле." },
-                        { step: "Смешайте рис с овощами и соевым соусом." }
-                    ],
-                    time: "17 минут",
-                    calories: 300
-                }
-            ],
-            dinner: [
-                {
-                    title: "Запечённый лосось",
-                    photo: "https://images.unsplash.com/photo-1604908177520-9ff9c4aeb1d0?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["200 г лосося", "специи", "лимон"],
-                    steps: [
-                        { step: "Разогрейте духовку до 180°C." },
-                        { step: "Приправьте лосось специями и лимоном." },
-                        { step: "Запеките лосось 15 минут." }
-                    ],
-                    time: "22 минуты",
-                    calories: 350
-                },
-                {
-                    title: "Курица с овощами",
-                    photo: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["200 г курицы", "овощи", "масло", "специи"],
-                    steps: [
-                        { step: "Обжарьте курицу до золотистой корочки." },
-                        { step: "Добавьте овощи и специи." },
-                        { step: "Тушите до готовности." }
-                    ],
-                    time: "22 минуты",
-                    calories: 320
-                },
-                {
-                    title: "Спагетти с овощами",
-                    photo: "https://images.unsplash.com/photo-1598866594230-a7c12756260f?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["100 г спагетти", "овощи", "соус", "сыр"],
-                    steps: [
-                        { step: "Отварите спагетти." },
-                        { step: "Обжарьте овощи с соусом." },
-                        { step: "Смешайте спагетти с овощами и посыпьте сыром." }
-                    ],
-                    time: "17 минут",
-                    calories: 330
-                }
-            ],
-            dessert: [
-                {
-                    title: "Шоколадный мусс",
-                    photo: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["100 г шоколада", "2 яйца", "50 мл сливок", "сахар по вкусу"],
-                    steps: [
-                        { step: "Растопите шоколад на водяной бане." },
-                        { step: "Взбейте яйца со сливками и сахаром." },
-                        { step: "Смешайте шоколад с взбитой массой." },
-                        { step: "Охладите в холодильнике минимум 5 минут." }
-                    ],
-                    time: "15 минут",
-                    calories: 300
-                },
-                {
-                    title: "Фруктовый салат",
-                    photo: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["Фрукты по вкусу", "мед", "йогурт"],
-                    steps: [
-                        { step: "Нарежьте фрукты." },
-                        { step: "Смешайте с йогуртом и медом." }
-                    ],
-                    time: "5 минут",
-                    calories: 150
-                },
-                {
-                    title: "Печенье овсяное",
-                    photo: "https://images.unsplash.com/photo-1574926054530-540288c8e678?w=400&h=200&fit=crop&auto=format",
-                    ingredients: ["100 г овсяных хлопьев", "50 г сахара", "1 яйцо", "масло"],
-                    steps: [
-                        { step: "Смешайте все ингредиенты." },
-                        { step: "Выложите тесто на противень и выпекайте 10 минут." }
-                    ],
-                    time: "15 минут",
-                    calories: 200
-                },
-                {
-                    title: "Десерт на отрубях с кремом",
-                    photo: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=200&fit=crop&auto=format",
-                    ingredients: [
-                        "2 ст. ложки пшеничных/овсяных отрубей",
-                        "1 яйцо",
-                        "1 ст. ложка творожка или сметаны",
-                        "½ ч. ложки разрыхлителя",
-                        "100 мл кофе или какао с сахаром (для пропитки)",
-                        "100 г творожка/йогурта + подсластитель + щепотка соли (для крема)"
-                    ],
-                    steps: [
-                        { step: "Смешайте отруби, яйцо, творожок и разрыхлитель. Дайте постоять 1–2 минуты." },
-                        { step: "Выложите в форму для микроволновки, готовьте 4 минуты на полной мощности (пару раз откройте дверцу для выхода пара)." },
-                        { step: "Пропитайте готовый корж кофе или какао." },
-                        { step: "Смажьте кремом (творожок + подсластитель + соль). При желании соберите слоями." }
-                    ],
-                    time: "10 минут",
-                    calories: 180
-                }
-            ]
-        };
 
         // Функции для работы с модальным окном
         function openModal() {
@@ -516,13 +295,19 @@
 
         // Генерация случайного рецепта
         function generateRecipe() {
+            // Проверяем, загружены ли рецепты
+            if (typeof data === 'undefined') {
+                alert('Рецепты не загружены! Проверьте файл recipes.js');
+                return;
+            }
+
             if (!currentCategory) {
                 alert('Сначала выберите категорию!');
                 openModal();
                 return;
             }
 
-            if (!data || !data[currentCategory]) {
+            if (!data[currentCategory]) {
                 alert('Рецепты для этой категории не найдены!');
                 return;
             }
@@ -535,7 +320,6 @@
             document.getElementById('title').textContent = randomRecipe.title;
             
             const photoEl = document.getElementById('photo');
-            // Показываем placeholder пока загружается картинка
             photoEl.style.display = 'block';
             photoEl.alt = randomRecipe.title;
             
@@ -545,7 +329,6 @@
                 photoEl.src = this.src;
             };
             img.onerror = function() {
-                // Если картинка не загрузилась, оставляем placeholder
                 console.log('Ошибка загрузки изображения');
             };
             img.src = randomRecipe.photo;
@@ -582,9 +365,6 @@
             document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // Глобальная переменная для текущей категории
-        let currentCategory = null;
-
         // Закрытие модального окна при клике вне его
         document.getElementById('modal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -605,10 +385,6 @@
             
             // Изначально кнопка "Обновить рецепт" скрыта
             document.getElementById('refresh').style.display = 'none';
-            
-            // Предзагрузка первой картинки для ускорения
-            const preloadImg = new Image();
-            preloadImg.src = "https://images.unsplash.com/photo-1598214886806-c87b84b7078b?w=400&h=200&fit=crop&auto=format";
             
             // Добавляем touch события для лучшей реакции на мобильных
             const buttons = document.querySelectorAll('button');
