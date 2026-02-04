@@ -323,15 +323,16 @@
             photoEl.style.display = 'block';
             photoEl.alt = randomRecipe.title;
             
-            // Создаем новое изображение для предзагрузки
-            const img = new Image();
-            img.onload = function() {
-                photoEl.src = this.src;
+            // Используем временное изображение для загрузки
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                photoEl.src = randomRecipe.photo;
             };
-            img.onerror = function() {
+            tempImg.onerror = function() {
                 console.log('Ошибка загрузки изображения');
+                // Оставляем placeholder если изображение не загрузилось
             };
-            img.src = randomRecipe.photo;
+            tempImg.src = randomRecipe.photo;
             
             // Проверяем тип ingredients (массив или строка)
             let ingredientsText;
