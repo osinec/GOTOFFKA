@@ -23,7 +23,6 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            -webkit-tap-highlight-color: transparent;
         }
         .card {
             width: 100%;
@@ -42,8 +41,6 @@
             border-radius: 40px;
             font-weight: 600;
             transition: transform 0.2s ease;
-            -webkit-appearance: none;
-            touch-action: manipulation;
         }
         .main-btn {
             padding: 16px 28px;
@@ -70,7 +67,6 @@
             align-items: center;
             z-index: 1000;
             padding: 20px;
-            -webkit-overflow-scrolling: touch;
         }
         .modal-box {
             background: #fff;
@@ -139,7 +135,7 @@
         "breakfast": [
             {
                 "title": "Грибной омлет",
-                "photo": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=200&fit=crop",
+                "photo": "грибной_омлет.png",
                 "ingredients": ["шампиньоны 100-150 гр", "2 яйца", "соль и специи", "лук 1/4"],
                 "steps": [
                     "Грибы режем произвольно, лук измельчаем",
@@ -152,7 +148,7 @@
             },
             {
                 "title": "Бутерброды из отрубей",
-                "photo": "https://images.unsplash.com/photo-1481070555726-e2fe8357725c?w=400&h=200&fit=crop",
+                "photo": "Бутерброды_из_отрубей.png",
                 "ingredients": [
                     "2 ст. л. отрубей",
                     "1 яйцо",
@@ -171,7 +167,7 @@
             },
             {
                 "title": "Ленивые пирожки с зеленым луком",
-                "photo": "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=200&fit=crop",
+                "photo": "ленивые_пирожки.png",
                 "ingredients": [
                     "2 яйца (вареные)",
                     "1 яичный белок",
@@ -193,7 +189,7 @@
         "lunch": [
             {
                 "title": "Куриная запеканка с овощами",
-                "photo": "https://images.unsplash.com/photo-1606728035253-49e8a23146de?w=400&h=200&fit=crop",
+                "photo": "куриная_запеканка.png",
                 "ingredients": [
                     "Куриное филе — 100 г",
                     "Баклажан — 100 г",
@@ -215,7 +211,7 @@
             },
             {
                 "title": "Рыба с горчицей и сметаной",
-                "photo": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=200&fit=crop",
+                "photo": "рыба_с_горчицей.png",
                 "ingredients": [
                     "Рыба (филе) — 150–200 г",
                     "Сметана — 1 ст. л.",
@@ -236,7 +232,7 @@
         "dinner": [
             {
                 "title": "Салат с креветками",
-                "photo": "https://images.unsplash.com/photo-1551248429-40975aa4de74?w=400&h=200&fit=crop",
+                "photo": "салат_креветки.png",
                 "ingredients": [
                     "креветки 100-150 г",
                     "капуста пекинская 100 г",
@@ -259,10 +255,10 @@
         "dessert": [
             {
                 "title": "Классический чизкейк",
-                "photo": "https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=200&fit=crop",
+                "photo": "чизкейк.png",
                 "ingredients": [
                     "Для основы: Крекеры — 200 г, Сливочное масло — 100 г, Сахар — 50 г",
-                    "Для начинки: Сливочный сыр — 1 кг, Сметана — 200 г, Яйца — 4 шт., Сахар — 1 стакан"
+                    "Для начинку: Сливочный сыр — 1 кг, Сметана — 200 г, Яйца — 4 шт., Сахар — 1 стакан"
                 ],
                 "steps": [
                     "Измельчить крекеры, добавить масло и сахар",
@@ -349,14 +345,7 @@
                             if (recipe.photo) {
                                 const img = new Image();
                                 img.loading = 'lazy';
-                                img.onload = () => {
-                                    imageCache.set(recipe.photo, img);
-                                    console.log('Изображение загружено:', recipe.title);
-                                };
-                                img.onerror = () => {
-                                    console.error('Ошибка загрузки изображения:', recipe.photo);
-                                    imageCache.set(recipe.photo, null);
-                                };
+                                img.onload = () => imageCache.set(recipe.photo, img);
                                 img.src = recipe.photo;
                             }
                         });
@@ -368,14 +357,7 @@
                             if (recipe.photo) {
                                 const img = new Image();
                                 img.loading = 'lazy';
-                                img.onload = () => {
-                                    imageCache.set(recipe.photo, img);
-                                    console.log('Изображение загружено:', recipe.title);
-                                };
-                                img.onerror = () => {
-                                    console.error('Ошибка загрузки изображения:', recipe.photo);
-                                    imageCache.set(recipe.photo, null);
-                                };
+                                img.onload = () => imageCache.set(recipe.photo, img);
                                 img.src = recipe.photo;
                             }
                         });
@@ -474,24 +456,14 @@
                     elements.photo.style.display = 'block';
                     elements.photo.alt = recipe.title;
                     
-                    // Проверяем кэш и загружаем изображение
+                    // Оптимизированная загрузка изображения
                     const cachedImg = imageCache.get(recipe.photo);
-                    if (cachedImg && cachedImg.complete && cachedImg.naturalWidth > 0) {
+                    if (cachedImg && cachedImg.complete) {
                         elements.photo.src = cachedImg.src;
                     } else {
-                        // Сначала показываем фолбэк
-                        elements.photo.src = fallbackImage;
-                        
-                        // Затем загружаем настоящее изображение
+                        elements.photo.src = recipe.photo;
                         const img = new Image();
-                        img.onload = () => {
-                            elements.photo.src = recipe.photo;
-                            imageCache.set(recipe.photo, img);
-                        };
-                        img.onerror = () => {
-                            console.error('Не удалось загрузить изображение:', recipe.photo);
-                            // Оставляем фолбэк изображение
-                        };
+                        img.onload = () => imageCache.set(recipe.photo, img);
                         img.src = recipe.photo;
                     }
                     
@@ -601,14 +573,6 @@
                     .note { text-align: left; margin-top: 12px; font-size: 14px; color: #666; font-style: italic; padding: 8px; background: #f9f9f9; border-radius: 8px; }
                     .note span { font-weight: 600; color: #444; }
                     
-                    /* Запрет выделения текста на кнопках для мобильных */
-                    button {
-                        -webkit-user-select: none;
-                        -moz-user-select: none;
-                        -ms-user-select: none;
-                        user-select: none;
-                    }
-                    
                     @media (max-width: 360px) {
                         .card { padding: 20px 16px; border-radius: 20px; }
                         h2 { font-size: 18px; }
@@ -622,21 +586,6 @@
                     }
                     
                     body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-                    
-                    /* Улучшения для мобильных устройств */
-                    @media (max-width: 768px) {
-                        html {
-                            -webkit-text-size-adjust: 100%;
-                            -ms-text-size-adjust: 100%;
-                            text-size-adjust: 100%;
-                        }
-                        body {
-                            touch-action: pan-y;
-                        }
-                        button, input, select, textarea {
-                            font-size: 16px; /* Предотвращает зум в iOS */
-                        }
-                    }
                 `;
                 document.head.appendChild(style);
             }
