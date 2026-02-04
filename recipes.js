@@ -5,7 +5,7 @@ const data = {
     breakfast: [
         {
             title: "Грибной омлет",
-            photo: "грибной омлет(завтрак).png",
+            photo: "грибной_омлет.png", // Изменено: убрали пробелы
             ingredients: ["шампиньоны 100 - 150 гр", "2 яйца", "соль и специи", "лук 1/4"],
             steps: [
                 { step: "Грибы режем произвольно, лук измельчаем" },
@@ -48,7 +48,7 @@ const data = {
             ],
             steps: [
                 { step: "Нарежьте варёные яйца кубиками, смешайте с мелко нарезанным луком." },
-                { step: "В отдельной миске взбейте сырой белок со сметаной, мукой и специями." },
+                { step: "В отдельной миске взбейте сырой белок со сметаной, мукой и специи." },
                 { step: "Соедините обе смеси, аккуратно перемешайте." },
                 { step: "Жарьте на сковороде под крышкой по 3 минуты с каждой стороны." }
             ],
@@ -75,7 +75,7 @@ const data = {
                 "1 яйцо",
                 "100 мл кефира (или йогурт/сметана)",
                 "50 г муки",
-                "15 г сливочное масло",
+                "15 г сливочного масла",
                 "соль (по необходимости — сулугуни и так солёный)"
             ],
             steps: [
@@ -145,7 +145,7 @@ const data = {
                 "Паприка/специи по вкусу"
             ],
             steps: [
-                { step: "Измельчите грудку в блендере с луком и специями." },
+                { step: "Измельчите грудку в блендере с луком и специи." },
                 { step: "Если масса густая, разбавьте молоком." },
                 { step: "На пергамент выложите смесь, добавьте ветчину и яйцо, сверните в рулет." },
                 { step: "Запекайте при 180°C 25–30 минут." }
@@ -198,7 +198,7 @@ const data = {
     dinner: [
         {
             title: "Белковый рулет с крабовыми палочками",
-            photo: "рулет_крабовые_палочки.png",
+            photo: "белковый_рулет.png",
             ingredients: [
                 "1 яйцо + 1 белок",
                 "крабовые палочки 50-70 г",
@@ -221,7 +221,7 @@ const data = {
         },
         {
             title: "Салат с кальмаром",
-            photo: "салат_с_кальмарами.png",
+            photo: "салат_кальмар.png",
             ingredients: [
                 "кальмар 150 г",
                 "огурец 1 шт.",
@@ -242,7 +242,7 @@ const data = {
         },
         {
             title: "Салат с креветками",
-            photo: "салат_с_креветками.png",
+            photo: "салат_креветки.png",
             ingredients: [
                 "креветки 100-150 г",
                 "капуста пекинская 100 г",
@@ -264,7 +264,7 @@ const data = {
         },
         {
             title: "Запеканка с горбушей и брокколи",
-            photo: "запеканка_с_горубушей.png",
+            photo: "запеканка_горбуша.png",
             ingredients: [
                 "брокколи 150 г",
                 "горбуша 150 г",
@@ -286,7 +286,7 @@ const data = {
         },
         {
             title: "Макароны с копчёными колбасками в сливочном соусе",
-            photo: "Макароны_с_копчёными колбасками.png",
+            photo: "макароны_колбаски.png",
             ingredients: [
                 "макароны из твёрдых сортов пшеницы 200 г",
                 "копчёные колбаски или копчёная колбаса 100 г",
@@ -340,7 +340,7 @@ const data = {
             steps: [
                 { step: "Смешать муку с разрыхлителем." },
                 { step: "Растопить масло, смешать с сахаром, какао-порошком и мукой. Тесто получается крошкообразным, как песок." },
-                { step: "Для начинки смешать творог, творожную массу с изюмом, сахар, яйца, крахмал и ваниль." },
+                { step: "Для начинки смешать творог, творожная масса с изюмом, сахар, яйца, крахмал и ваниль." },
                 { step: "Персики вымыть и нарезать дольками." },
                 { step: "На дно формы выложить половину теста, сверху — часть начинки." },
                 { step: "Уложить персики, выложить оставшуюся начинку и присыпать оставшимся тестом." },
@@ -483,30 +483,41 @@ function preloadImages() {
     let loadedCount = 0;
     const totalImages = allRecipes.length;
     
+    // Создаем промисы для всех изображений
+    const imagePromises = [];
+    
     allRecipes.forEach(recipe => {
         if (recipe.photo) {
-            const img = new Image();
-            img.onload = () => {
-                loadedCount++;
-                imageCache.set(recipe.photo, img);
-                console.log(`✓ Загружено: ${recipe.title}`);
-                if (loadedCount === totalImages) {
-                    console.log('✅ Все изображения загружены!');
-                }
-            };
-            img.onerror = () => {
-                loadedCount++;
-                console.log(`✗ Ошибка загрузки: ${recipe.photo} для "${recipe.title}"`);
-                // Загружаем fallback изображение
-                const fallbackImg = new Image();
-                fallbackImg.onload = () => {
-                    imageCache.set(recipe.photo, fallbackImg);
+            const promise = new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    loadedCount++;
+                    imageCache.set(recipe.photo, img);
+                    console.log(`✓ Загружено: ${recipe.title}`);
+                    resolve(true);
                 };
-                fallbackImg.src = fallbackImage;
-            };
-            // Добавляем таймстамп для избежания кэширования
-            img.src = recipe.photo + '?' + new Date().getTime();
+                img.onerror = () => {
+                    loadedCount++;
+                    console.log(`✗ Ошибка загрузки: ${recipe.photo} для "${recipe.title}"`);
+                    // Создаем placeholder для отсутствующего изображения
+                    const placeholder = new Image();
+                    placeholder.src = fallbackImage;
+                    placeholder.alt = recipe.title;
+                    imageCache.set(recipe.photo, placeholder);
+                    resolve(false);
+                };
+                // Кодируем пробелы в URL
+                const encodedPhoto = encodeURI(recipe.photo);
+                img.src = encodedPhoto;
+            });
+            imagePromises.push(promise);
         }
+    });
+    
+    // Ждем загрузки всех изображений
+    Promise.all(imagePromises).then(results => {
+        const successful = results.filter(r => r).length;
+        console.log(`✅ Загружено ${successful}/${totalImages} изображений`);
     });
 }
 
@@ -565,6 +576,9 @@ function generateRecipe() {
     photoEl.src = fallbackImage;
     photoEl.alt = recipe.title;
     
+    // Кодируем URL для безопасной загрузки
+    const encodedPhoto = encodeURI(recipe.photo);
+    
     // Создаем новое изображение для загрузки
     const img = new Image();
     img.onload = function() {
@@ -577,13 +591,14 @@ function generateRecipe() {
         console.log(`❌ Ошибка загрузки изображения: ${recipe.photo}`);
         // Оставляем fallback изображение
     };
+    
     // Пытаемся загрузить из кэша или напрямую
     if (imageCache.has(recipe.photo)) {
         const cachedImg = imageCache.get(recipe.photo);
         photoEl.src = cachedImg.src;
     } else {
-        // Добавляем таймстамп для избежания кэширования
-        img.src = recipe.photo + '?' + new Date().getTime();
+        // Пробуем загрузить с кодированным URL
+        img.src = encodedPhoto;
     }
 
     // Отображаем ингредиенты
@@ -630,7 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Object.values(data).reduce((sum, arr) => sum + arr.length, 0));
     
     // Предзагрузка изображений (начинаем через небольшой таймаут)
-    setTimeout(preloadImages, 500);
+    setTimeout(preloadImages, 100);
     
     // Назначаем обработчики для кнопок
     const refreshBtn = document.getElementById("refresh");
