@@ -375,6 +375,41 @@ const data = {
     ]
 };
 
+// Кэш для предзагрузки изображений
+const imageCache = new Map();
+const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+';
+
+// Предзагрузка изображений для быстрого отображения
+function preloadImages() {
+    console.log('Начинаем предзагрузку изображений...');
+    
+    const allRecipes = Object.values(data).flat();
+    let loadedCount = 0;
+    const totalImages = allRecipes.length;
+    
+    allRecipes.forEach(recipe => {
+        if (recipe.photo) {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                imageCache.set(recipe.photo, img);
+                if (loadedCount === totalImages) {
+                    console.log('Все изображения загружены!');
+                }
+            };
+            img.onerror = () => {
+                loadedCount++;
+                console.log(`Ошибка загрузки: ${recipe.photo}`);
+                // Используем fallback изображение
+                const fallbackImg = new Image();
+                fallbackImg.src = fallbackImage;
+                imageCache.set(recipe.photo, fallbackImg);
+            };
+            img.src = recipe.photo;
+        }
+    });
+}
+
 // Функции для работы с модальным окном
 function openModal() {
     document.getElementById("modal").style.display = "flex";
@@ -424,8 +459,30 @@ function generateRecipe() {
     document.getElementById("title").innerText = recipe.title;
 
     const photoEl = document.getElementById("photo");
-    photoEl.src = recipe.photo;
-    photoEl.style.display = "block";
+    
+    // Сначала скрываем изображение
+    photoEl.style.display = "none";
+    
+    // Используем кэшированное изображение или загружаем новое
+    if (imageCache.has(recipe.photo)) {
+        const cachedImg = imageCache.get(recipe.photo);
+        photoEl.src = cachedImg.src;
+        photoEl.style.display = "block";
+        console.log('Изображение загружено из кэша:', recipe.title);
+    } else {
+        // Если нет в кэше, загружаем с обработкой ошибок
+        photoEl.onload = function() {
+            this.style.display = "block";
+            console.log('Изображение загружено напрямую:', recipe.title);
+        };
+        photoEl.onerror = function() {
+            console.log('Ошибка загрузки изображения, используем fallback:', recipe.title);
+            this.src = fallbackImage;
+            this.style.display = "block";
+        };
+        photoEl.src = recipe.photo;
+    }
+    
     photoEl.alt = recipe.title;
 
     // Отображаем ингредиенты
@@ -446,7 +503,6 @@ function generateRecipe() {
     document.getElementById("calories").innerHTML = `<span>Калорийность:</span> ${recipe.calories} ккал`;
 
     // Добавляем примечание, если оно есть
-    // ВАЖНО: в HTML должен быть элемент с id="note"
     const noteElement = document.getElementById("note");
     if (noteElement) {
         if (recipe.note) {
@@ -462,16 +518,35 @@ function generateRecipe() {
     if (refreshBtn) {
         refreshBtn.style.display = "inline-block";
     }
+    
+    // Прокручиваем к началу для удобства
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Инициализация при загрузке страницы
 document.addEventListener("DOMContentLoaded", () => {
+    console.log('Генератор рецептов загружен! Всего рецептов:', 
+        Object.values(data).reduce((sum, arr) => sum + arr.length, 0));
+    
+    // Предзагрузка изображений
+    setTimeout(preloadImages, 100);
+    
+    // Назначаем обработчики для кнопок
     const refreshBtn = document.getElementById("refresh");
     if (refreshBtn) {
         refreshBtn.addEventListener("click", generateRecipe);
-        // Изначально скрываем кнопку
         refreshBtn.style.display = "none";
     }
+    
+    // Назначаем обработчики для кнопок в модальном окне
+    document.querySelectorAll('.choice').forEach(button => {
+        button.addEventListener('click', function() {
+            const category = this.getAttribute('data-category') || this.getAttribute('onclick')?.match(/selectCategory\('(\w+)'\)/)?.[1];
+            if (category) {
+                selectCategory(category);
+            }
+        });
+    });
 
     // Закрытие модального окна при клике вне его
     const modal = document.getElementById("modal");
@@ -485,13 +560,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Закрытие модального окна по клавише Escape
     document.addEventListener("keydown", function(e) {
-        if (e.key === "Escape" && modal.style.display === "flex") {
+        if (e.key === "Escape" && modal && modal.style.display === "flex") {
             closeModal();
         }
     });
 
-    console.log('Генератор рецептов загружен! Всего рецептов:', 
-        Object.values(data).reduce((sum, arr) => sum + arr.length, 0));
+    // Инициализация примечания
+    const noteElement = document.getElementById("note");
+    if (noteElement) {
+        noteElement.style.display = "none";
+    }
 });
 
 // Экспортируем функции для использования в HTML
