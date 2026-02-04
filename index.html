@@ -2,116 +2,555 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Генератор рецептов</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор рецептов</title>
+
+    <!-- КРАСИВЫЙ ШРИФТ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: #222;
             padding: 20px;
         }
 
         .card {
+            width: 100%;
             max-width: 420px;
-            margin: auto;
-            background: #fff;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            background: rgba(255,255,255,.96);
+            border-radius: 26px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(0,0,0,.18);
+            margin: 0 auto;
         }
 
         button {
-            width: 100%;
-            padding: 14px;
-            border-radius: 30px;
-            border: none;
+            font-family: 'Inter', sans-serif;
             cursor: pointer;
-            font-weight: bold;
-            margin-top: 10px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .main-btn {
-            background: #ffcc70;
+            padding: 16px 28px;
+            background: linear-gradient(135deg,#f6d365,#fda085);
+            font-size: 16px;
+            color: #222;
+            width: 100%;
+        }
+
+        .main-btn:hover, .main-btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,.15);
         }
 
         .refresh {
-            background: #ff7a18;
-            color: #fff;
             display: none;
+            margin-top: 15px;
+            padding: 14px 24px;
+            background: linear-gradient(135deg,#ff6a00,#ee0979);
+            color: #fff;
+            font-size: 15px;
+            width: 100%;
+        }
+
+        .refresh:hover, .refresh:active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(238, 9, 121, 0.3);
+        }
+
+        .category {
+            margin-top: 20px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #c7903d;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            margin: 12px 0;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+            min-height: 28px;
         }
 
         img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-radius: 12px;
-            margin-top: 10px;
+            border-radius: 16px;
             display: none;
+            margin-top: 10px;
+            max-height: 40vh;
+            background: #f0f0f0;
         }
 
-        .category {
-            margin-top: 10px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #888;
-            letter-spacing: 2px;
+        .info {
+            text-align: left;
+            margin-top: 12px;
+            font-size: 15px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .info span {
+            font-weight: 600;
+            color: #333;
         }
 
         ul {
+            text-align: left;
+            margin-top: 12px;
             padding-left: 20px;
+            font-size: 15px;
+            color: #444;
+            line-height: 1.6;
         }
 
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* MODAL */
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,.6);
+            background: rgba(0,0,0,.55);
+            backdrop-filter: blur(6px);
             justify-content: center;
             align-items: center;
+            z-index: 1000;
+            padding: 20px;
         }
 
         .modal-box {
             background: #fff;
-            padding: 20px;
-            border-radius: 20px;
-            width: 300px;
+            padding: 24px 20px;
+            border-radius: 22px;
+            width: 100%;
+            max-width: 320px;
+            position: relative;
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 22px;
+            cursor: pointer;
+            opacity: .6;
+            transition: opacity 0.2s;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close:hover, .close:active {
+            opacity: 1;
         }
 
         .choice {
+            width: 100%;
+            margin-top: 14px;
+            padding: 16px 12px;
+            background: #f5f5f5;
+            font-size: 15px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .choice:hover, .choice:active {
             background: #eee;
+            transform: translateY(-2px);
+        }
+
+        /* Адаптация для очень маленьких экранов */
+        @media (max-width: 360px) {
+            .card {
+                padding: 20px 16px;
+                border-radius: 20px;
+            }
+            
+            h2 {
+                font-size: 18px;
+            }
+            
+            img {
+                height: 180px;
+            }
+            
+            .modal-box {
+                padding: 20px 16px;
+            }
+        }
+
+        /* Адаптация для планшетов и больших экранов */
+        @media (min-width: 768px) {
+            body {
+                align-items: center;
+                padding: 40px 20px;
+            }
+            
+            .card {
+                padding: 28px;
+            }
+        }
+
+        /* Предотвращение масштабирования текста на iOS */
+        @media screen and (max-device-width: 480px) {
+            body {
+                -webkit-text-size-adjust: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="card">
+        <button class="main-btn" id="random-btn">Случайный рецепт</button>
+        <button class="refresh" id="refresh">Обновить рецепт 🔄</button>
 
-<div class="card">
-    <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
-    <button class="refresh" id="refresh" onclick="generateRecipe()">Обновить 🔄</button>
+        <div class="category" id="category"></div>
+        <h2 id="title">Выберите категорию</h2>
 
-    <div class="category" id="category"></div>
-    <h2 id="title">Выберите категорию</h2>
+        <img id="photo" alt="Фото рецепта" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+">
 
-    <img id="photo" alt="Фото блюда">
-
-    <div id="ingredients"></div>
-    <ul id="steps"></ul>
-    <div id="time"></div>
-    <div id="calories"></div>
-    <div id="note" style="display:none"></div>
-</div>
-
-<div class="modal" id="modal">
-    <div class="modal-box">
-        <button class="choice" onclick="selectCategory('breakfast')">🍳 Завтрак</button>
-        <button class="choice" onclick="selectCategory('lunch')">🍝 Обед</button>
-        <button class="choice" onclick="selectCategory('dinner')">🍽 Ужин</button>
-        <button class="choice" onclick="selectCategory('dessert')">🍰 Десерт</button>
+        <div id="ingredients" class="info"></div>
+        <ul id="steps"></ul>
+        <div id="time" class="info"></div>
+        <div id="calories" class="info"></div>
     </div>
-</div>
 
-<script src="recipes.js"></script>
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <div class="close" id="close-modal">✕</div>
+            <h3 style="margin-bottom: 18px; font-size: 18px;">Выберите категорию</h3>
+            <button class="choice" data-category="breakfast">🍳 Завтрак</button>
+            <button class="choice" data-category="lunch">🍝 Обед</button>
+            <button class="choice" data-category="dinner">🍽 Ужин</button>
+            <button class="choice" data-category="dessert">🍰 Десерт</button>
+        </div>
+    </div>
+
+    <script>
+        // Переменные
+        let currentCategory = null;
+        let recipesData = null;
+
+        // Загрузка данных рецептов
+        async function loadRecipes() {
+            try {
+                // Попытка загрузить внешний файл
+                const response = await fetch('recipes.js');
+                const scriptContent = await response.text();
+                
+                // Извлекаем данные из файла
+                const dataMatch = scriptContent.match(/const data = ({[\s\S]*?});/);
+                if (dataMatch) {
+                    // Создаем функцию для безопасного парсинга
+                    const dataStr = dataMatch[1]
+                        .replace(/(['"])?([a-z_]+)(['"])?\s*:/gi, '"$2":')
+                        .replace(/'/g, '"');
+                    
+                    recipesData = JSON.parse(dataStr);
+                    console.log('Рецепты загружены из recipes.js');
+                    return true;
+                }
+            } catch (error) {
+                console.log('Не удалось загрузить recipes.js, используем встроенные данные');
+            }
+            
+            // Если внешний файл не загрузился, используем встроенные данные
+            recipesData = {
+                breakfast: [
+                    {
+                        title: "Грибной омлет",
+                        photo: "грибной омлет(завтрак).png",
+                        ingredients: ["шампиньоны 100 - 150 гр", "2 яйца", "соль и специи", "лук 1/4"],
+                        steps: [
+                            { step: "Грибы режем произвольно, лук измельчаем" },
+                            { step: "Обжариваем на масле до золотистого цвета" },
+                            { step: "Яйца взбиваем вилкой и выливаем на обжаренные грибы" },
+                            { step: "Можно все перемешать - получится скрамбл / пожарить на каждой стороне, как блин" }
+                        ],
+                        time: "10 минут",
+                        calories: 250
+                    },
+                    {
+                        title: "Бутерброды из отрубей (муки или овсянки)",
+                        photo: "Бутерброды_из_отрубей.png",
+                        ingredients: [
+                            "2 ст. л. отрубей (пшеничных или овсяных)",
+                            "1 яйцо",
+                            "1,5 ст. л. мягкого творога или сметаны",
+                            "1/3 ч. л. разрыхлителя",
+                            "соль, перец, зелень (по вкусу)"
+                        ],
+                        steps: [
+                            { step: "Смешать все ингредиенты." },
+                            { step: "Выпекать в микроволновке 4 минуты." },
+                            { step: "Дать остыть, затем намазать хлебную основу на кусок хруста." },
+                            { step: "Варианты начинки: ветчина 30 г + вареное яйцо + зелень; запеченные баклажаны с чесноком и помидором 100 г; тунец 50 г + яйцо + сметана + зелень; малосоленая рыба 30 г + сметана + зелень." }
+                        ],
+                        time: "4 минуты + остывание",
+                        calories: 180
+                    }
+                ],
+                lunch: [
+                    {
+                        title: "Куриная запеканка с овощами",
+                        photo: "куриная_запеканка.png",
+                        ingredients: [
+                            "Куриное филе — 100 г",
+                            "Баклажан — 100 г",
+                            "Помидор — 1 шт.",
+                            "Лук — 1 шт.",
+                            "Сыр — 1 ст. л.",
+                            "Сметана — 20 г",
+                            "Специи по вкусу"
+                        ],
+                        steps: [
+                            { step: "Обжарьте кубиками курицу и баклажаны с луком, добавьте специи." },
+                            { step: "Влейте яйцо, добавьте помидор и сметану, перемешайте." },
+                            { step: "Выложите в форму для запекания, запекайте 30 минут при 180°C." },
+                            { step: "Добавьте сметану, запекайте ещё 5 минут." }
+                        ],
+                        time: "40 минут",
+                        calories: 320,
+                        note: "День: 1-й обед"
+                    }
+                ],
+                dinner: [
+                    {
+                        title: "Белковый рулет с крабовыми палочками",
+                        photo: "белковый_рулет.png",
+                        ingredients: [
+                            "1 яйцо + 1 белок",
+                            "крабовые палочки 50-70 г",
+                            "помидор 1 шт. средний",
+                            "сметана 1-2 ст. л.",
+                            "зелень по вкусу",
+                            "соль и специи"
+                        ],
+                        steps: [
+                            { step: "Яйцо и белок взбить с щепоткой соли и специями." },
+                            { step: "Вылить на сковороду, жарить 1 минуту с каждой стороны до готовности омлета." },
+                            { step: "Крабовые палочки нарезать кубиками, помидор мелко нарезать." },
+                            { step: "Смешать крабовые палочки, помидор, сметану и зелень." },
+                            { step: "Выложить начинку на омлет, свернуть в рулет." },
+                            { step: "При желании можно слегка подрумянить рулет на сковороде." }
+                        ],
+                        time: "15 минут",
+                        calories: 180,
+                        note: "День: 2-й ужин"
+                    }
+                ],
+                dessert: [
+                    {
+                        title: "Десерт на отрубях с кремом",
+                        photo: "десерт_отруби_крем.png",
+                        ingredients: [
+                            "2 ст. ложки пшеничных/овсяных отрубей",
+                            "1 яйцо",
+                            "1 ст. ложка творожка или сметаны",
+                            "½ ч. ложки разрыхлителя",
+                            "100 мл кофе или какао с сахаром (для пропитки)",
+                            "100 г творожки/йогурта + подсластитель + щепотка соли (для крема)"
+                        ],
+                        steps: [
+                            { step: "Смешайте отруби, яйцо, творожок и разрыхлитель. Дайте постоять 1–2 минуты." },
+                            { step: "Выложите в форму для микроволновки, готовьте 4 минуты на полной мощности (пару раз откройте дверцу для выхода пара)." },
+                            { step: "Пропитайте готовый корж кофе или какао." },
+                            { step: "Смажьте кремом (творожок + подсластитель + соль). При желании соберите слоями." }
+                        ],
+                        time: "10 минут",
+                        calories: 180
+                    }
+                ]
+            };
+            
+            return true;
+        }
+
+        // Функции для работы с модальным окном
+        function openModal() {
+            document.getElementById('modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Выбор категории
+        function selectCategory(category) {
+            if (!recipesData || !recipesData[category]) {
+                alert('Рецепты для этой категории не загружены!');
+                return;
+            }
+            
+            currentCategory = category;
+            closeModal();
+            generateRecipe();
+        }
+
+        // Генерация случайного рецепта
+        function generateRecipe() {
+            if (!currentCategory) {
+                alert('Сначала выберите категорию!');
+                openModal();
+                return;
+            }
+
+            if (!recipesData || !recipesData[currentCategory]) {
+                alert('Рецепты не загружены!');
+                return;
+            }
+
+            const categoryRecipes = recipesData[currentCategory];
+            if (categoryRecipes.length === 0) {
+                alert('В этой категории нет рецептов!');
+                return;
+            }
+
+            const randomRecipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
+
+            // Обновляем данные на странице
+            document.getElementById('category').textContent = currentCategory.toUpperCase();
+            document.getElementById('title').textContent = randomRecipe.title;
+            
+            const photoEl = document.getElementById('photo');
+            photoEl.style.display = 'block';
+            photoEl.alt = randomRecipe.title;
+            
+            // Пытаемся загрузить изображение
+            const img = new Image();
+            img.onload = function() {
+                photoEl.src = this.src;
+            };
+            img.onerror = function() {
+                // Если изображение не загрузилось, оставляем placeholder
+                console.log('Ошибка загрузки изображения:', randomRecipe.photo);
+            };
+            img.src = randomRecipe.photo || '';
+            
+            // Ингредиенты
+            let ingredientsText;
+            if (Array.isArray(randomRecipe.ingredients)) {
+                ingredientsText = randomRecipe.ingredients.join(", ");
+            } else {
+                ingredientsText = randomRecipe.ingredients;
+            }
+            document.getElementById('ingredients').innerHTML = `<span>Ингредиенты:</span> ${ingredientsText}`;
+            
+            document.getElementById('time').innerHTML = `<span>Время приготовления:</span> ${randomRecipe.time}`;
+            document.getElementById('calories').innerHTML = `<span>Калорийность:</span> ${randomRecipe.calories} ккал`;
+
+            // Шаги приготовления
+            const stepsList = document.getElementById('steps');
+            stepsList.innerHTML = '';
+            randomRecipe.steps.forEach((stepObj, index) => {
+                const li = document.createElement('li');
+                if (typeof stepObj === 'object' && stepObj.step) {
+                    li.textContent = `${index + 1}. ${stepObj.step}`;
+                } else {
+                    li.textContent = `${index + 1}. ${stepObj}`;
+                }
+                stepsList.appendChild(li);
+            });
+
+            // Показываем кнопку "Обновить рецепт"
+            document.getElementById('refresh').style.display = 'inline-block';
+            
+            // Прокручиваем к началу карточки для удобства
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Загружаем рецепты
+            await loadRecipes();
+            
+            // Назначаем обработчики событий
+            document.getElementById('random-btn').addEventListener('click', openModal);
+            document.getElementById('refresh').addEventListener('click', generateRecipe);
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            
+            // Назначаем обработчики для кнопок выбора категории
+            document.querySelectorAll('.choice').forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    selectCategory(category);
+                });
+            });
+            
+            // Закрытие модального окна при клике вне его
+            document.getElementById('modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // Закрытие модального окна по клавише Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && document.getElementById('modal').style.display === 'flex') {
+                    closeModal();
+                }
+            });
+            
+            // Добавляем touch события для лучшей реакции на мобильных
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                });
+                button.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                });
+            });
+            
+            // Изначально кнопка "Обновить рецепт" скрыта
+            document.getElementById('refresh').style.display = 'none';
+            
+            console.log('Генератор рецептов загружен!');
+        });
+    </script>
 </body>
 </html>
