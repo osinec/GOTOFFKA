@@ -243,8 +243,8 @@
 
 <body>
     <div class="card">
-        <button class="main-btn" id="random-btn">Случайный рецепт</button>
-        <button class="refresh" id="refresh">Обновить рецепт 🔄</button>
+        <button class="main-btn" onclick="openModal()">Случайный рецепт</button>
+        <button class="refresh" id="refresh" onclick="generateRecipe()">Обновить рецепт 🔄</button>
 
         <div class="category" id="category"></div>
         <h2 id="title">Выберите категорию</h2>
@@ -259,154 +259,21 @@
 
     <div class="modal" id="modal">
         <div class="modal-box">
-            <div class="close" id="close-modal">✕</div>
+            <div class="close" onclick="closeModal()">✕</div>
             <h3 style="margin-bottom: 18px; font-size: 18px;">Выберите категорию</h3>
-            <button class="choice" data-category="breakfast">🍳 Завтрак</button>
-            <button class="choice" data-category="lunch">🍝 Обед</button>
-            <button class="choice" data-category="dinner">🍽 Ужин</button>
-            <button class="choice" data-category="dessert">🍰 Десерт</button>
+            <button class="choice" onclick="selectCategory('breakfast')">🍳 Завтрак</button>
+            <button class="choice" onclick="selectCategory('lunch')">🍝 Обед</button>
+            <button class="choice" onclick="selectCategory('dinner')">🍽 Ужин</button>
+            <button class="choice" onclick="selectCategory('dessert')">🍰 Десерт</button>
         </div>
     </div>
 
+    <!-- Подключаем внешний JS файл с рецептами -->
+    <script src="recipes.js"></script>
+    
     <script>
-        // Переменные
+        // Глобальная переменная для текущей категории
         let currentCategory = null;
-        let recipesData = null;
-
-        // Загрузка данных рецептов
-        async function loadRecipes() {
-            try {
-                // Попытка загрузить внешний файл
-                const response = await fetch('recipes.js');
-                const scriptContent = await response.text();
-                
-                // Извлекаем данные из файла
-                const dataMatch = scriptContent.match(/const data = ({[\s\S]*?});/);
-                if (dataMatch) {
-                    // Создаем функцию для безопасного парсинга
-                    const dataStr = dataMatch[1]
-                        .replace(/(['"])?([a-z_]+)(['"])?\s*:/gi, '"$2":')
-                        .replace(/'/g, '"');
-                    
-                    recipesData = JSON.parse(dataStr);
-                    console.log('Рецепты загружены из recipes.js');
-                    return true;
-                }
-            } catch (error) {
-                console.log('Не удалось загрузить recipes.js, используем встроенные данные');
-            }
-            
-            // Если внешний файл не загрузился, используем встроенные данные
-            recipesData = {
-                breakfast: [
-                    {
-                        title: "Грибной омлет",
-                        photo: "грибной омлет(завтрак).png",
-                        ingredients: ["шампиньоны 100 - 150 гр", "2 яйца", "соль и специи", "лук 1/4"],
-                        steps: [
-                            { step: "Грибы режем произвольно, лук измельчаем" },
-                            { step: "Обжариваем на масле до золотистого цвета" },
-                            { step: "Яйца взбиваем вилкой и выливаем на обжаренные грибы" },
-                            { step: "Можно все перемешать - получится скрамбл / пожарить на каждой стороне, как блин" }
-                        ],
-                        time: "10 минут",
-                        calories: 250
-                    },
-                    {
-                        title: "Бутерброды из отрубей (муки или овсянки)",
-                        photo: "Бутерброды_из_отрубей.png",
-                        ingredients: [
-                            "2 ст. л. отрубей (пшеничных или овсяных)",
-                            "1 яйцо",
-                            "1,5 ст. л. мягкого творога или сметаны",
-                            "1/3 ч. л. разрыхлителя",
-                            "соль, перец, зелень (по вкусу)"
-                        ],
-                        steps: [
-                            { step: "Смешать все ингредиенты." },
-                            { step: "Выпекать в микроволновке 4 минуты." },
-                            { step: "Дать остыть, затем намазать хлебную основу на кусок хруста." },
-                            { step: "Варианты начинки: ветчина 30 г + вареное яйцо + зелень; запеченные баклажаны с чесноком и помидором 100 г; тунец 50 г + яйцо + сметана + зелень; малосоленая рыба 30 г + сметана + зелень." }
-                        ],
-                        time: "4 минуты + остывание",
-                        calories: 180
-                    }
-                ],
-                lunch: [
-                    {
-                        title: "Куриная запеканка с овощами",
-                        photo: "куриная_запеканка.png",
-                        ingredients: [
-                            "Куриное филе — 100 г",
-                            "Баклажан — 100 г",
-                            "Помидор — 1 шт.",
-                            "Лук — 1 шт.",
-                            "Сыр — 1 ст. л.",
-                            "Сметана — 20 г",
-                            "Специи по вкусу"
-                        ],
-                        steps: [
-                            { step: "Обжарьте кубиками курицу и баклажаны с луком, добавьте специи." },
-                            { step: "Влейте яйцо, добавьте помидор и сметану, перемешайте." },
-                            { step: "Выложите в форму для запекания, запекайте 30 минут при 180°C." },
-                            { step: "Добавьте сметану, запекайте ещё 5 минут." }
-                        ],
-                        time: "40 минут",
-                        calories: 320,
-                        note: "День: 1-й обед"
-                    }
-                ],
-                dinner: [
-                    {
-                        title: "Белковый рулет с крабовыми палочками",
-                        photo: "белковый_рулет.png",
-                        ingredients: [
-                            "1 яйцо + 1 белок",
-                            "крабовые палочки 50-70 г",
-                            "помидор 1 шт. средний",
-                            "сметана 1-2 ст. л.",
-                            "зелень по вкусу",
-                            "соль и специи"
-                        ],
-                        steps: [
-                            { step: "Яйцо и белок взбить с щепоткой соли и специями." },
-                            { step: "Вылить на сковороду, жарить 1 минуту с каждой стороны до готовности омлета." },
-                            { step: "Крабовые палочки нарезать кубиками, помидор мелко нарезать." },
-                            { step: "Смешать крабовые палочки, помидор, сметану и зелень." },
-                            { step: "Выложить начинку на омлет, свернуть в рулет." },
-                            { step: "При желании можно слегка подрумянить рулет на сковороде." }
-                        ],
-                        time: "15 минут",
-                        calories: 180,
-                        note: "День: 2-й ужин"
-                    }
-                ],
-                dessert: [
-                    {
-                        title: "Десерт на отрубях с кремом",
-                        photo: "десерт_отруби_крем.png",
-                        ingredients: [
-                            "2 ст. ложки пшеничных/овсяных отрубей",
-                            "1 яйцо",
-                            "1 ст. ложка творожка или сметаны",
-                            "½ ч. ложки разрыхлителя",
-                            "100 мл кофе или какао с сахаром (для пропитки)",
-                            "100 г творожки/йогурта + подсластитель + щепотка соли (для крема)"
-                        ],
-                        steps: [
-                            { step: "Смешайте отруби, яйцо, творожок и разрыхлитель. Дайте постоять 1–2 минуты." },
-                            { step: "Выложите в форму для микроволновки, готовьте 4 минуты на полной мощности (пару раз откройте дверцу для выхода пара)." },
-                            { step: "Пропитайте готовый корж кофе или какао." },
-                            { step: "Смажьте кремом (творожок + подсластитель + соль). При желании соберите слоями." }
-                        ],
-                        time: "10 минут",
-                        calories: 180
-                    }
-                ]
-            };
-            
-            return true;
-        }
 
         // Функции для работы с модальным окном
         function openModal() {
@@ -421,11 +288,6 @@
 
         // Выбор категории
         function selectCategory(category) {
-            if (!recipesData || !recipesData[category]) {
-                alert('Рецепты для этой категории не загружены!');
-                return;
-            }
-            
             currentCategory = category;
             closeModal();
             generateRecipe();
@@ -433,23 +295,24 @@
 
         // Генерация случайного рецепта
         function generateRecipe() {
+            // Проверяем, загружены ли рецепты
+            if (typeof data === 'undefined') {
+                alert('Рецепты не загружены! Проверьте файл recipes.js');
+                return;
+            }
+
             if (!currentCategory) {
                 alert('Сначала выберите категорию!');
                 openModal();
                 return;
             }
 
-            if (!recipesData || !recipesData[currentCategory]) {
-                alert('Рецепты не загружены!');
+            if (!data[currentCategory]) {
+                alert('Рецепты для этой категории не найдены!');
                 return;
             }
 
-            const categoryRecipes = recipesData[currentCategory];
-            if (categoryRecipes.length === 0) {
-                alert('В этой категории нет рецептов!');
-                return;
-            }
-
+            const categoryRecipes = data[currentCategory];
             const randomRecipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
 
             // Обновляем данные на странице
@@ -460,18 +323,17 @@
             photoEl.style.display = 'block';
             photoEl.alt = randomRecipe.title;
             
-            // Пытаемся загрузить изображение
+            // Создаем новое изображение для предзагрузки
             const img = new Image();
             img.onload = function() {
                 photoEl.src = this.src;
             };
             img.onerror = function() {
-                // Если изображение не загрузилось, оставляем placeholder
-                console.log('Ошибка загрузки изображения:', randomRecipe.photo);
+                console.log('Ошибка загрузки изображения');
             };
-            img.src = randomRecipe.photo || '';
+            img.src = randomRecipe.photo;
             
-            // Ингредиенты
+            // Проверяем тип ingredients (массив или строка)
             let ingredientsText;
             if (Array.isArray(randomRecipe.ingredients)) {
                 ingredientsText = randomRecipe.ingredients.join(", ");
@@ -483,15 +345,15 @@
             document.getElementById('time').innerHTML = `<span>Время приготовления:</span> ${randomRecipe.time}`;
             document.getElementById('calories').innerHTML = `<span>Калорийность:</span> ${randomRecipe.calories} ккал`;
 
-            // Шаги приготовления
+            // Формируем список шагов
             const stepsList = document.getElementById('steps');
             stepsList.innerHTML = '';
             randomRecipe.steps.forEach((stepObj, index) => {
                 const li = document.createElement('li');
                 if (typeof stepObj === 'object' && stepObj.step) {
-                    li.textContent = `${index + 1}. ${stepObj.step}`;
+                    li.textContent = stepObj.step;
                 } else {
-                    li.textContent = `${index + 1}. ${stepObj}`;
+                    li.textContent = stepObj;
                 }
                 stepsList.appendChild(li);
             });
@@ -500,56 +362,40 @@
             document.getElementById('refresh').style.display = 'inline-block';
             
             // Прокручиваем к началу карточки для удобства
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
+        // Закрытие модального окна при клике вне его
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Закрытие модального окна по клавише Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modal').style.display === 'flex') {
+                closeModal();
+            }
+        });
+
         // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Загружаем рецепты
-            await loadRecipes();
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Генератор рецептов загружен!');
             
-            // Назначаем обработчики событий
-            document.getElementById('random-btn').addEventListener('click', openModal);
-            document.getElementById('refresh').addEventListener('click', generateRecipe);
-            document.getElementById('close-modal').addEventListener('click', closeModal);
-            
-            // Назначаем обработчики для кнопок выбора категории
-            document.querySelectorAll('.choice').forEach(button => {
-                button.addEventListener('click', function() {
-                    const category = this.getAttribute('data-category');
-                    selectCategory(category);
-                });
-            });
-            
-            // Закрытие модального окна при клике вне его
-            document.getElementById('modal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-            
-            // Закрытие модального окна по клавише Escape
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && document.getElementById('modal').style.display === 'flex') {
-                    closeModal();
-                }
-            });
+            // Изначально кнопка "Обновить рецепт" скрыта
+            document.getElementById('refresh').style.display = 'none';
             
             // Добавляем touch события для лучшей реакции на мобильных
             const buttons = document.querySelectorAll('button');
             buttons.forEach(button => {
                 button.addEventListener('touchstart', function() {
-                    this.style.opacity = '0.8';
+                    this.style.transform = 'translateY(0)';
                 });
                 button.addEventListener('touchend', function() {
-                    this.style.opacity = '1';
+                    this.style.transform = 'translateY(-2px)';
                 });
             });
-            
-            // Изначально кнопка "Обновить рецепт" скрыта
-            document.getElementById('refresh').style.display = 'none';
-            
-            console.log('Генератор рецептов загружен!');
         });
     </script>
 </body>
