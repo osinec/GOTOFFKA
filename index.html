@@ -251,7 +251,7 @@
         <div class="error" id="error"></div>
         <div class="category" id="category"></div>
         <h2 id="title">Выберите категорию</h2>
-        <img id="photo" alt="Фото рецепта" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bpbj48L3RleHQ+PC9zdmc+">
+        <img id="photo" alt="Фото рецепта" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+">
         <div id="ingredients" class="info"></div>
         <ul id="steps"></ul>
         <div id="time" class="info"></div>
@@ -273,7 +273,7 @@
         let recipesData = null;
         let currentCategory = null;
         const imageCache = new Map();
-        const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bpbj48L3RleHQ+PC9zdmc+';
+        const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+';
        
         // Для хранения порядка показа рецептов по категориям
         const recipeIndices = new Map();
@@ -295,6 +295,11 @@
             calories: document.getElementById('calories'),
             note: document.getElementById('note')
         };
+        // Функция для получения полного URL
+        function getFullUrl(path) {
+            if (location.protocol !== 'file:') return path;
+            return location.href.replace(/\/[^/]*$/, '/') + (path || '');
+        }
         // Загрузка рецептов из JSON файла
         async function loadRecipes() {
             try {
@@ -335,14 +340,15 @@
             allRecipes.forEach(recipe => {
                 if (recipe.photo) {
                     const img = new Image();
+                    const fullSrc = getFullUrl(recipe.photo);
                     img.onload = () => {
-                        imageCache.set(recipe.photo, img.src);
+                        imageCache.set(recipe.photo, fullSrc);
                     };
                     img.onerror = () => {
                         console.log(`Ошибка загрузки изображения: ${recipe.photo}`);
                         imageCache.set(recipe.photo, fallbackImage);
                     };
-                    img.src = recipe.photo;
+                    img.src = fullSrc;
                 }
             });
         }
@@ -461,7 +467,7 @@
             if (imageCache.has(recipe.photo)) {
                 elements.photo.src = imageCache.get(recipe.photo);
             } else {
-                elements.photo.src = recipe.photo || fallbackImage;
+                elements.photo.src = getFullUrl(recipe.photo) || fallbackImage;
             }
             // Ингредиенты
             const ingredientsText = Array.isArray(recipe.ingredients)
