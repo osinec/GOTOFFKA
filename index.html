@@ -103,12 +103,11 @@
         }
         .ingredients-list li, .steps-list li {
             margin-bottom: 10px;
-            position: relative;
         }
         .steps-list {
-            counter-reset: step;
             list-style: none;
             padding-left: 0;
+            counter-reset: step;
         }
         .steps-list li {
             counter-increment: step;
@@ -350,7 +349,6 @@
             elements.photo.onerror = () => elements.photo.src = fallbackImage;
             elements.photo.src = r.photo || fallbackImage;
 
-            // Ингредиенты — в столбик (список)
             elements.ingredients.innerHTML = '';
             if (Array.isArray(r.ingredients) && r.ingredients.length) {
                 const title = document.createElement('div');
@@ -368,7 +366,6 @@
                 elements.ingredients.appendChild(ul);
             }
 
-            // Шаги — нумерованный список без дублирования цифр
             elements.steps.innerHTML = '';
             if (Array.isArray(r.steps) && r.steps.length) {
                 const title = document.createElement('div');
