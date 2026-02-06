@@ -93,37 +93,12 @@
             color: #333;
             margin: 24px 0 12px;
         }
-        .ingredients-list, .steps-list {
+        .plain-list {
             text-align: left;
-            margin: 0 0 24px 0;
-            padding-left: 24px;
             font-size: 16px;
             line-height: 1.65;
             color: #333;
-        }
-        .ingredients-list li, .steps-list li {
-            margin-bottom: 10px;
-            position: relative;
-        }
-        .steps-list {
-            counter-reset: step;
-            list-style: none;
-            padding-left: 0;
-        }
-        .steps-list li {
-            counter-increment: step;
-            padding-left: 40px;
-            position: relative;
-            margin-bottom: 14px;
-        }
-        .steps-list li::before {
-            content: counter(step) ".";
-            position: absolute;
-            left: 0;
-            font-weight: 700;
-            color: #e67e22;
-            width: 28px;
-            text-align: right;
+            margin: 0 0 24px 0;
         }
         .note {
             text-align: left;
@@ -163,7 +138,7 @@
         }
         @keyframes modalAppear {
             from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .close {
             position: absolute;
@@ -219,21 +194,17 @@
     <div class="card">
         <button class="main-btn" id="mainBtn">Случайный рецепт</button>
         <button class="refresh" id="refreshBtn">Обновить рецепт 🔄</button>
-
         <div class="loader" id="loader">Загрузка рецептов...</div>
         <div class="error" id="error"></div>
-
         <div class="category" id="category"></div>
         <h2 id="title">Выберите категорию</h2>
         <img id="photo" alt="Фото рецепта" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+">
-
         <div id="ingredients"></div>
-        <ol class="steps-list" id="steps"></ol>
+        <div id="steps"></div>
         <div class="info" id="time"></div>
         <div class="info" id="calories"></div>
         <div class="note" id="note"></div>
     </div>
-
     <div class="modal" id="modal">
         <div class="modal-box">
             <div class="close" id="closeBtn">✕</div>
@@ -250,10 +221,8 @@
         let recipesData = null;
         let currentCategory = null;
         const fallbackImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkludGVyIiBmb250LXNpemU9IjE0IiBmaWxsPSIjODg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+PHQzc3Bhbj5Gb29kIEltYWdlPC90c3Bhbj48L3RleHQ+PC9zdmc+';
-
         const recipeIndices = new Map();
         const recipeHistory = new Map();
-
         const elements = {
             modal: document.getElementById('modal'),
             mainBtn: document.getElementById('mainBtn'),
@@ -271,13 +240,6 @@
             note: document.getElementById('note')
         };
 
-        function preloadAllImages() {
-            if (!recipesData) return;
-            const photos = new Set();
-            Object.values(recipesData).flat().forEach(r => r.photo && photos.add(r.photo));
-            photos.forEach(src => { const img = new Image(); img.src = src; });
-        }
-
         async function loadRecipes() {
             try {
                 elements.loader.style.display = 'block';
@@ -285,13 +247,10 @@
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 recipesData = await res.json();
                 elements.loader.style.display = 'none';
-
                 Object.keys(recipesData).forEach(cat => {
                     recipeIndices.set(cat, 0);
                     recipeHistory.set(cat, []);
                 });
-
-                preloadAllImages();
             } catch (err) {
                 elements.loader.style.display = 'none';
                 elements.error.textContent = 'Не удалось загрузить рецепты • ' + err.message;
@@ -299,15 +258,8 @@
             }
         }
 
-        function openModal() {
-            elements.modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            elements.modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        function openModal() { elements.modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        function closeModal() { elements.modal.style.display = 'none'; document.body.style.overflow = 'auto'; }
 
         function selectCategory(cat) {
             currentCategory = cat;
@@ -318,7 +270,6 @@
         function getNextRecipe(cat) {
             const recipes = recipesData?.[cat];
             if (!recipes?.length) return null;
-
             let idx = recipeIndices.get(cat) || 0;
             const recipe = recipes[idx];
             recipeIndices.set(cat, (idx + 1) % recipes.length);
@@ -328,14 +279,12 @@
         function generateRecipe() {
             if (!recipesData) return;
             if (!currentCategory) return openModal();
-
             const recipe = getNextRecipe(currentCategory);
             if (!recipe) {
                 elements.error.textContent = 'Рецепты в этой категории закончились';
                 elements.error.style.display = 'block';
                 return;
             }
-
             updateUI(recipe);
             elements.refreshBtn.style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -343,14 +292,13 @@
 
         function updateUI(r) {
             elements.category.textContent = currentCategory.toUpperCase();
-            elements.title.textContent    = r.title || 'Без названия';
-
+            elements.title.textContent = (r.title || 'Без названия').trim();
             elements.photo.style.display = 'block';
             elements.photo.alt = r.title || 'Рецепт';
             elements.photo.onerror = () => elements.photo.src = fallbackImage;
             elements.photo.src = r.photo || fallbackImage;
 
-            // Ингредиенты — в столбик (список)
+            // Ингредиенты — просто текст с переносами
             elements.ingredients.innerHTML = '';
             if (Array.isArray(r.ingredients) && r.ingredients.length) {
                 const title = document.createElement('div');
@@ -358,17 +306,13 @@
                 title.textContent = 'Ингредиенты:';
                 elements.ingredients.appendChild(title);
 
-                const ul = document.createElement('ul');
-                ul.className = 'ingredients-list';
-                r.ingredients.forEach(item => {
-                    const li = document.createElement('li');
-                    li.textContent = item.trim();
-                    ul.appendChild(li);
-                });
-                elements.ingredients.appendChild(ul);
+                const div = document.createElement('div');
+                div.className = 'plain-list';
+                div.innerHTML = r.ingredients.map(item => item.trim()).join('<br>');
+                elements.ingredients.appendChild(div);
             }
 
-            // Шаги — нумерованный список без дублирования цифр
+            // Шаги — просто текст с номерами и переносами
             elements.steps.innerHTML = '';
             if (Array.isArray(r.steps) && r.steps.length) {
                 const title = document.createElement('div');
@@ -376,18 +320,17 @@
                 title.textContent = 'Приготовление:';
                 elements.steps.appendChild(title);
 
-                r.steps.forEach(step => {
-                    const li = document.createElement('li');
-                    li.textContent = step.trim();
-                    elements.steps.appendChild(li);
-                });
+                const div = document.createElement('div');
+                div.className = 'plain-list';
+                div.innerHTML = r.steps.map((step, i) => `${i+1}. ${step.trim()}`).join('<br>');
+                elements.steps.appendChild(div);
             }
 
-            elements.time.innerHTML     = `<strong>Время приготовления:</strong> ${r.time || '—'}`;
+            elements.time.innerHTML = `<strong>Время приготовления:</strong> ${r.time || '—'}`;
             elements.calories.innerHTML = `<strong>Калорийность:</strong> ${r.calories || '—'} ккал`;
 
             if (r.note) {
-                elements.note.innerHTML = `<strong>Примечание:</strong><br>${r.note}`;
+                elements.note.innerHTML = `<strong>Примечание:</strong><br>${r.note.trim()}`;
                 elements.note.style.display = 'block';
             } else {
                 elements.note.style.display = 'none';
@@ -395,6 +338,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            elements.title.textContent = 'Выберите категорию';
             loadRecipes();
 
             elements.mainBtn.onclick = openModal;
@@ -406,7 +350,6 @@
             });
 
             elements.modal.onclick = e => { if (e.target === elements.modal) closeModal(); };
-
             document.onkeydown = e => {
                 if (e.key === 'Escape' && elements.modal.style.display === 'flex') closeModal();
             };
