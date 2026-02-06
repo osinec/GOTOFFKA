@@ -180,6 +180,46 @@
       font-size: 15px;
       display: none;
     }
+
+    /* Стили для приветственного поп-апа */
+    #welcome-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1100;
+      padding: 20px;
+    }
+    #welcome-box {
+      background: #ffffff;
+      padding: 28px 24px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+    }
+    #welcome-text {
+      font-size: 16px;
+      line-height: 1.55;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    #welcome-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #777;
+    }
+    #welcome-close:hover {
+      color: #222;
+    }
+
     @media (max-width:360px) {
       .card { padding: 24px 18px; border-radius: 20px; }
       h2 { font-size: 22px; }
@@ -220,6 +260,17 @@
   </div>
 </div>
 
+<!-- Приветственное окно при первом запуске -->
+<div id="welcome-modal">
+  <div id="welcome-box">
+    <div id="welcome-close">✕</div>
+    <div id="welcome-text">
+      При первом запуске картинки могут подгружаться дольше.<br><br>
+      Выберите другую случайную категорию, а потом можете вернуться обратно 🙂
+    </div>
+  </div>
+</div>
+
 <script>
 const elements = {
   modal: document.getElementById('modal'),
@@ -235,12 +286,26 @@ const elements = {
   steps: document.getElementById('steps'),
   time: document.getElementById('time'),
   calories: document.getElementById('calories'),
-  note: document.getElementById('note')
+  note: document.getElementById('note'),
+  welcomeModal: document.getElementById('welcome-modal'),
+  welcomeClose: document.getElementById('welcome-close')
 };
 
 let recipesData = null;
 let currentCategory = null;
 let recipeIndices = {};
+
+// Показываем приветственное окно только при первом запуске
+function showWelcomeIfFirstTime() {
+  if (!localStorage.getItem('hasSeenWelcome')) {
+    elements.welcomeModal.style.display = 'flex';
+    localStorage.setItem('hasSeenWelcome', 'true');
+  }
+}
+
+function closeWelcome() {
+  elements.welcomeModal.style.display = 'none';
+}
 
 const fallbackImage = 'data:image/svg+xml;utf8,<svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="200" fill="%23F0F0F0"/><text x="50%" y="50%" font-family="Inter" font-size="14" fill="%23888" text-anchor="middle" dy=".3em">Фото блюда</text></svg>';
 
@@ -251,10 +316,7 @@ async function loadRecipes() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     recipesData = await res.json();
     elements.loader.style.display = 'none';
-
-    // Предзагрузка ВСЕХ картинок сразу после получения данных
     preloadAllImages();
-
   } catch (err) {
     elements.loader.style.display = 'none';
     elements.error.textContent = 'Не удалось загрузить рецепты • ' + err.message;
@@ -309,36 +371,30 @@ function generateRecipe() {
 function updateUI(r) {
   elements.category.textContent = currentCategory.toUpperCase();
   elements.title.textContent = (r.title || 'Без названия').trim();
-
-  // Фото — показываем сразу, но с плавным появлением
   elements.photo.src = r.photo || fallbackImage;
   elements.photo.alt = r.title || 'Рецепт';
   elements.photo.style.display = 'block';
   elements.photo.classList.remove('loaded');
   elements.photo.onload = () => elements.photo.classList.add('loaded');
 
-  // Ингредиенты в столбик
   elements.ingredients.innerHTML = '';
   if (Array.isArray(r.ingredients) && r.ingredients.length) {
     const title = document.createElement('div');
     title.className = 'section-title';
     title.textContent = 'Ингредиенты:';
     elements.ingredients.appendChild(title);
-
     const content = document.createElement('div');
     content.className = 'plain-list';
     content.innerHTML = r.ingredients.map(item => item.trim()).join('<br>');
     elements.ingredients.appendChild(content);
   }
 
-  // Шаги в столбик с номерами
   elements.steps.innerHTML = '';
   if (Array.isArray(r.steps) && r.steps.length) {
     const title = document.createElement('div');
     title.className = 'section-title';
     title.textContent = 'Приготовление:';
     elements.steps.appendChild(title);
-
     const content = document.createElement('div');
     content.className = 'plain-list';
     content.innerHTML = r.steps.map((step, i) => `${i + 1}. ${step.trim()}`).join('<br>');
@@ -358,7 +414,7 @@ function updateUI(r) {
 
 document.addEventListener('DOMContentLoaded', () => {
   elements.title.textContent = 'Выберите категорию';
-  elements.photo.src = fallbackImage; // сразу ставим лёгкий плейсхолдер
+  elements.photo.src = fallbackImage;
   loadRecipes();
 
   elements.mainBtn.onclick = openModal;
@@ -373,6 +429,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.onkeydown = e => {
     if (e.key === 'Escape' && elements.modal.style.display === 'flex') closeModal();
   };
+
+  // Обработчики приветственного окна
+  elements.welcomeClose.onclick = closeWelcome;
+  elements.welcomeModal.onclick = e => {
+    if (e.target === elements.welcomeModal) closeWelcome();
+  };
+
+  // Показываем приветствие при первом запуске
+  showWelcomeIfFirstTime();
 
   elements.refreshBtn.style.display = 'none';
 });
