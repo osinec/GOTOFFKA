@@ -107,18 +107,23 @@
         }
         .steps-list {
             counter-reset: step;
+            list-style: none;
+            padding-left: 0;
         }
         .steps-list li {
             counter-increment: step;
-            padding-left: 36px;
+            padding-left: 40px;
             position: relative;
+            margin-bottom: 14px;
         }
         .steps-list li::before {
             content: counter(step) ".";
             position: absolute;
             left: 0;
-            font-weight: 600;
+            font-weight: 700;
             color: #e67e22;
+            width: 28px;
+            text-align: right;
         }
         .note {
             text-align: left;
@@ -233,11 +238,11 @@
         <div class="modal-box">
             <div class="close" id="closeBtn">✕</div>
             <h3 style="margin-bottom: 22px; font-size: 22px;">Выберите категорию</h3>
-            <button class="choice" data-category="breakfast">🍳 Завтрак</button>
-            <button class="choice" data-category="lunch">🍝 Обед</button>
-            <button class="choice" data-category="dinner">🍽 Ужин</button>
-            <button class="choice" data-category="soups">🥣 Супы</button>
-            <button class="choice" data-category="dessert">🍰 Десерт</button>
+            <button class="choice" data-category="breakfast">Завтрак</button>
+            <button class="choice" data-category="lunch">Обед</button>
+            <button class="choice" data-category="dinner">Ужин</button>
+            <button class="choice" data-category="soups">Супы</button>
+            <button class="choice" data-category="dessert">Десерт</button>
         </div>
     </div>
 
@@ -363,7 +368,7 @@
                 elements.ingredients.appendChild(ul);
             }
 
-            // Шаги — нумерованный список в столбик
+            // Шаги — нумерованный список без дублирования цифр
             elements.steps.innerHTML = '';
             if (Array.isArray(r.steps) && r.steps.length) {
                 const title = document.createElement('div');
