@@ -54,7 +54,6 @@
       text-decoration: none;
       margin-bottom: 24px;
       transition: all 0.2s;
-      cursor: pointer;
     }
 
     .back-btn:hover {
@@ -364,7 +363,6 @@
       color: #a08464;
       text-decoration: none;
       font-size: 12px;
-      cursor: pointer;
       transition: color 0.2s;
     }
 
@@ -391,63 +389,6 @@
       font-size: 14px;
     }
 
-    /* Модальное окно */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 28px;
-      padding: 28px;
-      max-width: 320px;
-      width: 90%;
-      text-align: center;
-      animation: modalFadeIn 0.2s ease;
-    }
-
-    @keyframes modalFadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .modal-content i {
-      font-size: 48px;
-      color: #e67e22;
-      margin-bottom: 16px;
-    }
-
-    .modal-content h3 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      color: #3d3229;
-    }
-
-    .modal-content p {
-      color: #a08464;
-      margin-bottom: 24px;
-      font-size: 14px;
-    }
-
-    .modal-content .btn {
-      width: 100%;
-    }
-
     @media (max-width: 480px) {
       body { padding: 12px; }
       .profile-header { padding: 24px 20px 70px 20px; }
@@ -465,9 +406,9 @@
 <div class="app-container">
   <div class="profile-card">
     <div class="profile-header">
-      <div class="back-btn" id="backBtn">
+      <a href="index.html" class="back-btn">
         <i class="fas fa-arrow-left"></i> Назад
-      </div>
+      </a>
       <h1>Личный кабинет</h1>
       <div class="sub">Управляйте профилем и подпиской</div>
     </div>
@@ -504,12 +445,12 @@
       </div>
 
       <div class="action-buttons">
-        <button id="recipesBtn" class="btn btn-secondary">
+        <a href="recipes.html" class="btn btn-secondary">
           <i class="fas fa-book-open"></i> Рецепты
-        </button>
-        <button id="favoritesBtn" class="btn btn-secondary">
+        </a>
+        <a href="favorites.html" class="btn btn-secondary">
           <i class="fas fa-heart"></i> Избранное
-        </button>
+        </a>
       </div>
 
       <div class="action-buttons">
@@ -536,15 +477,15 @@
 
       <div id="subscribeBlock" class="subscribe-section" style="display: none;">
         <p><i class="fas fa-lock"></i> У вас нет активной подписки</p>
-        <button id="subscribeBtn" class="btn btn-primary">
+        <a href="payment.html" class="btn btn-primary">
           <i class="fas fa-credit-card"></i> Оформить подписку
-        </button>
+        </a>
       </div>
 
       <div class="footer">
         <div class="footer-links">
-          <a id="policyLink">Политика конфиденциальности</a>
-          <a id="ofertaLink">Публичная оферта</a>
+          <a href="policy.html">Политика конфиденциальности</a>
+          <a href="oferta.html">Публичная оферта</a>
         </div>
         <div class="contact">
           <i class="fas fa-envelope"></i>
@@ -552,49 +493,14 @@
         </div>
       </div>
 
-      <button id="logoutBtnInner" class="btn btn-danger btn-full" style="margin-top: 20px;">
+      <a href="logout.html" id="logoutBtnInner" class="btn btn-danger btn-full" style="margin-top: 20px;">
         <i class="fas fa-sign-out-alt"></i> Выйти
-      </button>
+      </a>
     </div>
   </div>
 </div>
 
-<!-- Модальное окно -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <i id="modalIcon" class="fas fa-info-circle"></i>
-    <h3 id="modalTitle">Уведомление</h3>
-    <p id="modalMessage">Текст сообщения</p>
-    <button id="modalClose" class="btn btn-primary">Хорошо</button>
-  </div>
-</div>
-
 <script>
-  // Показ модального окна
-  function showModal(title, message, icon = 'fa-info-circle') {
-    const modal = document.getElementById('modal');
-    const modalIcon = document.getElementById('modalIcon');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalMessage = document.getElementById('modalMessage');
-    
-    modalIcon.className = `fas ${icon}`;
-    modalTitle.textContent = title;
-    modalMessage.textContent = message;
-    modal.style.display = 'flex';
-  }
-
-  document.getElementById('modalClose').addEventListener('click', () => {
-    document.getElementById('modal').style.display = 'none';
-  });
-
-  // Закрытие по клику вне модалки
-  window.addEventListener('click', (e) => {
-    const modal = document.getElementById('modal');
-    if (e.target === modal) {
-      modal.style.display = 'none';
-    }
-  });
-
   // Данные пользователя
   let testUser = {
     username: 'Алексей',
@@ -653,32 +559,6 @@
       trialBanner.style.display = 'none';
     }
   }
-  
-  // Навигация
-  document.getElementById('backBtn').addEventListener('click', () => {
-    showModal('Навигация', 'Вы переходите на главную страницу с рецептами', 'fa-arrow-left');
-  });
-  
-  document.getElementById('recipesBtn').addEventListener('click', () => {
-    showModal('Рецепты', 'Здесь будут все доступные рецепты', 'fa-book-open');
-  });
-  
-  document.getElementById('favoritesBtn').addEventListener('click', () => {
-    showModal('Избранное', 'Ваши сохранённые рецепты появятся здесь', 'fa-heart');
-  });
-  
-  document.getElementById('subscribeBtn')?.addEventListener('click', () => {
-    showModal('Оформление подписки', 'Откроется страница с выбором тарифа', 'fa-credit-card');
-  });
-  
-  // Юридические ссылки
-  document.getElementById('policyLink').addEventListener('click', () => {
-    showModal('Политика конфиденциальности', 'Мы собираем только необходимые данные для работы сервиса. Ваши данные в безопасности.', 'fa-shield-alt');
-  });
-  
-  document.getElementById('ofertaLink').addEventListener('click', () => {
-    showModal('Публичная оферта', 'Договор между сервисом и пользователем. Подробнее на отдельной странице.', 'fa-file-contract');
-  });
   
   // Смена почты
   const changeEmailForm = document.getElementById('changeEmailForm');
@@ -742,22 +622,12 @@
   });
   
   // Выход
-  document.getElementById('logoutBtnInner').addEventListener('click', () => {
-    if (confirm('Вы уверены, что хотите выйти?')) {
-      localStorage.removeItem('gotofka_user_data');
-      testUser = {
-        username: 'Алексей',
-        email: 'aleksey@gotofka.ru',
-        trial_start: new Date().toISOString(),
-        is_subscribed: false,
-        subscription_end: null
-      };
-      updateUI();
-      showModal('Выход', 'Вы вышли из аккаунта', 'fa-sign-out-alt');
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+  document.getElementById('logoutBtnInner').addEventListener('click', (e) => {
+    if (!confirm('Вы уверены, что хотите выйти?')) {
+      e.preventDefault();
+      return false;
     }
+    localStorage.removeItem('gotofka_user_data');
   });
   
   // Запуск
