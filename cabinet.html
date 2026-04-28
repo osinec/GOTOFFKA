@@ -12,25 +12,37 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      background: linear-gradient(145deg, #fff5e8 0%, #fee7d4 100%);
       min-height: 100vh;
-      padding: 16px;
+      padding: 24px 16px;
       display: flex;
       justify-content: center;
       align-items: flex-start;
     }
     .card {
       width: 100%;
-      max-width: 500px;
-      background: rgba(255, 255, 255, 0.97);
-      border-radius: 28px;
-      padding: 24px 20px 32px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+      max-width: 560px;
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 24px 24px 32px;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-    h1 { font-size: 1.7rem; font-weight: 700; color: #d35400; margin-bottom: 20px; text-align: center; }
+    h1 { 
+      font-size: 28px; 
+      font-weight: 700; 
+      background: linear-gradient(135deg, #e67e22, #f39c12);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 20px; 
+      text-align: center; 
+    }
     
-    .tabs { display: flex; margin-bottom: 24px; border-bottom: 2px solid #f0e0cc; gap: 8px; }
-    .tab { flex: 1; padding: 12px 8px; font-weight: 600; cursor: pointer; color: #888; transition: 0.2s; text-align: center; border-radius: 40px 40px 0 0; }
+    .tabs { display: flex; margin-bottom: 24px; border-bottom: 2px solid #f0e2d4; gap: 8px; }
+    .tab { 
+      flex: 1; padding: 12px 8px; font-weight: 600; cursor: pointer; 
+      color: #a08464; transition: 0.2s; text-align: center; border-radius: 40px 40px 0 0; 
+    }
     .tab:hover { color: #e67e22; background: #fff5ea; }
     .tab.active { color: #e67e22; border-bottom: 3px solid #e67e22; }
     
@@ -40,16 +52,17 @@
     input {
       width: 100%;
       padding: 14px 16px;
-      border: 1.5px solid #e0d6c8;
+      border: 1.5px solid #ffe2c4;
       border-radius: 60px;
       font-size: 1rem;
       transition: 0.2s;
       font-family: inherit;
+      background: white;
     }
-    input:focus { outline: none; border-color: #fda085; box-shadow: 0 0 0 3px rgba(253,160,133,0.2); }
+    input:focus { outline: none; border-color: #e69a4a; box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1); }
     .hint {
       font-size: 0.7rem;
-      color: #b97f44;
+      color: #b67a48;
       margin-top: 6px;
       margin-left: 16px;
     }
@@ -71,91 +84,97 @@
       gap: 8px;
       font-family: inherit;
     }
-    .btn-primary { background: linear-gradient(135deg, #f6d365, #fda085); color: #222; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(253,164,133,0.3); }
-    .btn-pay { background: linear-gradient(135deg, #4caf50, #66bb6a); color: white; }
-    .btn-outline { background: #f3e8ff; color: #6b21a8; border: 1px solid #d1b4ff; }
-    .btn-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-    .btn-secondary { background: #e3f2fd; color: #1565c0; }
+    .btn-primary { 
+      background: linear-gradient(105deg, #f39c12, #e67e22); 
+      color: white; 
+      box-shadow: 0 4px 10px rgba(230, 126, 34, 0.2);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.3); }
+    .btn-pay { background: linear-gradient(105deg, #2ecc71, #27ae60); color: white; }
+    .btn-outline { background: #fef5e9; color: #c26b2a; border: 1.5px solid #ffe2c4; }
+    .btn-outline:hover { background: #feefdf; border-color: #e69a4a; }
+    .btn-danger { background: #fee2e2; color: #bc3f2e; border: 1px solid #fecaca; }
+    .btn-danger:hover { background: #fdd8d8; }
+    .btn-secondary { background: #fef5e9; color: #c26b2a; border: 1.5px solid #ffe2c4; }
     
     .button-group { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
     .button-group-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .button-group-row .btn { flex: 1; margin: 0; }
     
-    .avatar-section { display: flex; justify-content: center; margin-bottom: 16px; }
+    .avatar-section { display: flex; justify-content: center; margin-bottom: 20px; }
     .avatar {
-      width: 80px; height: 80px;
+      width: 88px; height: 88px;
       background: linear-gradient(135deg, #f6d365, #fda085);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       font-weight: 700;
       color: #5c3a1e;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       border: 3px solid white;
     }
     
     .info-card {
-      background: #fef7ef;
+      background: #fefaf5;
       border-radius: 24px;
       padding: 20px;
       margin: 20px 0;
-      border: 1px solid #ffe1b9;
+      border: 1px solid #f0e2d4;
     }
     .info-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 0;
-      border-bottom: 1px solid #ffe1b9;
+      border-bottom: 1px solid #f0e2d4;
       font-size: 1rem;
     }
     .info-row:last-child { border-bottom: none; }
-    .info-label { color: #b97f44; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-    .info-value { font-weight: 600; color: #2d2a24; text-align: right; }
-    .badge-vip { background: linear-gradient(135deg, #f6d365, #f58d42); color: white; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; }
-    .badge-trial { background: #e3f2fd; color: #1565c0; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; }
-    .badge-expired { background: #fee2e2; color: #b91c1c; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; }
-    .badge-none { background: #fef3c7; color: #d97706; padding: 4px 12px; border-radius: 40px; font-size: 0.8rem; }
+    .info-label { color: #b67a48; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .info-value { font-weight: 600; color: #3d3229; text-align: right; }
+    .badge-vip { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 4px 14px; border-radius: 40px; font-size: 0.8rem; font-weight: 600; }
+    .badge-trial { background: #e3f2fd; color: #1565c0; padding: 4px 14px; border-radius: 40px; font-size: 0.8rem; }
+    .badge-expired { background: #ffe6e5; color: #bc3f2e; padding: 4px 14px; border-radius: 40px; font-size: 0.8rem; }
+    .badge-none { background: #fef3c7; color: #d97706; padding: 4px 14px; border-radius: 40px; font-size: 0.8rem; }
     
     .message, .error, .warning-banner {
       margin: 16px 0;
-      padding: 14px 16px;
+      padding: 14px 18px;
       border-radius: 20px;
       font-size: 0.9rem;
     }
-    .message { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-    .error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-    .warning-banner { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+    .message { background: #e0f7e8; color: #1e6f3f; border: 1px solid #bce5cf; }
+    .error { background: #ffe6e5; color: #bc3f2e; border: 1px solid #f5c6cb; }
+    .warning-banner { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 20px; }
     
     .settings-form {
       margin: 16px 0;
       padding: 20px;
-      background: #f9f5ff;
+      background: #fefaf5;
       border-radius: 24px;
-      border: 1px solid #d1b4ff;
+      border: 1px solid #ffe2c4;
       display: none;
     }
     .link { color: #e67e22; cursor: pointer; text-decoration: underline; font-size: 0.85rem; margin-top: 12px; display: inline-block; }
     
     .footer-links {
-      margin-top: 24px;
+      margin-top: 28px;
       padding-top: 20px;
-      border-top: 1px solid #f0e0cc;
+      border-top: 1px solid #f0e2d4;
       text-align: center;
       font-size: 0.75rem;
-      color: #999;
+      color: #a08464;
     }
     .footer-links a { color: #e67e22; text-decoration: none; margin: 0 6px; }
     .contact-info {
       margin-top: 16px;
       text-align: center;
       font-size: 0.8rem;
-      color: #b97f44;
+      color: #b67a48;
     }
-    .contact-info a { color: #d35400; text-decoration: none; font-weight: 500; }
+    .contact-info a { color: #e67e22; text-decoration: none; font-weight: 500; }
     
     @keyframes spin { to { transform: rotate(360deg); } }
     .loader {
@@ -176,7 +195,7 @@
       .info-value { text-align: left; }
       .button-group-row { flex-direction: column; }
       .btn { min-height: 48px; }
-      .avatar { width: 64px; height: 64px; font-size: 1.8rem; }
+      .avatar { width: 70px; height: 70px; font-size: 2rem; }
     }
   </style>
 </head>
@@ -185,7 +204,8 @@
 <div class="card">
   <h1 id="pageTitle">Личный кабинет</h1>
 
-  <div id="authForms">
+  <!-- Скрытая форма входа (больше не показывается, но оставлена для технических нужд) -->
+  <div id="authForms" style="display:none;">
     <div class="tabs">
       <div class="tab active" data-tab="login">Вход</div>
       <div class="tab" data-tab="register">Регистрация</div>
@@ -214,7 +234,7 @@
         <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль" required />
       </div>
       <button type="submit" class="btn btn-primary" id="registerBtn">Зарегистрироваться</button>
-      <div style="font-size: 0.7rem; color: #999; text-align: center; margin-top: 12px;">
+      <div style="font-size: 0.7rem; color: #a08464; text-align: center; margin-top: 12px;">
         Регистрируясь, вы соглашаетесь с <a href="/terms.html" style="color:#e67e22;">условиями</a>
       </div>
     </form>
@@ -230,7 +250,8 @@
     <div id="authError" class="error" style="display:none;"></div>
   </div>
 
-  <div id="userContent" style="display:none;">
+  <!-- Основной контент кабинета (всегда виден, вход через тестовый аккаунт) -->
+  <div id="userContent">
     <div class="avatar-section">
       <div class="avatar" id="userAvatar">👤</div>
     </div>
@@ -292,10 +313,13 @@ const PB_URL = 'https://gotofka.ru';
 const pb = new PocketBase(PB_URL);
 const USERS_COLLECTION = 'users';
 
+// ТЕСТОВЫЕ ДАННЫЕ ДЛЯ АВТОВХОДА
+const TEST_USER_EMAIL = 'test@gotofka.ru';
+const TEST_USER_PASSWORD = 'test123456';
+
 let passwordResetCooldown = false;
 let emailChangeCooldown = false;
 let authRestored = false;
-let trialActivationPending = false;
 
 function saveAuthSession() {
   if (!pb.authStore.isValid || !pb.authStore.model?.id) return;
@@ -339,25 +363,9 @@ function restoreAuthSession() {
   return false;
 }
 
-async function activateTrialIfNeeded(user) {
-  if (user.verified && !user.trial_start && !trialActivationPending) {
-    trialActivationPending = true;
-    try {
-      const updatedUser = await pb.collection(USERS_COLLECTION).update(user.id, {
-        trial_start: new Date().toISOString()
-      });
-      pb.authStore.save(pb.authStore.token, updatedUser);
-      saveAuthSession();
-      showMessage('🎉 Пробный период на 3 дня активирован!', 'message');
-      return updatedUser;
-    } catch (err) { console.error(err); return user; }
-    finally { setTimeout(() => { trialActivationPending = false; }, 10000); }
-  }
-  return user;
-}
-
 function showError(msg) {
   const el = document.getElementById('authError');
+  if (!el) return;
   el.textContent = msg;
   el.style.display = 'block';
   setTimeout(() => el.style.display = 'none', 8000);
@@ -369,8 +377,16 @@ function showMessage(msg, type = 'message') {
     el.className = type;
     el.style.display = 'block';
     setTimeout(() => el.style.display = 'none', 5000);
+  } else {
+    // fallback
+    const banner = document.createElement('div');
+    banner.className = type;
+    banner.textContent = msg;
+    document.getElementById('userContent')?.prepend(banner);
+    setTimeout(() => banner.remove(), 4000);
   }
 }
+
 function setLoading(btn, loading) {
   if (loading) {
     btn.dataset.originalText = btn.innerHTML;
@@ -381,106 +397,65 @@ function setLoading(btn, loading) {
     btn.disabled = false;
   }
 }
-function hideMessages() {
-  document.getElementById('authError').style.display = 'none';
-  document.getElementById('authMessage').style.display = 'none';
-}
 
-function switchToTab(tabName) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelector(`.tab[data-tab="${tabName}"]`)?.classList.add('active');
-  document.querySelectorAll('#authForms form').forEach(f => { f.style.display = 'none'; f.classList.remove('active'); });
-  if (tabName === 'login') {
-    document.getElementById('loginForm').style.display = 'block';
-    document.getElementById('loginForm').classList.add('active');
-    document.getElementById('resetPasswordForm').style.display = 'none';
-  } else if (tabName === 'register') {
-    document.getElementById('registerForm').style.display = 'block';
-    document.getElementById('registerForm').classList.add('active');
-    document.getElementById('resetPasswordForm').style.display = 'none';
-  }
-  hideMessages();
-}
-
-function validateUsername(username) {
-  const regex = /^[A-Za-z0-9]{3,}$/;
-  return regex.test(username);
-}
-
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('loginBtn');
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  setLoading(btn, true);
-  hideMessages();
-  try {
-    const authData = await pb.collection(USERS_COLLECTION).authWithPassword(email, password);
-    const user = pb.authStore.model;
-    if (!user.verified) {
-      showError('📧 Почта не подтверждена. Проверьте почту.');
+async function autoLoginToTestAccount() {
+  // Если уже есть активная сессия и модель совпадает с тестовой — просто обновим
+  if (pb.authStore.isValid && pb.authStore.model?.email === TEST_USER_EMAIL) {
+    try {
+      await pb.collection(USERS_COLLECTION).authRefresh();
+      return pb.authStore.model;
+    } catch (e) {
+      // если рефреш не прошел — перелогиним
       pb.authStore.clear();
-      document.getElementById('resendVerification').style.display = 'inline-block';
-      return;
     }
+  }
+  
+  // Пробуем войти как тестовый пользователь
+  try {
+    const authData = await pb.collection(USERS_COLLECTION).authWithPassword(TEST_USER_EMAIL, TEST_USER_PASSWORD);
     saveAuthSession();
-    await activateTrialIfNeeded(user);
-    showMessage('✅ Добро пожаловать!');
-    loadUserData();
+    return authData.record;
   } catch (err) {
-    let msg = '❌ Неверная почта или пароль';
-    if (err.status === 0) msg = '❌ Нет соединения с сервером';
-    showError(msg);
-  } finally {
-    setLoading(btn, false);
-  }
-});
-
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('registerBtn');
-  const username = document.getElementById('regUsername').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const passwordConfirm = document.getElementById('regPasswordConfirm').value;
-  hideMessages();
-  
-  if (!validateUsername(username)) {
-    showError('❌ Никнейм может содержать только латиницу, цифры, и быть не короче 3 символов');
-    return;
-  }
-  if (password !== passwordConfirm) { showError('❌ Пароли не совпадают'); return; }
-  if (password.length < 6) { showError('❌ Пароль должен быть минимум 6 символов'); return; }
-  
-  setLoading(btn, true);
-  try {
-    await pb.collection(USERS_COLLECTION).create({
-      username, email, password, passwordConfirm, emailVisibility: true
-    });
-    showMessage('✅ Регистрация успешна! Подтвердите почту.');
-    setTimeout(() => {
-      switchToTab('login');
-      document.getElementById('loginEmail').value = email;
-    }, 2000);
-  } catch (err) {
-    let msg = '❌ Ошибка регистрации';
-    if (err.status === 400 && err.data?.data) {
-      const data = err.data.data;
-      if (data.email?.message) msg = `❌ ${data.email.message}`;
-      else if (data.username?.message) msg = `❌ ${data.username.message}`;
+    console.error('Тестовый аккаунт не найден, пробуем создать...');
+    // Если тестового аккаунта нет — создаём его
+    try {
+      const created = await pb.collection(USERS_COLLECTION).create({
+        username: 'testuser',
+        email: TEST_USER_EMAIL,
+        emailVisibility: true,
+        password: TEST_USER_PASSWORD,
+        passwordConfirm: TEST_USER_PASSWORD,
+        verified: true  // сразу верифицируем
+      });
+      // Добавим пробный период вручную
+      await pb.collection(USERS_COLLECTION).update(created.id, {
+        trial_start: new Date().toISOString()
+      });
+      // Входим
+      const authData = await pb.collection(USERS_COLLECTION).authWithPassword(TEST_USER_EMAIL, TEST_USER_PASSWORD);
+      saveAuthSession();
+      return authData.record;
+    } catch (createErr) {
+      console.error('Не удалось создать тестовый аккаунт', createErr);
+      showError('Ошибка при создании тестового аккаунта');
+      return null;
     }
-    showError(msg);
-  } finally { setLoading(btn, false); }
-});
+  }
+}
 
-document.getElementById('resendVerification').addEventListener('click', async function() {
-  const email = document.getElementById('loginEmail').value.trim();
-  if (!email) { showError('Введите почту'); return; }
-  try {
-    await pb.collection(USERS_COLLECTION).requestVerification(email);
-    showMessage('📧 Письмо отправлено повторно!');
-  } catch (err) { showError('❌ Не удалось отправить'); }
-});
+async function activateTrialIfNeeded(user) {
+  if (user.verified && !user.trial_start && user.email === TEST_USER_EMAIL) {
+    try {
+      const updatedUser = await pb.collection(USERS_COLLECTION).update(user.id, {
+        trial_start: new Date().toISOString()
+      });
+      pb.authStore.save(pb.authStore.token, updatedUser);
+      saveAuthSession();
+      return updatedUser;
+    } catch (err) { console.error(err); return user; }
+  }
+  return user;
+}
 
 function updateAvatar(username) {
   const avatarEl = document.getElementById('userAvatar');
@@ -492,35 +467,49 @@ function updateAvatar(username) {
 }
 
 async function loadUserData() {
-  const authForms = document.getElementById('authForms');
   const userContent = document.getElementById('userContent');
-  authForms.style.display = 'none';
-  userContent.style.display = 'none';
+  userContent.style.display = 'block';
   
-  if (!restoreAuthSession() || !pb.authStore.isValid) {
-    authForms.style.display = 'block';
-    document.getElementById('pageTitle').textContent = 'Личный кабинет';
-    return;
+  // Скрываем формы аутентификации полностью
+  document.getElementById('authForms').style.display = 'none';
+  
+  if (!pb.authStore.isValid || !pb.authStore.model) {
+    // Выполняем автоматический вход в тестовый аккаунт
+    const user = await autoLoginToTestAccount();
+    if (!user) {
+      userContent.innerHTML = '<div class="error">Не удалось войти в тестовый аккаунт. Пожалуйста, проверьте соединение.</div>';
+      return;
+    }
   }
   
   try {
     await pb.collection(USERS_COLLECTION).authRefresh();
     let user = pb.authStore.model;
     
+    // Автоматически подтверждаем почту для тестового юзера, если вдруг нет
+    if (!user.verified && user.email === TEST_USER_EMAIL) {
+      try {
+        await pb.collection(USERS_COLLECTION).update(user.id, { verified: true });
+        user = pb.authStore.model;
+      } catch (e) {}
+    }
+    
     if (!user.verified) {
       document.getElementById('emailWarningBanner').innerHTML = "⚠️ Подтвердите почту — перейдите по ссылке в письме";
       document.getElementById('emailWarningBanner').style.display = 'block';
       document.getElementById('pageTitle').textContent = 'Подтвердите почту';
-      userContent.style.display = 'block';
+      document.getElementById('username').textContent = user.username || '—';
+      document.getElementById('email').textContent = user.email || '—';
+      updateAvatar(user.username);
       return;
     }
     
     user = await activateTrialIfNeeded(user);
     saveAuthSession();
     
-    document.getElementById('username').textContent = user.username || '—';
-    document.getElementById('email').textContent = user.email || '—';
-    updateAvatar(user.username);
+    document.getElementById('username').textContent = user.username || 'testuser';
+    document.getElementById('email').textContent = user.email || TEST_USER_EMAIL;
+    updateAvatar(user.username || 'Тест');
     
     const now = new Date();
     const statusSpan = document.getElementById('subscriptionStatus');
@@ -553,15 +542,15 @@ async function loadUserData() {
       subBlock.style.display = 'block';
     }
     
-    userContent.style.display = 'block';
     document.getElementById('pageTitle').textContent = 'Мой профиль';
+    document.getElementById('emailWarningBanner').style.display = 'none';
     
   } catch (err) {
     if (err.status === 401) {
-      pb.authStore.clear();
-      localStorage.removeItem('pocketbase_auth');
-      sessionStorage.removeItem('pocketbase_auth');
-      authForms.style.display = 'block';
+      // Попробуем перелогиниться
+      const user = await autoLoginToTestAccount();
+      if (user) loadUserData();
+      else showError('Сессия истекла, перезагрузите страницу');
     } else {
       showError('Ошибка загрузки профиля');
     }
@@ -573,43 +562,15 @@ function logout() {
     pb.authStore.clear();
     localStorage.removeItem('pocketbase_auth');
     sessionStorage.removeItem('pocketbase_auth');
-    document.getElementById('userContent').style.display = 'none';
-    document.getElementById('authForms').style.display = 'block';
-    document.getElementById('pageTitle').textContent = 'Личный кабинет';
-    hideMessages();
-    switchToTab('login');
-    showMessage('👋 Вы вышли');
+    // После выхода снова залогинимся в тестовый аккаунт
+    window.location.reload();
   }
 }
 
+// Обработчики событий
 document.getElementById('logoutBtnInner').addEventListener('click', logout);
 
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => switchToTab(tab.dataset.tab));
-});
-
-document.getElementById('forgotPasswordLink').addEventListener('click', () => {
-  document.querySelectorAll('#authForms form').forEach(f => f.style.display = 'none');
-  document.getElementById('resetPasswordForm').style.display = 'block';
-});
-document.getElementById('backToLogin').addEventListener('click', () => switchToTab('login'));
-
-document.getElementById('resetPasswordForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  if (passwordResetCooldown) return;
-  const btn = document.getElementById('resetPasswordBtn');
-  const email = document.getElementById('resetEmail').value.trim();
-  if (!email.includes('@')) { showError('Введите корректную почту'); return; }
-  passwordResetCooldown = true;
-  setLoading(btn, true);
-  try {
-    await pb.collection(USERS_COLLECTION).requestPasswordReset(email);
-    showMessage(`✅ Ссылка отправлена на ${email}`);
-    setTimeout(() => switchToTab('login'), 2500);
-  } catch (err) { showError('❌ Не удалось отправить'); }
-  finally { setLoading(btn, false); setTimeout(() => passwordResetCooldown = false, 5000); }
-});
-
+// Смена почты
 const changeEmailForm = document.getElementById('changeEmailForm');
 const emailChangeStatus = document.getElementById('emailChangeStatus');
 
@@ -697,16 +658,11 @@ document.getElementById('changePasswordBtn').addEventListener('click', async () 
   setTimeout(() => statusEl.style.display = 'none', 5000);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  restoreAuthSession();
-  pb.authStore.onChange((token, model) => {
-    if (pb.authStore.isValid && model?.id) saveAuthSession();
-  });
-  if (pb.authStore.isValid) {
-    loadUserData();
-  } else {
-    document.getElementById('authForms').style.display = 'block';
-  }
+// Инициализация: сразу грузим тестовый кабинет
+document.addEventListener('DOMContentLoaded', async () => {
+  // Скрываем окно регистрации/входа
+  document.getElementById('authForms').style.display = 'none';
+  await loadUserData();
 });
 </script>
 </body>
