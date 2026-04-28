@@ -12,12 +12,15 @@
       font-family: 'Inter', system-ui, sans-serif;
       background: linear-gradient(135deg, #fdf8ed 0%, #fef3e2 100%);
       min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 24px 16px;
-      color: #2c2418;
     }
 
     .recipe-card {
       max-width: 560px;
+      width: 100%;
       margin: 0 auto;
       background: white;
       border-radius: 32px;
@@ -113,7 +116,6 @@
     .another-recipe.visible { display: flex; }
     .another-recipe:active { transform: scale(0.97); }
 
-    /* ВЕСЬ КОНТЕНТ РЕЦЕПТА — ПОЛНОСТЬЮ СКРЫТ ДО ВЫБОРА */
     .recipe-container {
       display: none;
     }
@@ -132,7 +134,6 @@
       overflow: hidden;
     }
     
-    /* 🔥 ФОТО — РАСТЯГИВАЕТСЯ ПО ВСЕЙ ШИРИНЕ И СОХРАНЯЕТ ПРОПОРЦИИ */
     .recipe-photo {
       width: 100%;
       height: auto;
@@ -146,6 +147,10 @@
       filter: drop-shadow(2px 6px 12px rgba(0,0,0,0.1));
       padding: 24px;
       text-align: center;
+    }
+    
+    .food-icon.hidden {
+      display: none;
     }
 
     .content { padding: 24px; }
@@ -340,7 +345,6 @@
     <button class="another-recipe" id="anotherRecipeBtn">🔄 Другой рецепт</button>
   </div>
 
-  <!-- ВЕСЬ КОНТЕНТ РЕЦЕПТА — ПОЛНОСТЬЮ ОТСУТСТВУЕТ ДО ВЫБОРА -->
   <div class="recipe-container" id="recipeContainer">
     <div class="image-section" id="imageSection">
       <div class="food-icon" id="defaultIcon">🍳✨</div>
@@ -376,6 +380,7 @@ let allRecipes = {};
 let currentCategory = null;
 let currentRecipe = null;
 let likedRecipes = JSON.parse(localStorage.getItem('likedRecipes') || '[]');
+let allImagesPreloaded = false;
 
 const categoryNames = { 
   breakfast: '🌅 ЗАВТРАК', 
@@ -409,6 +414,10 @@ async function loadRecipesFromFile() {
     if (total === 0) throw new Error('Нет рецептов в файле');
     
     console.log('✅ Загружено рецептов:', total);
+    
+    // 🔥 ПРЕДЗАГРУЖАЕМ ВСЕ КАРТИНКИ МГНОВЕННО
+    await preloadAllImages();
+    
     if (loader) loader.style.display = 'none';
     return true;
   } catch (err) {
@@ -419,6 +428,41 @@ async function loadRecipesFromFile() {
     if (loader) loader.style.display = 'none';
     return false;
   }
+}
+
+// 🔥 ПРЕДЗАГРУЗКА ВСЕХ ИЗОБРАЖЕНИЙ
+async function preloadAllImages() {
+  const allUrls = [];
+  
+  // Собираем все URL картинок из рецептов
+  for (const category of Object.keys(allRecipes)) {
+    for (const recipe of allRecipes[category]) {
+      if (recipe.photo && recipe.photo !== '') {
+        allUrls.push(recipe.photo);
+      }
+    }
+  }
+  
+  if (allUrls.length === 0) {
+    console.log('Нет картинок для предзагрузки');
+    allImagesPreloaded = true;
+    return;
+  }
+  
+  console.log(`🖼️ Предзагружаем ${allUrls.length} изображений...`);
+  
+  const promises = allUrls.map(url => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+      img.src = url;
+    });
+  });
+  
+  await Promise.all(promises);
+  console.log('✅ Все изображения предзагружены');
+  allImagesPreloaded = true;
 }
 
 // ==================== ФОРМАТИРОВАНИЕ ====================
@@ -486,63 +530,44 @@ function formatSteps(steps) {
   return `<div class="section-title"><span>👩‍🍳</span> Приготовление</div><ul class="steps-list" id="stepsList">${items}</ul>`;
 }
 
-// ==================== ОТОБРАЖЕНИЕ РЕЦЕПТА ====================
+// ==================== ОТОБРАЖЕНИЕ РЕЦЕПТА (МГНОВЕННО, ВСЕ КАРТИНКИ УЖЕ В КЕШЕ) ====================
 function displayRecipe(recipe, category) {
   if (!recipe) return;
   
-  // ПОКАЗЫВАЕМ контейнер с рецептом
   const container = document.getElementById('recipeContainer');
   container.classList.add('visible');
   
-  // Показываем кнопку "Другой рецепт"
   const anotherBtn = document.getElementById('anotherRecipeBtn');
   anotherBtn.classList.add('visible');
   
-  // Категория
   document.getElementById('categoryBadge').textContent = categoryNames[category] || category.toUpperCase();
-  
-  // Название
   document.getElementById('recipeTitle').textContent = recipe.title;
-  
-  // Время и калории
   document.getElementById('timeBadge').innerHTML = recipe.time ? `⏱️ ${recipe.time}` : '⏱️ —';
   document.getElementById('caloriesBadge').innerHTML = recipe.calories ? `🔥 ${recipe.calories} ккал` : '🔥 —';
   
-  // 🔥 ФОТО — РАСТЯГИВАЕТСЯ ПРАВИЛЬНО
+  // Фото — показываем мгновенно (уже предзагружено)
   const photoEl = document.getElementById('recipePhoto');
   const defaultIcon = document.getElementById('defaultIcon');
   
   if (recipe.photo && recipe.photo !== '') {
-    photoEl.style.display = 'block';
-    defaultIcon.style.display = 'none';
     photoEl.src = recipe.photo;
-    photoEl.onerror = () => {
-      // Если фото не загрузилось — показываем иконку
-      photoEl.style.display = 'none';
-      defaultIcon.style.display = 'flex';
-    };
+    photoEl.style.display = 'block';
+    defaultIcon.classList.add('hidden');
   } else {
     photoEl.style.display = 'none';
-    defaultIcon.style.display = 'flex';
+    defaultIcon.classList.remove('hidden');
   }
   
-  // Ингредиенты
   document.getElementById('ingredientsContainer').innerHTML = formatIngredients(recipe.ingredients);
-  
-  // Шаги
   document.getElementById('stepsContainer').innerHTML = formatSteps(recipe.steps);
   
-  // Заметка
   if (recipe.note) {
     document.getElementById('noteContainer').innerHTML = `<div class="note"><span>✨</span> ${recipe.note}</div>`;
   } else {
     document.getElementById('noteContainer').innerHTML = '';
   }
   
-  // Обновляем кнопку лайка
   updateLikeButton(recipe, category);
-  
-  // Добавляем обработчики для шагов
   attachStepHandlers();
 }
 
