@@ -4,34 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Генератор рецептов</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: linear-gradient(145deg, #FFF3E0, #FFE0B5);
+      background: linear-gradient(135deg, #fdf8ed 0%, #fef3e2 100%);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #2d2f36;
-      padding: 20px 12px;
+      padding: 24px 16px;
+      color: #2c2418;
     }
-    .card {
-      width: 100%;
-      max-width: 520px;
-      background: rgba(255,255,255,0.96);
-      border-radius: 28px;
-      padding: 20px 18px 28px;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+
+    .recipe-card {
+      max-width: 560px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
     }
+
     .header-row {
       display: flex;
       justify-content: flex-end;
-      align-items: center;
-      margin-bottom: 20px;
+      padding: 20px 24px 12px;
     }
     .profile-icon {
       background: #f0e4d4;
@@ -48,333 +45,343 @@
       text-decoration: none;
     }
     .profile-icon:hover { background: #e8d8c4; }
-    .primary-btn {
-      background: linear-gradient(115deg, #f6b868, #f58d42);
+
+    .nav-bar { padding: 0 24px 12px; }
+    
+    .random-btn {
+      background: linear-gradient(105deg, #f5b042, #f59e0b);
       border: none;
       color: white;
-      padding: 16px 20px;
-      font-size: 18px;
       font-weight: 700;
-      border-radius: 48px;
+      font-size: 18px;
+      padding: 14px 20px;
+      border-radius: 60px;
       width: 100%;
-      margin-bottom: 12px;
       cursor: pointer;
-      transition: transform 0.1s;
-    }
-    .primary-btn:active { transform: scale(0.98); }
-    .secondary-btn {
-      background: white;
-      border: 1.5px solid #ffcf9a;
-      padding: 12px 16px;
-      font-size: 15px;
-      font-weight: 600;
-      border-radius: 40px;
-      width: 100%;
-      margin-bottom: 10px;
-      color: #b45f2b;
-      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 6px 14px rgba(245, 158, 11, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      text-decoration: none;
+      gap: 10px;
     }
-    .btn-group {
+    .random-btn:active { transform: scale(0.97); }
+
+    .menu-row {
       display: flex;
       gap: 12px;
-      margin-bottom: 8px;
+      margin: 16px 0 12px;
     }
-    .btn-group .secondary-btn { margin-bottom: 0; }
-    .refresh-btn {
-      background: #fef3e8;
-      border: 1px solid #ffcf9a;
-      color: #b45f2b;
-      padding: 10px;
-      border-radius: 40px;
-      font-weight: 600;
-      width: 100%;
-      margin: 8px 0 12px;
-      cursor: pointer;
-      display: none;
-    }
-    .allergens-btn {
-      background: #fff4e6;
-      border: 1px solid #fed7aa;
-      border-radius: 40px;
-      padding: 10px 16px;
-      font-size: 13px;
-      font-weight: 500;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 8px auto;
-      cursor: pointer;
-      color: #b45f2b;
-    }
-    .like-btn {
-      background: #ffe4e6;
-      border: none;
-      border-radius: 40px;
-      padding: 10px 20px;
-      font-weight: 600;
-      color: #b91c1c;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 12px auto;
-      width: fit-content;
-      cursor: pointer;
-    }
-    .servings-card {
-      background: #FEF9F0;
-      border-radius: 28px;
-      padding: 12px 16px;
-      margin: 12px 0;
-      border: 1px solid #ffe1b9;
-      display: none;
-    }
-    .servings-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #c07a3a;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-    .servings-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-    }
-    .servings-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 40px;
-      background: #ffe0bc;
-      border: none;
-      font-size: 22px;
-      font-weight: 700;
-      color: #e67e22;
-      cursor: pointer;
-    }
-    .servings-count {
-      font-size: 26px;
-      font-weight: 800;
-      color: #e67e22;
-      min-width: 48px;
-      text-align: center;
-    }
-    .section-title {
-      font-weight: 700;
-      margin: 18px 0 8px 0;
-      font-size: 15px;
-      color: #3e2c1c;
-    }
-    .plain-list {
-      padding-left: 24px;
+
+    .menu-link {
+      flex: 1;
+      background: #fffaf5;
+      border: 1.5px solid #ffe3c6;
+      border-radius: 50px;
+      padding: 10px 0;
       font-size: 14px;
-      line-height: 1.5;
-      color: #5a4a38;
+      font-weight: 600;
+      color: #c47a2b;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
     }
-    .plain-list li { margin: 8px 0; }
-    .category-tag {
+    .menu-link:hover { background: #fff0e2; }
+
+    .another-recipe {
+      background: linear-gradient(115deg, #2c3e50, #1a2a38);
+      border: none;
+      border-radius: 56px;
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
+      width: 100%;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      margin: 8px 0 4px;
       display: none;
-      background: #fde68a;
-      padding: 4px 12px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+    .another-recipe.visible { display: flex; }
+    .another-recipe:active { transform: scale(0.97); }
+
+    /* ВЕСЬ КОНТЕНТ РЕЦЕПТА — ПОЛНОСТЬЮ СКРЫТ ДО ВЫБОРА */
+    .recipe-container {
+      display: none;
+    }
+    .recipe-container.visible {
+      display: block;
+    }
+
+    .image-section {
+      background: linear-gradient(145deg, #f9efdf, #fae9d4);
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-direction: column;
+      padding: 24px;
+    }
+    .food-icon { font-size: 64px; filter: drop-shadow(2px 6px 12px rgba(0,0,0,0.1)); }
+    #photo {
+      max-width: 100%;
+      max-height: 160px;
+      object-fit: cover;
       border-radius: 20px;
+    }
+
+    .content { padding: 24px; }
+
+    .category-badge {
+      display: inline-block;
+      background: #fef1df;
+      color: #e67e22;
       font-size: 11px;
       font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: 0.5px;
-      color: #92400e;
-      width: fit-content;
+      padding: 5px 12px;
+      border-radius: 30px;
+      margin-bottom: 12px;
     }
-    .category-tag.visible { display: inline-block; }
-    .centered-title {
-      text-align: center;
-      font-size: 1.6rem;
-      margin: 20px 0 16px;
-      font-weight: 700;
-      color: #c07a3a;
-    }
+
     .recipe-title {
-      font-size: 1.6rem;
-      margin: 6px 0 4px;
+      font-size: 28px;
       font-weight: 700;
-      color: #c07a3a;
+      color: #3e2c1a;
+      margin-bottom: 20px;
     }
-    #photo {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 24px;
+
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
       background: #fef3e8;
-      margin: 10px 0;
-      display: none;
-    }
-    .fixed-bottom {
-      position: fixed;
-      bottom: 16px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      pointer-events: none;
-    }
-    .toast-fav {
-      background: #1f2937;
-      color: white;
-      padding: 12px 24px;
       border-radius: 60px;
-      font-size: 14px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-weight: 500;
-      display: inline-flex;
+      font-size: 14px;
+      color: #7b5a3b;
+    }
+
+    .section-title {
+      font-weight: 700;
+      font-size: 19px;
+      margin: 28px 0 16px 0;
+      color: #3e2c1c;
+      display: flex;
       align-items: center;
       gap: 10px;
-      pointer-events: auto;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+      border-left: 4px solid #f7b05e;
+      padding-left: 14px;
     }
-    .modal, .allergens-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(6px);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+
+    .ingredients-grid {
+      background: #fefcf8;
+      border-radius: 24px;
+      list-style: none;
     }
-    .modal-box {
-      background: white;
-      border-radius: 32px;
-      max-width: 340px;
-      width: 90%;
-      padding: 20px;
+    .ingredients-grid li {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0e6da;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
     }
-    .choice {
-      background: #fef9f0;
-      border: 1px solid #ffe1b9;
-      width: 100%;
-      text-align: left;
-      padding: 12px;
-      border-radius: 20px;
-      margin: 6px 0;
-      font-weight: 500;
-      cursor: pointer;
+    .ingredient-name { font-weight: 500; }
+    .ingredient-amount {
       color: #b45f2b;
+      font-weight: 600;
+      background: #fff2e5;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 13px;
     }
+
+    .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .steps-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: #fefbf7;
+      padding: 16px 18px;
+      border-radius: 24px;
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: 1px solid #f5e6d8;
+      cursor: pointer;
+    }
+    .steps-list li:hover {
+      background: #fffaf2;
+      border-color: #faddb4;
+      transform: translateX(4px);
+    }
+    .steps-list li.step-expanded {
+      background: linear-gradient(135deg, #fff6ea, #fffaf0);
+      border: 2px solid #f5b042;
+      transform: scale(1.02);
+      box-shadow: 0 12px 24px rgba(245, 176, 66, 0.25);
+      margin: 4px 0;
+    }
+    .steps-list li.step-expanded .step-text {
+      font-weight: 600;
+      color: #e67e22;
+    }
+    .steps-list li.step-expanded .step-number {
+      background: #e67e22;
+      transform: scale(1.05);
+    }
+    .step-number {
+      background: #f5b042;
+      color: white;
+      font-weight: 800;
+      width: 32px;
+      height: 32px;
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .step-text { flex: 1; line-height: 1.45; font-size: 15px; color: #3a2e22; }
+    .step-icon { font-size: 22px; opacity: 0.6; transition: all 0.2s; }
+    .steps-list li.step-expanded .step-icon { opacity: 1; transform: scale(1.1); }
+
+    .note {
+      background: #fff7ef;
+      border-radius: 24px;
+      padding: 16px 20px;
+      margin: 28px 0 16px;
+      font-size: 14px;
+      color: #b76828;
+      border-left: 4px solid #f5b042;
+      display: flex;
+      gap: 12px;
+    }
+
+    .like-button {
+      background: #ffe8e8;
+      border: none;
+      border-radius: 60px;
+      padding: 14px 24px;
+      font-weight: 700;
+      font-size: 16px;
+      color: #bf3a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 20px;
+    }
+    .like-button:hover { background: #ffdddd; transform: scale(0.98); }
+    hr { margin: 20px 0; border: 1px dashed #f0e0ce; }
+
     .loader, .error, .warning { display: none; margin: 16px 0; text-align: center; font-size: 14px; }
     .error { color: #dc2626; }
     .warning { color: #d97706; }
-    @media (max-width: 480px) {
-      .card { padding: 16px; }
+
+    @media (max-width: 500px) {
+      .content { padding: 20px; }
+      .recipe-title { font-size: 24px; }
     }
   </style>
 </head>
 <body>
-<div class="card">
+
+<div class="recipe-card">
   <div class="header-row">
-    <a href="cabinet.html" class="profile-icon" id="cabinetBtn">👤 Кабинет</a>
+    <a href="cabinet.html" class="profile-icon">👤 Кабинет</a>
   </div>
 
-  <button class="primary-btn" id="mainBtn">🎲 Случайный рецепт</button>
-  
-  <div class="btn-group">
-    <a href="menu.html" class="secondary-btn" id="menuBtn">📅 Меню на неделю <span class="premium-badge-icon">👑</span></a>
-    <a href="ingredients.html" class="secondary-btn" id="ingredientsBtn">🔍 По ингредиентам</a>
-  </div>
-
-  <button class="refresh-btn" id="refreshBtn">🔄 Другой рецепт</button>
-  <button class="allergens-btn" id="allergensBtn">⚠️ Аллергии (<span id="allergensCount">0</span>)</button>
-
-  <div class="servings-card" id="servingsSection">
-    <div class="servings-label">👥 Количество персон</div>
-    <div class="servings-controls">
-      <button class="servings-btn" id="servingsMinus">−</button>
-      <span class="servings-count" id="servingsCount">2</span>
-      <button class="servings-btn" id="servingsPlus">+</button>
+  <div class="nav-bar">
+    <button class="random-btn" id="randomBtn">🎲 Случайный рецепт</button>
+    <div class="menu-row">
+      <a href="menu.html" class="menu-link">📅 Меню на неделю</a>
+      <a href="ingredients.html" class="menu-link">🔍 По ингредиентам</a>
     </div>
+    <button class="another-recipe" id="anotherRecipeBtn">🔄 Другой рецепт</button>
   </div>
 
-  <button class="like-btn" id="likeBtn"><span>❤️</span> <span>В избранное</span></button>
+  <!-- ВЕСЬ КОНТЕНТ РЕЦЕПТА — ПОЛНОСТЬЮ ОТСУТСТВУЕТ ДО ВЫБОРА -->
+  <div class="recipe-container" id="recipeContainer">
+    <div class="image-section">
+      <div class="food-icon" id="defaultIcon">🍳✨</div>
+      <img id="photo" style="display: none;">
+    </div>
 
-  <div class="loader" id="loader">Загрузка рецептов...</div>
-  <div class="error" id="error"></div>
-  <div class="warning" id="warning"></div>
-  <div id="category" class="category-tag"></div>
-  <div id="title" class="centered-title">🍳 Выберите категорию</div>
-  <img id="photo" alt="Фото блюда">
-  <div id="ingredients"></div>
-  <div id="steps"></div>
-  <div id="time" style="margin: 8px 0;"></div>
-  <div id="calories" style="margin-bottom: 8px;"></div>
-  <div id="note"></div>
-</div>
+    <div class="content">
+      <div class="category-badge" id="categoryBadge"></div>
+      <h1 class="recipe-title" id="recipeTitle"></h1>
 
-<div class="fixed-bottom" id="favoritesToast" style="display: none;">
-  <div class="toast-fav">💖 Рецепт добавлен в <strong style="cursor:pointer; text-decoration:underline;" onclick="window.location.href='cabinet.html'">Избранное</strong></div>
-</div>
+      <div class="stats-row">
+        <div class="stat-badge" id="timeBadge">⏱️ —</div>
+        <div class="stat-badge" id="caloriesBadge">🔥 —</div>
+      </div>
 
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <h3 style="margin-bottom: 14px;">🍽️ Категория</h3>
-    <button class="choice" data-category="breakfast">🌅 Завтрак</button>
-    <button class="choice" data-category="lunch">☀️ Обед</button>
-    <button class="choice" data-category="dinner">🌙 Ужин</button>
-    <button class="choice" data-category="soups">🍲 Супы</button>
-    <button class="choice" data-category="dessert">🍰 Десерт</button>
-    <button class="close-modal" style="margin-top:12px; background:none; border:none; font-size:12px; width:100%; text-align:center; color:#aaa; cursor:pointer;">Закрыть</button>
-  </div>
-</div>
+      <div id="ingredientsContainer"></div>
+      <div id="stepsContainer"></div>
+      <div id="noteContainer"></div>
 
-<div class="allergens-modal" id="allergensModal">
-  <div class="modal-box">
-    <h3 style="margin-bottom: 16px;">🚫 Исключить аллергены</h3>
-    <div id="allergensGrid" style="display: grid; gap: 8px; grid-template-columns: 1fr 1fr; margin-bottom: 20px;"></div>
-    <div style="display: flex; gap: 12px;">
-      <button id="allergensClearBtn" style="flex:1; background:#fef3e8; border:1px solid #ffcf9a; padding:10px; border-radius:40px; cursor:pointer;">Сбросить</button>
-      <button id="allergensSaveBtn" style="flex:1; background:linear-gradient(115deg,#f6b868,#f58d42); color:white; border:none; border-radius:40px; cursor:pointer;">Сохранить</button>
+      <hr>
+      <button class="like-button" id="likeBtn"><span>❤️</span> В избранное</button>
     </div>
   </div>
 </div>
+
+<div class="loader" id="loader">Загрузка рецептов...</div>
+<div class="error" id="error"></div>
+<div class="warning" id="warning"></div>
 
 <script>
-// ==================== ЗАГРУЗКА ИЗ JSON ФАЙЛА ====================
-
+// ==================== ГЛОБАЛЬНЫЕ ДАННЫЕ ====================
 let allRecipes = {};
 let currentCategory = null;
 let currentRecipe = null;
-let selectedAllergens = JSON.parse(localStorage.getItem('selectedAllergens') || '[]');
 let likedRecipes = JSON.parse(localStorage.getItem('likedRecipes') || '[]');
-let currentServings = 2;
-let baseServings = 2;
 
 const categoryNames = { 
-  breakfast: 'Завтрак', 
-  lunch: 'Обед', 
-  dinner: 'Ужин', 
-  soups: 'Супы', 
-  dessert: 'Десерт' 
+  breakfast: '🌅 ЗАВТРАК', 
+  lunch: '☀️ ОБЕД', 
+  dinner: '🌙 УЖИН', 
+  soups: '🍲 СУПЫ', 
+  dessert: '🍰 ДЕСЕРТЫ' 
 };
 
-// Загрузка рецептов из recipes.json
+// ==================== ЗАГРУЗКА ИЗ JSON ====================
 async function loadRecipesFromFile() {
   const loader = document.getElementById('loader');
   const errorDiv = document.getElementById('error');
   
   if (loader) loader.style.display = 'block';
-  if (errorDiv) errorDiv.style.display = 'none';
   
   try {
     const response = await fetch(`recipes.json?t=${Date.now()}`);
-    
-    if (!response.ok) {
-      throw new Error(`Файл recipes.json не найден (HTTP ${response.status})`);
-    }
+    if (!response.ok) throw new Error(`Файл recipes.json не найден (HTTP ${response.status})`);
     
     const data = await response.json();
-    
     allRecipes = {
       breakfast: data.breakfast || [],
       lunch: data.lunch || [],
@@ -383,21 +390,15 @@ async function loadRecipesFromFile() {
       dessert: data.dessert || []
     };
     
-    const totalRecipes = Object.values(allRecipes).reduce((sum, arr) => sum + arr.length, 0);
+    const total = Object.values(allRecipes).reduce((s, arr) => s + arr.length, 0);
+    if (total === 0) throw new Error('Нет рецептов в файле');
     
-    if (totalRecipes === 0) {
-      throw new Error('В файле recipes.json нет рецептов');
-    }
-    
-    console.log('✅ Загружено рецептов:', totalRecipes);
-    
+    console.log('✅ Загружено рецептов:', total);
     if (loader) loader.style.display = 'none';
     return true;
-    
   } catch (err) {
-    console.error('Ошибка загрузки:', err);
     if (errorDiv) {
-      errorDiv.innerHTML = `❌ Ошибка загрузки рецептов: ${err.message}<br><small>Убедитесь, что файл recipes.json находится в той же папке</small>`;
+      errorDiv.innerHTML = `❌ ${err.message}<br><small>Проверьте, что recipes.json в той же папке</small>`;
       errorDiv.style.display = 'block';
     }
     if (loader) loader.style.display = 'none';
@@ -405,27 +406,15 @@ async function loadRecipesFromFile() {
   }
 }
 
-function getRecipeAllergens(recipe) {
-  const allergens = [];
-  const ingredientsText = JSON.stringify(recipe.ingredients || []).toLowerCase();
-  
-  if (ingredientsText.includes('молок') || ingredientsText.includes('сливк') || ingredientsText.includes('сыр')) allergens.push('milk');
-  if (ingredientsText.includes('яйц')) allergens.push('eggs');
-  if (ingredientsText.includes('мук') || ingredientsText.includes('пшениц')) allergens.push('gluten');
-  if (ingredientsText.includes('арахис')) allergens.push('peanuts');
-  if (ingredientsText.includes('орех')) allergens.push('tree_nuts');
-  if (ingredientsText.includes('рыб')) allergens.push('fish');
-  
-  return allergens;
-}
-
+// ==================== ФОРМАТИРОВАНИЕ ====================
 function getUnitForIngredient(name) {
   const lower = name.toLowerCase();
   if (lower.includes('яйцо') || lower.includes('банан') || lower.includes('помидор') || 
-      lower.includes('лук') || lower.includes('морков') || lower.includes('картош') ||
-      lower.includes('кабачок')) return 'шт';
+      lower.includes('лук') || lower.includes('морков') || lower.includes('картош')) return 'шт';
   if (lower.includes('зубчик')) return 'зуб.';
   if (lower.includes('щепотк')) return 'щепотка';
+  if (lower.includes('столовая') || lower.includes('ст.л')) return 'ст.л.';
+  if (lower.includes('чайная') || lower.includes('ч.л')) return 'ч.л.';
   return 'г';
 }
 
@@ -440,7 +429,7 @@ function formatIngredients(ingredients) {
       if (match) {
         quantity = match[1];
         const rest = match[2].trim();
-        const unitMatch = rest.match(/^(г|мл|шт|зуб\.|щепотка)\s+(.+)$/);
+        const unitMatch = rest.match(/^(г|мл|шт|ст\.л|ч\.л|зуб\.|щепотка)\s+(.+)$/);
         if (unitMatch) {
           unit = unitMatch[1];
           name = unitMatch[2];
@@ -455,125 +444,154 @@ function formatIngredients(ingredients) {
       }
     } else {
       name = it.name || 'Ингредиент';
-      quantity = it.quantity != null ? it.quantity : '';
+      quantity = it.quantity ?? '';
       unit = it.unit || getUnitForIngredient(name);
     }
     
     const nameFormatted = name.charAt(0).toUpperCase() + name.slice(1);
-    return `<li>${nameFormatted} — ${quantity} ${unit}</li>`;
+    return `<li><span class="ingredient-name">${nameFormatted}</span><span class="ingredient-amount">${quantity} ${unit}</span></li>`;
   });
   
-  return `<div class="section-title">📝 Ингредиенты</div><ul class="plain-list">${items.join('')}</ul>`;
+  return `<div class="section-title"><span>📋</span> Ингредиенты</div><ul class="ingredients-grid">${items.join('')}</ul>`;
 }
 
-function scaleIngredients(ingredients, fromServings, toServings) {
-  const ratio = toServings / fromServings;
-  return ingredients.map(it => {
-    if (typeof it === 'object' && typeof it.quantity === 'number') {
-      return { ...it, quantity: Math.round(it.quantity * ratio * 10) / 10 };
-    }
-    return it;
-  });
-}
-
-function updateServingsDisplay() {
-  if (!currentRecipe) return;
-  const scaled = scaleIngredients(currentRecipe.ingredients, baseServings, currentServings);
-  document.getElementById('ingredients').innerHTML = formatIngredients(scaled);
-  document.getElementById('servingsCount').textContent = currentServings;
-}
-
-function updateUI(recipe) {
-  if (!recipe) {
-    document.getElementById('title').className = 'centered-title';
-    document.getElementById('title').textContent = '🍳 Выберите категорию';
-    document.getElementById('category').classList.remove('visible');
-    document.getElementById('photo').style.display = 'none';
-    document.getElementById('ingredients').innerHTML = '';
-    document.getElementById('steps').innerHTML = '';
-    document.getElementById('time').innerHTML = '';
-    document.getElementById('calories').innerHTML = '';
-    document.getElementById('note').innerHTML = '';
-    document.getElementById('refreshBtn').style.display = 'none';
-    document.getElementById('likeBtn').style.display = 'none';
-    document.getElementById('servingsSection').style.display = 'none';
-    return;
-  }
+function formatSteps(steps) {
+  if (!steps?.length) return '';
   
-  document.getElementById('category').textContent = (categoryNames[currentCategory] || currentCategory).toUpperCase();
-  document.getElementById('category').classList.add('visible');
-  document.getElementById('title').className = 'recipe-title';
-  document.getElementById('title').textContent = recipe.title;
+  const stepIcons = ['🍯', '✨', '🥣', '🍪', '📄', '🔥', '🍵', '🧂', '🍽️', '⭐'];
   
-  if (recipe.photo) {
-    const photoEl = document.getElementById('photo');
+  const items = steps.map((step, idx) => `
+    <li data-step="${idx + 1}">
+      <span class="step-number">${idx + 1}</span>
+      <span class="step-text">${step}</span>
+      <span class="step-icon">${stepIcons[idx % stepIcons.length]}</span>
+    </li>
+  `).join('');
+  
+  return `<div class="section-title"><span>👩‍🍳</span> Приготовление</div><ul class="steps-list" id="stepsList">${items}</ul>`;
+}
+
+// ==================== ОТОБРАЖЕНИЕ РЕЦЕПТА ====================
+function displayRecipe(recipe, category) {
+  if (!recipe) return;
+  
+  // ПОКАЗЫВАЕМ контейнер с рецептом (до этого он скрыт)
+  const container = document.getElementById('recipeContainer');
+  container.classList.add('visible');
+  
+  // Показываем кнопку "Другой рецепт"
+  const anotherBtn = document.getElementById('anotherRecipeBtn');
+  anotherBtn.classList.add('visible');
+  
+  // Категория
+  document.getElementById('categoryBadge').textContent = categoryNames[category] || category.toUpperCase();
+  
+  // Название
+  document.getElementById('recipeTitle').textContent = recipe.title;
+  
+  // Время и калории
+  document.getElementById('timeBadge').innerHTML = recipe.time ? `⏱️ ${recipe.time}` : '⏱️ —';
+  document.getElementById('caloriesBadge').innerHTML = recipe.calories ? `🔥 ${recipe.calories} ккал` : '🔥 —';
+  
+  // Фото
+  const photoEl = document.getElementById('photo');
+  const defaultIcon = document.getElementById('defaultIcon');
+  if (recipe.photo && recipe.photo !== '') {
     photoEl.style.display = 'block';
+    defaultIcon.style.display = 'none';
     photoEl.src = recipe.photo;
-    photoEl.onerror = () => { photoEl.style.display = 'none'; };
+    photoEl.onerror = () => {
+      photoEl.style.display = 'none';
+      defaultIcon.style.display = 'flex';
+    };
   } else {
-    document.getElementById('photo').style.display = 'none';
+    photoEl.style.display = 'none';
+    defaultIcon.style.display = 'flex';
   }
   
-  baseServings = recipe.servings || 2;
-  currentServings = baseServings;
-  document.getElementById('servingsCount').textContent = currentServings;
-  document.getElementById('servingsSection').style.display = 'block';
-  document.getElementById('ingredients').innerHTML = formatIngredients(recipe.ingredients);
+  // Ингредиенты
+  document.getElementById('ingredientsContainer').innerHTML = formatIngredients(recipe.ingredients);
   
-  if (recipe.steps?.length) {
-    document.getElementById('steps').innerHTML = `<div class="section-title">👨‍🍳 Приготовление</div><ol class="plain-list">${recipe.steps.map(s => `<li>${s}</li>`).join('')}</ol>`;
+  // Шаги
+  document.getElementById('stepsContainer').innerHTML = formatSteps(recipe.steps);
+  
+  // Заметка
+  if (recipe.note) {
+    document.getElementById('noteContainer').innerHTML = `<div class="note"><span>✨</span> ${recipe.note}</div>`;
   } else {
-    document.getElementById('steps').innerHTML = '';
+    document.getElementById('noteContainer').innerHTML = '';
   }
   
-  document.getElementById('time').innerHTML = recipe.time ? `⏱️ ${recipe.time}` : '';
-  document.getElementById('calories').innerHTML = recipe.calories ? `🔥 ${recipe.calories} ккал` : '';
-  document.getElementById('note').innerHTML = recipe.note ? `<em>💡 ${recipe.note}</em>` : '';
-  document.getElementById('refreshBtn').style.display = 'block';
-  document.getElementById('likeBtn').style.display = 'inline-flex';
+  // Обновляем кнопку лайка
+  updateLikeButton(recipe, category);
   
-  const isLiked = likedRecipes.some(r => r.title === recipe.title && r.category === currentCategory);
-  const heartSpan = document.querySelector('#likeBtn span:first-child');
-  const textSpan = document.querySelector('#likeBtn span:last-child');
-  if (heartSpan) heartSpan.textContent = isLiked ? '💖' : '❤️';
-  if (textSpan) textSpan.textContent = isLiked ? 'В избранном ✓' : 'В избранное';
+  // Добавляем обработчики для шагов
+  attachStepHandlers();
 }
 
+function attachStepHandlers() {
+  const stepsList = document.getElementById('stepsList');
+  if (!stepsList) return;
+  
+  const newStepsList = stepsList.cloneNode(true);
+  stepsList.parentNode.replaceChild(newStepsList, stepsList);
+  
+  newStepsList.addEventListener('click', (event) => {
+    const stepItem = event.target.closest('li');
+    if (!stepItem) return;
+    
+    const isExpanded = stepItem.classList.contains('step-expanded');
+    
+    document.querySelectorAll('.steps-list li').forEach(li => {
+      li.classList.remove('step-expanded');
+    });
+    
+    if (!isExpanded) {
+      stepItem.classList.add('step-expanded');
+      setTimeout(() => {
+        if (stepItem.classList.contains('step-expanded')) {
+          stepItem.classList.remove('step-expanded');
+        }
+      }, 2000);
+    }
+  });
+}
+
+function updateLikeButton(recipe, category) {
+  const likeBtn = document.getElementById('likeBtn');
+  const isLiked = likedRecipes.some(r => r.title === recipe.title && r.category === category);
+  likeBtn.innerHTML = isLiked ? '<span>💖</span> В избранном ✓' : '<span>❤️</span> В избранное';
+  likeBtn.style.background = isLiked ? '#f0dbdb' : '#ffe8e8';
+}
+
+// ==================== ВЫБОР СЛУЧАЙНОГО РЕЦЕПТА ====================
 function selectCategory(category) {
   currentCategory = category;
-  document.getElementById('modal').style.display = 'none';
   
   let recipes = [...(allRecipes[category] || [])];
   
-  if (selectedAllergens.length) {
-    recipes = recipes.filter(r => {
-      const alls = getRecipeAllergens(r);
-      return !alls.some(a => selectedAllergens.includes(a));
-    });
-  }
-  
   if (!recipes.length) {
-    document.getElementById('warning').textContent = selectedAllergens.length ? 
-      '⚠️ Нет рецептов без выбранных аллергенов' : '⚠️ Нет рецептов в этой категории';
+    document.getElementById('warning').textContent = 'Нет рецептов в этой категории';
     document.getElementById('warning').style.display = 'block';
-    updateUI(null);
     return;
   }
   
   document.getElementById('warning').style.display = 'none';
   document.getElementById('error').style.display = 'none';
   
-  currentRecipe = recipes[Math.floor(Math.random() * recipes.length)];
-  updateUI(currentRecipe);
+  const randomIndex = Math.floor(Math.random() * recipes.length);
+  currentRecipe = recipes[randomIndex];
+  displayRecipe(currentRecipe, currentCategory);
 }
 
 function refreshRecipe() {
-  if (!currentCategory) return;
-  selectCategory(currentCategory);
+  if (currentCategory) {
+    selectCategory(currentCategory);
+  }
 }
 
 function toggleLike() {
-  if (!currentRecipe) return;
+  if (!currentRecipe || !currentCategory) return;
   
   const index = likedRecipes.findIndex(r => r.title === currentRecipe.title && r.category === currentCategory);
   if (index >= 0) {
@@ -585,7 +603,6 @@ function toggleLike() {
       categoryName: categoryNames[currentCategory],
       time: currentRecipe.time,
       calories: currentRecipe.calories,
-      servings: currentRecipe.servings,
       ingredients: currentRecipe.ingredients,
       steps: currentRecipe.steps,
       note: currentRecipe.note,
@@ -593,84 +610,52 @@ function toggleLike() {
       likedAt: new Date().toISOString()
     });
     
-    const toast = document.getElementById('favoritesToast');
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    const toast = document.createElement('div');
+    toast.textContent = '💖 Рецепт добавлен в избранное';
+    toast.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1f2937; color:white; padding:12px 24px; border-radius:60px; z-index:1000; font-size:14px;';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
   }
   
   localStorage.setItem('likedRecipes', JSON.stringify(likedRecipes));
-  updateUI(currentRecipe);
+  updateLikeButton(currentRecipe, currentCategory);
 }
 
-function renderAllergensModal() {
-  const grid = document.getElementById('allergensGrid');
-  const allergens = [
-    { id: 'milk', label: '🥛 Молоко' },
-    { id: 'eggs', label: '🥚 Яйца' },
-    { id: 'gluten', label: '🌾 Глютен' },
-    { id: 'peanuts', label: '🥜 Арахис' },
-    { id: 'tree_nuts', label: '🌰 Орехи' },
-    { id: 'fish', label: '🐟 Рыба' }
-  ];
+// ==================== МОДАЛЬНОЕ ОКНО ДЛЯ КАТЕГОРИЙ ====================
+function showCategoryModal() {
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:2000;';
+  modal.innerHTML = `
+    <div style="background:white; border-radius:32px; max-width:340px; width:90%; padding:24px;">
+      <h3 style="margin-bottom:16px;">🍽️ Категория</h3>
+      <button class="modal-choice" data-cat="breakfast" style="display:block; width:100%; background:#fef9f0; border:1px solid #ffe1b9; padding:12px; border-radius:20px; margin:8px 0; text-align:left; cursor:pointer;">🌅 Завтрак</button>
+      <button class="modal-choice" data-cat="lunch" style="display:block; width:100%; background:#fef9f0; border:1px solid #ffe1b9; padding:12px; border-radius:20px; margin:8px 0; text-align:left; cursor:pointer;">☀️ Обед</button>
+      <button class="modal-choice" data-cat="dinner" style="display:block; width:100%; background:#fef9f0; border:1px solid #ffe1b9; padding:12px; border-radius:20px; margin:8px 0; text-align:left; cursor:pointer;">🌙 Ужин</button>
+      <button class="modal-choice" data-cat="soups" style="display:block; width:100%; background:#fef9f0; border:1px solid #ffe1b9; padding:12px; border-radius:20px; margin:8px 0; text-align:left; cursor:pointer;">🍲 Супы</button>
+      <button class="modal-choice" data-cat="dessert" style="display:block; width:100%; background:#fef9f0; border:1px solid #ffe1b9; padding:12px; border-radius:20px; margin:8px 0; text-align:left; cursor:pointer;">🍰 Десерт</button>
+      <button class="modal-close" style="margin-top:12px; background:none; border:none; font-size:12px; width:100%; text-align:center; color:#aaa; cursor:pointer;">Закрыть</button>
+    </div>
+  `;
   
-  grid.innerHTML = allergens.map(a => `
-    <label style="display:flex; align-items:center; gap:8px; background:#fef9f0; padding:6px 12px; border-radius:40px; cursor:pointer;">
-      <input type="checkbox" data-allergen="${a.id}" ${selectedAllergens.includes(a.id) ? 'checked' : ''}> ${a.label}
-    </label>
-  `).join('');
+  document.body.appendChild(modal);
   
-  document.getElementById('allergensCount').textContent = selectedAllergens.length;
-  document.getElementById('allergensBtn').style.display = selectedAllergens.length ? 'inline-flex' : 'none';
+  modal.querySelectorAll('.modal-choice').forEach(btn => {
+    btn.onclick = () => {
+      selectCategory(btn.dataset.cat);
+      modal.remove();
+    };
+  });
+  modal.querySelector('.modal-close').onclick = () => modal.remove();
 }
 
-// Инициализация
+// ==================== ИНИЦИАЛИЗАЦИЯ ====================
 document.addEventListener('DOMContentLoaded', async () => {
   const loaded = await loadRecipesFromFile();
   if (!loaded) return;
   
-  renderAllergensModal();
-  
-  document.getElementById('mainBtn').onclick = () => document.getElementById('modal').style.display = 'flex';
-  document.querySelector('.close-modal').onclick = () => document.getElementById('modal').style.display = 'none';
-  document.getElementById('refreshBtn').onclick = refreshRecipe;
+  document.getElementById('randomBtn').onclick = showCategoryModal;
+  document.getElementById('anotherRecipeBtn').onclick = refreshRecipe;
   document.getElementById('likeBtn').onclick = toggleLike;
-  
-  document.getElementById('allergensBtn').onclick = () => document.getElementById('allergensModal').style.display = 'flex';
-  document.getElementById('allergensSaveBtn').onclick = () => {
-    selectedAllergens = [];
-    document.querySelectorAll('#allergensGrid input:checked').forEach(cb => {
-      selectedAllergens.push(cb.dataset.allergen);
-    });
-    localStorage.setItem('selectedAllergens', JSON.stringify(selectedAllergens));
-    document.getElementById('allergensModal').style.display = 'none';
-    renderAllergensModal();
-    if (currentCategory) selectCategory(currentCategory);
-  };
-  document.getElementById('allergensClearBtn').onclick = () => {
-    selectedAllergens = [];
-    localStorage.removeItem('selectedAllergens');
-    document.querySelectorAll('#allergensGrid input').forEach(cb => cb.checked = false);
-    document.getElementById('allergensModal').style.display = 'none';
-    renderAllergensModal();
-    if (currentCategory) selectCategory(currentCategory);
-  };
-  
-  document.querySelectorAll('.choice').forEach(btn => {
-    btn.onclick = () => selectCategory(btn.dataset.category);
-  });
-  
-  document.getElementById('servingsMinus').onclick = () => {
-    if (currentRecipe && currentServings > 1) {
-      currentServings--;
-      updateServingsDisplay();
-    }
-  };
-  document.getElementById('servingsPlus').onclick = () => {
-    if (currentRecipe && currentServings < 20) {
-      currentServings++;
-      updateServingsDisplay();
-    }
-  };
 });
 </script>
 </body>
