@@ -45,6 +45,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      text-decoration: none;
     }
     .profile-icon:hover { background: #e8d8c4; }
     .primary-btn {
@@ -76,6 +77,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      text-decoration: none;
     }
     .btn-group {
       display: flex;
@@ -273,14 +275,14 @@
 <body>
 <div class="card">
   <div class="header-row">
-    <div class="profile-icon" id="cabinetBtn">👤 Избранное</div>
+    <a href="cabinet.html" class="profile-icon" id="cabinetBtn">👤 Кабинет</a>
   </div>
 
   <button class="primary-btn" id="mainBtn">🎲 Случайный рецепт</button>
   
   <div class="btn-group">
-    <button class="secondary-btn" id="menuBtn">📅 Меню на неделю</button>
-    <button class="secondary-btn" id="ingredientsBtn">🔍 По ингредиентам</button>
+    <a href="menu.html" class="secondary-btn" id="menuBtn">📅 Меню на неделю <span class="premium-badge-icon">👑</span></a>
+    <a href="ingredients.html" class="secondary-btn" id="ingredientsBtn">🔍 По ингредиентам</a>
   </div>
 
   <button class="refresh-btn" id="refreshBtn">🔄 Другой рецепт</button>
@@ -311,12 +313,12 @@
 </div>
 
 <div class="fixed-bottom" id="favoritesToast" style="display: none;">
-  <div class="toast-fav">💖 Рецепт добавлен в избранное</div>
+  <div class="toast-fav">💖 Рецепт добавлен в <strong style="cursor:pointer; text-decoration:underline;" onclick="window.location.href='cabinet.html'">Избранное</strong></div>
 </div>
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h3 style="margin-bottom: 14px;">🍽️ Выберите категорию</h3>
+    <h3 style="margin-bottom: 14px;">🍽️ Категория</h3>
     <button class="choice" data-category="breakfast">🌅 Завтрак</button>
     <button class="choice" data-category="lunch">☀️ Обед</button>
     <button class="choice" data-category="dinner">🌙 Ужин</button>
@@ -340,7 +342,7 @@
 <script>
 // ==================== ЗАГРУЗКА ИЗ JSON ФАЙЛА ====================
 
-let allRecipes = {};      // Хранилище всех рецептов из recipes.json
+let allRecipes = {};
 let currentCategory = null;
 let currentRecipe = null;
 let selectedAllergens = JSON.parse(localStorage.getItem('selectedAllergens') || '[]');
@@ -365,7 +367,6 @@ async function loadRecipesFromFile() {
   if (errorDiv) errorDiv.style.display = 'none';
   
   try {
-    // Добавляем timestamp чтобы избежать кэширования
     const response = await fetch(`recipes.json?t=${Date.now()}`);
     
     if (!response.ok) {
@@ -374,7 +375,6 @@ async function loadRecipesFromFile() {
     
     const data = await response.json();
     
-    // Проверяем структуру данных
     allRecipes = {
       breakfast: data.breakfast || [],
       lunch: data.lunch || [],
@@ -389,14 +389,7 @@ async function loadRecipesFromFile() {
       throw new Error('В файле recipes.json нет рецептов');
     }
     
-    console.log('✅ Загружено рецептов:', {
-      breakfast: allRecipes.breakfast.length,
-      lunch: allRecipes.lunch.length,
-      dinner: allRecipes.dinner.length,
-      soups: allRecipes.soups.length,
-      dessert: allRecipes.dessert.length,
-      total: totalRecipes
-    });
+    console.log('✅ Загружено рецептов:', totalRecipes);
     
     if (loader) loader.style.display = 'none';
     return true;
@@ -404,7 +397,7 @@ async function loadRecipesFromFile() {
   } catch (err) {
     console.error('Ошибка загрузки:', err);
     if (errorDiv) {
-      errorDiv.innerHTML = `❌ Ошибка загрузки рецептов: ${err.message}<br><small>Убедитесь, что файл recipes.json находится в той же папке, что и index.html</small>`;
+      errorDiv.innerHTML = `❌ Ошибка загрузки рецептов: ${err.message}<br><small>Убедитесь, что файл recipes.json находится в той же папке</small>`;
       errorDiv.style.display = 'block';
     }
     if (loader) loader.style.display = 'none';
@@ -412,46 +405,27 @@ async function loadRecipesFromFile() {
   }
 }
 
-// Получение аллергенов рецепта (анализ ингредиентов)
 function getRecipeAllergens(recipe) {
   const allergens = [];
   const ingredientsText = JSON.stringify(recipe.ingredients || []).toLowerCase();
   
-  if (ingredientsText.includes('молок') || ingredientsText.includes('сливк') || ingredientsText.includes('сыр') || ingredientsText.includes('сметан')) {
-    allergens.push('milk');
-  }
-  if (ingredientsText.includes('яйц')) {
-    allergens.push('eggs');
-  }
-  if (ingredientsText.includes('мук') || ingredientsText.includes('пшениц')) {
-    allergens.push('gluten');
-  }
-  if (ingredientsText.includes('арахис')) {
-    allergens.push('peanuts');
-  }
-  if (ingredientsText.includes('орех') || ingredientsText.includes('грецк') || ingredientsText.includes('миндал') || ingredientsText.includes('фундук')) {
-    allergens.push('tree_nuts');
-  }
-  if (ingredientsText.includes('рыб') || ingredientsText.includes('лосос') || ingredientsText.includes('семг') || ingredientsText.includes('треск')) {
-    allergens.push('fish');
-  }
+  if (ingredientsText.includes('молок') || ingredientsText.includes('сливк') || ingredientsText.includes('сыр')) allergens.push('milk');
+  if (ingredientsText.includes('яйц')) allergens.push('eggs');
+  if (ingredientsText.includes('мук') || ingredientsText.includes('пшениц')) allergens.push('gluten');
+  if (ingredientsText.includes('арахис')) allergens.push('peanuts');
+  if (ingredientsText.includes('орех')) allergens.push('tree_nuts');
+  if (ingredientsText.includes('рыб')) allergens.push('fish');
   
   return allergens;
 }
 
-// Определение единицы измерения
 function getUnitForIngredient(name) {
   const lower = name.toLowerCase();
   if (lower.includes('яйцо') || lower.includes('банан') || lower.includes('помидор') || 
       lower.includes('лук') || lower.includes('морков') || lower.includes('картош') ||
-      lower.includes('кабачок') || lower.includes('лимон') || lower.includes('огурец') ||
-      lower.includes('перец')) {
-    return 'шт';
-  }
-  if (lower.includes('зубчик') || lower.includes('чеснок')) return 'зуб.';
+      lower.includes('кабачок')) return 'шт';
+  if (lower.includes('зубчик')) return 'зуб.';
   if (lower.includes('щепотк')) return 'щепотка';
-  if (lower.includes('столовая ложка') || lower.includes('ст.л')) return 'ст.л.';
-  if (lower.includes('чайная ложка') || lower.includes('ч.л')) return 'ч.л.';
   return 'г';
 }
 
@@ -462,12 +436,11 @@ function formatIngredients(ingredients) {
     let name, quantity, unit;
     
     if (typeof it === 'string') {
-      // Парсим строку вида "40 г овсяных хлопьев"
-      const match = it.match(/^(\d+(?:\.\d+)?)\s*(.*?)$/);
+      const match = it.match(/^(\d+(?:\.\d+)?)\s*(.+)$/);
       if (match) {
         quantity = match[1];
         const rest = match[2].trim();
-        const unitMatch = rest.match(/^(г|мл|шт|ст\.л|ч\.л|зуб\.|щепотка)\s+(.+)$/);
+        const unitMatch = rest.match(/^(г|мл|шт|зуб\.|щепотка)\s+(.+)$/);
         if (unitMatch) {
           unit = unitMatch[1];
           name = unitMatch[2];
@@ -487,8 +460,7 @@ function formatIngredients(ingredients) {
     }
     
     const nameFormatted = name.charAt(0).toUpperCase() + name.slice(1);
-    const qtyDisplay = quantity ? quantity : '';
-    return `<li>${nameFormatted} — ${qtyDisplay} ${unit}</li>`;
+    return `<li>${nameFormatted} — ${quantity} ${unit}</li>`;
   });
   
   return `<div class="section-title">📝 Ингредиенты</div><ul class="plain-list">${items.join('')}</ul>`;
@@ -496,29 +468,9 @@ function formatIngredients(ingredients) {
 
 function scaleIngredients(ingredients, fromServings, toServings) {
   const ratio = toServings / fromServings;
-  
   return ingredients.map(it => {
-    if (typeof it === 'object' && it.quantity != null) {
-      let newQty = it.quantity;
-      if (typeof it.quantity === 'number') {
-        newQty = Math.round(it.quantity * ratio * 10) / 10;
-      } else if (typeof it.quantity === 'string') {
-        const numMatch = it.quantity.match(/^(\d+(?:\.\d+)?)/);
-        if (numMatch) {
-          const num = parseFloat(numMatch[1]);
-          const newNum = Math.round(num * ratio * 10) / 10;
-          newQty = it.quantity.replace(/^(\d+(?:\.\d+)?)/, newNum.toString());
-        }
-      }
-      return { ...it, quantity: newQty };
-    } else if (typeof it === 'string') {
-      const match = it.match(/^(\d+(?:\.\d+)?)\s+(.+)$/);
-      if (match) {
-        const num = parseFloat(match[1]);
-        const newNum = Math.round(num * ratio * 10) / 10;
-        return `${newNum} ${match[2]}`;
-      }
-      return it;
+    if (typeof it === 'object' && typeof it.quantity === 'number') {
+      return { ...it, quantity: Math.round(it.quantity * ratio * 10) / 10 };
     }
     return it;
   });
@@ -593,7 +545,6 @@ function selectCategory(category) {
   
   let recipes = [...(allRecipes[category] || [])];
   
-  // Фильтрация по аллергенам
   if (selectedAllergens.length) {
     recipes = recipes.filter(r => {
       const alls = getRecipeAllergens(r);
@@ -603,8 +554,7 @@ function selectCategory(category) {
   
   if (!recipes.length) {
     document.getElementById('warning').textContent = selectedAllergens.length ? 
-      '⚠️ Нет рецептов без выбранных аллергенов в этой категории' : 
-      '⚠️ Нет рецептов в этой категории';
+      '⚠️ Нет рецептов без выбранных аллергенов' : '⚠️ Нет рецептов в этой категории';
     document.getElementById('warning').style.display = 'block';
     updateUI(null);
     return;
@@ -649,12 +599,7 @@ function toggleLike() {
   }
   
   localStorage.setItem('likedRecipes', JSON.stringify(likedRecipes));
-  
-  const isLiked = likedRecipes.some(r => r.title === currentRecipe.title && r.category === currentCategory);
-  const heartSpan = document.querySelector('#likeBtn span:first-child');
-  const textSpan = document.querySelector('#likeBtn span:last-child');
-  if (heartSpan) heartSpan.textContent = isLiked ? '💖' : '❤️';
-  if (textSpan) textSpan.textContent = isLiked ? 'В избранном ✓' : 'В избранное';
+  updateUI(currentRecipe);
 }
 
 function renderAllergensModal() {
@@ -680,31 +625,15 @@ function renderAllergensModal() {
 
 // Инициализация
 document.addEventListener('DOMContentLoaded', async () => {
-  // Загружаем рецепты из файла
   const loaded = await loadRecipesFromFile();
-  
-  if (!loaded) {
-    console.error('Не удалось загрузить recipes.json');
-    return;
-  }
+  if (!loaded) return;
   
   renderAllergensModal();
   
-  // Обработчики событий
   document.getElementById('mainBtn').onclick = () => document.getElementById('modal').style.display = 'flex';
   document.querySelector('.close-modal').onclick = () => document.getElementById('modal').style.display = 'none';
   document.getElementById('refreshBtn').onclick = refreshRecipe;
   document.getElementById('likeBtn').onclick = toggleLike;
-  document.getElementById('cabinetBtn').onclick = () => {
-    if (likedRecipes.length === 0) {
-      alert('📋 Избранное пусто\n\nДобавляйте рецепты, нажимая ❤️');
-    } else {
-      alert(`📋 Ваши избранные рецепты (${likedRecipes.length}):\n\n${likedRecipes.map((r, i) => `${i+1}. ${r.title}`).join('\n')}`);
-    }
-  };
-  
-  document.getElementById('menuBtn').onclick = () => alert('📅 Функция "Меню на неделю" будет доступна в следующей версии');
-  document.getElementById('ingredientsBtn').onclick = () => alert('🔍 Функция "Поиск по ингредиентам" будет доступна в следующей версии');
   
   document.getElementById('allergensBtn').onclick = () => document.getElementById('allergensModal').style.display = 'flex';
   document.getElementById('allergensSaveBtn').onclick = () => {
@@ -730,7 +659,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.onclick = () => selectCategory(btn.dataset.category);
   });
   
-  // Управление порциями
   document.getElementById('servingsMinus').onclick = () => {
     if (currentRecipe && currentServings > 1) {
       currentServings--;
