@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.22.1/dist/pocketbase.umd.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -392,10 +391,7 @@
 
 <script>
   // ---------- КОНФИГУРАЦИЯ ----------
-  // PocketBase для загрузки данных (только чтение, без авторизации)
-  const PB_URL = 'https://gotofka.ru';
-  const pb = new PocketBase(PB_URL);
-
+  // Все данные загружаются локально из статических файлов (PocketBase не используется)
   const INGREDIENTS_BY_CATEGORY = {
     "🥩 Мясо и птица": ["курица", "говядина", "свинина", "фарш_смешанный", "ветчина", "колбаса", "сосиски", "бекон"],
     "🐟 Рыба и морепродукты": ["рыба_белая", "креветки", "кальмары", "крабовые_палочки", "Морской_коктейль"],
@@ -466,17 +462,22 @@
     if (Object.keys(ingredientsDB).length) return;
     try {
       const res = await fetch('data/ingredients.json');
+      if (!res.ok) throw new Error('ingredients.json not found');
       const data = await res.json();
       data.ingredients?.forEach(ing => {
         ingredientsDB[ing.id] = { name: ing.name || ing.id.replace(/_/g, ' '), unit: ing.unit || '' };
       });
-    } catch (e) { console.warn('Ошибка загрузки ingredients.json:', e); }
+    } catch (e) { 
+      console.warn('Ошибка загрузки ingredients.json, используем fallback:', e);
+      // Fallback пустой, но рецепты всё равно будут работать с id
+    }
   }
 
   async function loadAllRecipes() {
     if (allRecipesCache) return allRecipesCache;
     try {
-      const promises = ['breakfast', 'lunch', 'dinner', 'soups', 'dessert'].map(cat =>
+      const categories = ['breakfast', 'lunch', 'dinner', 'soups', 'dessert'];
+      const promises = categories.map(cat =>
         fetch(`recipes/${cat}.json`).then(r => r.ok ? r.json() : []).catch(() => [])
       );
       const results = await Promise.all(promises);
@@ -488,7 +489,7 @@
     }
   }
 
-  // ----- Отрисовка списка продуктов -----
+  // ----- Отрисовка списка продуктов: ВСЕ КАТЕГОРИИ ЗАКРЫТЫ ИЗНАЧАЛЬНО -----
   function renderIngredients() {
     ingredientsListEl.innerHTML = '';
     Object.entries(INGREDIENTS_BY_CATEGORY).forEach(([category, items]) => {
@@ -499,7 +500,7 @@
       header.className = 'category-header';
       header.innerHTML = `<span>${category}</span><span class="icon">▼</span>`;
       const content = document.createElement('div');
-      content.className = 'category-content';
+      content.className = 'category-content'; // без класса open — все закрыты
       const grid = document.createElement('div');
       grid.className = 'ingredients-grid';
       items.forEach(name => {
@@ -522,24 +523,21 @@
       content.appendChild(grid);
       categoryDiv.append(header, content);
       ingredientsListEl.appendChild(categoryDiv);
+      
+      // Обработчик клика по заголовку: открывает/закрывает текущую категорию, НЕ трогает другие
       header.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = content.classList.contains('open');
-        document.querySelectorAll('.category-content').forEach(c => c.classList.remove('open'));
-        document.querySelectorAll('.category-header').forEach(h => h.classList.remove('open'));
-        if (!isOpen) {
+        if (isOpen) {
+          content.classList.remove('open');
+          header.classList.remove('open');
+        } else {
           content.classList.add('open');
           header.classList.add('open');
         }
       });
     });
-    // Открываем первую категорию
-    const firstHeader = document.querySelector('.category-header');
-    const firstContent = document.querySelector('.category-content');
-    if (firstHeader && firstContent && !firstContent.classList.contains('open')) {
-      firstContent.classList.add('open');
-      firstHeader.classList.add('open');
-    }
+    // Важно: не открываем никакую категорию по умолчанию! Никакого firstContent.classList.add('open')
   }
 
   function renderRecipe(recipeData, index) {
@@ -554,7 +552,7 @@
       <div class="recipe-card" data-index="${index}">
         <div class="status-pill ${statusClass}">${statusText}</div>
         ${photo ? `<img src="${photo}" class="recipe-photo" loading="lazy" onerror="this.style.display='none'">` : ''}
-        <div class="recipe-title">${recipe.title || 'Домашнее блюдо'}</div>
+        <div class="recipe-title">${escapeHtml(recipe.title || 'Домашнее блюдо')}</div>
         <div class="recipe-meta">${[timeStr, catName].filter(Boolean).join(' • ')}</div>
         <div class="recipe-section-title">📋 Ингредиенты:</div>
         <ul class="plain-list">
@@ -562,12 +560,25 @@
             const displayName = ingredientsDB[i.ingredientId]?.name || i.ingredientId?.replace(/_/g, ' ') || '?';
             const qty = i.quantity != null ? i.quantity : '—';
             const unit = i.unit ? ` ${i.unit}` : '';
-            return `<li>${displayName} — ${qty}${unit}</li>`;
+            return `<li>${escapeHtml(displayName)} — ${escapeHtml(qty)}${escapeHtml(unit)}</li>`;
           }).join('')}
         </ul>
         <div class="recipe-section-title">👨‍🍳 Приготовление:</div>
-        <ol class="plain-list">${(recipe.steps || []).map(s => `<li>${s}</li>`).join('')}</ol>
+        <ol class="plain-list">${(recipe.steps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ol>
       </div>`;
+  }
+  
+  // Простая защита от XSS
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
   }
 
   function updateCarousel() {
@@ -588,6 +599,11 @@
     try {
       await loadIngredientsDB();
       const all = await loadAllRecipes();
+      if (!all.length) {
+        noResultsMsg.style.display = 'block';
+        noResultsMsg.textContent = '❌ Нет данных о рецептах. Убедитесь, что файлы рецептов загружены.';
+        return;
+      }
       const scored = all.map(r => calculateRecipeScore(r, selected))
         .filter(r => r.score >= 30)
         .sort((a, b) => b.score - a.score);
@@ -604,6 +620,7 @@
     } catch (err) {
       console.error(err);
       noResultsMsg.style.display = 'block';
+      noResultsMsg.textContent = '⚠️ Ошибка при загрузке рецептов. Проверьте соединение или наличие файлов.';
     } finally {
       loader.style.display = 'none';
     }
@@ -613,11 +630,13 @@
   findRecipesBtn.onclick = showMatchingRecipes;
   clearBtn.onclick = () => {
     selected.clear();
-    document.querySelectorAll('#ingredientsList input').forEach(cb => cb.checked = false);
+    // Сбрасываем все чекбоксы в интерфейсе
+    document.querySelectorAll('#ingredientsList input[type="checkbox"]').forEach(cb => cb.checked = false);
     findRecipesBtn.disabled = true;
     recipesContainer.innerHTML = '';
     recipeCarousel.style.display = 'none';
     noResultsMsg.style.display = 'none';
+    noResultsMsg.textContent = '😔 Ничего не нашлось... попробуйте добавить ещё продукты';
     matchedRecipes = [];
     currentRecipeIndex = 0;
   };
@@ -634,8 +653,15 @@
     }
   };
 
-  // ----- Запуск -----
+  // ----- Инициализация: все категории закрыты, никаких подписок -----
   renderIngredients();
+  
+  // Дополнительная проверка: если какие-то категории вдруг получили open из-за бага — принудительно закроем
+  // Через микросекунду убедимся, что ни одна не открыта
+  setTimeout(() => {
+    document.querySelectorAll('.category-content').forEach(c => c.classList.remove('open'));
+    document.querySelectorAll('.category-header').forEach(h => h.classList.remove('open'));
+  }, 0);
 </script>
 </body>
 </html>
