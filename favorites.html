@@ -27,7 +27,6 @@
       margin: 0 auto;
     }
 
-    /* Карточка */
     .favorites-card {
       background: #ffffff;
       border-radius: 32px;
@@ -35,7 +34,6 @@
       overflow: hidden;
     }
 
-    /* Шапка */
     .favorites-header {
       background: linear-gradient(135deg, #e67e22, #f39c12);
       padding: 32px 28px 40px 28px;
@@ -74,7 +72,6 @@
       color: rgba(255, 255, 255, 0.85);
     }
 
-    /* Счетчик */
     .counter-section {
       padding: 20px 28px 0 28px;
       display: flex;
@@ -120,7 +117,6 @@
       border-color: #f5c6cb;
     }
 
-    /* Сетка рецептов */
     .recipes-grid {
       padding: 24px 28px 28px 28px;
       display: flex;
@@ -128,7 +124,6 @@
       gap: 20px;
     }
 
-    /* Карточка рецепта */
     .recipe-card {
       background: white;
       border-radius: 24px;
@@ -256,7 +251,6 @@
       border-color: #f5c6cb;
     }
 
-    /* Пустое состояние */
     .empty-state {
       text-align: center;
       padding: 60px 28px;
@@ -283,7 +277,6 @@
       display: inline-flex;
     }
 
-    /* Футер */
     .footer-note {
       padding: 20px 28px 28px 28px;
       text-align: center;
@@ -302,7 +295,6 @@
       text-decoration: none;
     }
 
-    /* Модальное окно подтверждения */
     .modal {
       display: none;
       position: fixed;
@@ -364,7 +356,6 @@
 <body>
 <div class="app-container">
   <div class="favorites-card">
-    <!-- Шапка -->
     <div class="favorites-header">
       <a href="profile.html" class="back-btn">
         <i class="fas fa-arrow-left"></i> Назад
@@ -373,7 +364,6 @@
       <div class="sub">Ваши любимые рецепты всегда под рукой</div>
     </div>
 
-    <!-- Счетчик и кнопка очистки -->
     <div class="counter-section">
       <div class="counter-badge" id="counterBadge">
         <i class="fas fa-heart"></i>
@@ -384,10 +374,8 @@
       </button>
     </div>
 
-    <!-- Сетка рецептов -->
     <div id="recipesGrid" class="recipes-grid"></div>
 
-    <!-- Футер -->
     <div class="footer-note">
       <span><i class="fas fa-database"></i> Избранное сохраняется в вашем браузере</span>
       <a href="profile.html"><i class="fas fa-user"></i> Вернуться в личный кабинет</a>
@@ -395,7 +383,6 @@
   </div>
 </div>
 
-<!-- Модальное окно подтверждения -->
 <div id="modal" class="modal">
   <div class="modal-content">
     <i class="fas fa-question-circle"></i>
@@ -409,11 +396,9 @@
 </div>
 
 <script>
-  // Данные избранных рецептов
   let favorites = [];
-  let pendingAction = null; // Для хранения ID рецепта, который удаляем
   
-  // Пример рецептов (демо-данные)
+  // Демо-рецепты (для добавления через другие страницы)
   const demoRecipes = {
     '1': {
       id: '1',
@@ -457,41 +442,32 @@
     }
   };
   
-  // Загрузка избранного из localStorage
   function loadFavorites() {
     const saved = localStorage.getItem('gotofka_favorites');
     if (saved) {
       try {
         favorites = JSON.parse(saved);
-      } catch(e) { favorites = []; }
-    }
-    // Если избранное пустое, добавляем демо-рецепт для примера
-    if (favorites.length === 0) {
-      favorites = ['1']; // Пекинская капуста в избранном
+      } catch(e) { 
+        favorites = []; 
+      }
+    } else {
+      // Изначально избранное пустое — никаких демо-рецептов!
+      favorites = [];
       saveFavorites();
     }
     renderFavorites();
   }
   
-  // Сохранение избранного
   function saveFavorites() {
     localStorage.setItem('gotofka_favorites', JSON.stringify(favorites));
     updateCounter();
   }
   
-  // Обновление счетчика
   function updateCounter() {
     const count = favorites.length;
     document.getElementById('favoritesCount').textContent = count;
-    const counterBadge = document.getElementById('counterBadge');
-    if (count === 0) {
-      counterBadge.style.opacity = '0.6';
-    } else {
-      counterBadge.style.opacity = '1';
-    }
   }
   
-  // Отображение карточек рецептов
   function renderFavorites() {
     const grid = document.getElementById('recipesGrid');
     
@@ -539,7 +515,6 @@
       `;
     }).join('');
     
-    // Добавляем обработчики на кнопки
     document.querySelectorAll('.view-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -557,32 +532,25 @@
     });
   }
   
-  // Просмотр рецепта
   function viewRecipe(id) {
     const recipe = demoRecipes[id];
     if (recipe) {
-      // Сохраняем выбранный рецепт для страницы просмотра
       localStorage.setItem('current_recipe', JSON.stringify(recipe));
       window.location.href = `recipe.html?id=${id}`;
     }
   }
   
-  // Удаление рецепта из избранного
   function removeFromFavorites(id) {
     favorites = favorites.filter(favId => favId !== id);
     saveFavorites();
     renderFavorites();
   }
   
-  // Очистка всего избранного
   function clearAllFavorites() {
     favorites = [];
     saveFavorites();
     renderFavorites();
   }
-  
-  // Показать модалку подтверждения удаления
-  let modalResolve = null;
   
   function showRemoveConfirm(id) {
     const modal = document.getElementById('modal');
@@ -591,7 +559,6 @@
     modalMessage.textContent = `Удалить "${recipe?.title || 'рецепт'}" из избранного?`;
     modal.style.display = 'flex';
     
-    // Обработчики
     const confirmBtn = document.getElementById('modalConfirm');
     const cancelBtn = document.getElementById('modalCancel');
     
@@ -644,7 +611,6 @@
     cancelBtn.addEventListener('click', cancelHandler);
   }
   
-  // Вспомогательная функция
   function escapeHtml(str) {
     if (!str) return '';
     return str.replace(/[&<>]/g, function(m) {
@@ -655,14 +621,12 @@
     });
   }
   
-  // Обработчики
   document.getElementById('clearAllBtn').addEventListener('click', () => {
     if (favorites.length > 0) {
       showClearAllConfirm();
     }
   });
   
-  // Закрытие модалки по клику вне
   window.addEventListener('click', (e) => {
     const modal = document.getElementById('modal');
     if (e.target === modal) {
@@ -670,7 +634,6 @@
     }
   });
   
-  // Инициализация
   loadFavorites();
 </script>
 </body>
