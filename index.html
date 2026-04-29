@@ -2,24 +2,25 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Генератор рецептов</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html, body {
-      height: 100%;
-      min-height: 100vh;
-    }
-
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: linear-gradient(135deg, #fdf8ed 0%, #fef3e2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* ОБЕРТКА ДЛЯ ЦЕНТРИРОВАНИЯ С ПРОКРУТКОЙ */
+    .page-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      min-height: calc(100vh - 40px);
     }
 
     .recipe-card {
@@ -29,13 +30,32 @@
       background: white;
       border-radius: 32px;
       box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: calc(100vh - 40px);
+    }
+
+    /* Стилизация скроллбара */
+    .recipe-card::-webkit-scrollbar {
+      width: 4px;
+    }
+    .recipe-card::-webkit-scrollbar-track {
+      background: #f0e4d4;
+      border-radius: 10px;
+    }
+    .recipe-card::-webkit-scrollbar-thumb {
+      background: #f5b042;
+      border-radius: 10px;
     }
 
     .header-row {
       display: flex;
       justify-content: flex-end;
       padding: 20px 24px 12px;
+      background: white;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
     .profile-icon {
       background: #f0e4d4;
@@ -53,7 +73,13 @@
     }
     .profile-icon:hover { background: #e8d8c4; }
 
-    .nav-bar { padding: 0 24px 12px; }
+    .nav-bar { 
+      padding: 0 24px 12px;
+      background: white;
+      position: sticky;
+      top: 68px;
+      z-index: 10;
+    }
     
     .random-btn {
       background: linear-gradient(105deg, #f5b042, #f59e0b);
@@ -157,7 +183,10 @@
       display: none;
     }
 
-    .content { padding: 24px; }
+    .content { 
+      padding: 24px;
+      padding-bottom: 32px;
+    }
 
     .category-badge {
       display: inline-block;
@@ -175,6 +204,7 @@
       font-weight: 700;
       color: #3e2c1a;
       margin-bottom: 20px;
+      line-height: 1.3;
     }
 
     .stats-row {
@@ -208,11 +238,11 @@
       padding-left: 14px;
     }
 
-    /* 🔥 ИНГРЕДИЕНТЫ — СПРАВА КОЛИЧЕСТВО, СЛЕВА НАЗВАНИЕ */
     .ingredients-grid {
       background: #fefcf8;
       border-radius: 24px;
       list-style: none;
+      margin-bottom: 8px;
     }
     .ingredients-grid li {
       padding: 12px 16px;
@@ -222,10 +252,14 @@
       align-items: baseline;
       gap: 16px;
     }
+    .ingredients-grid li:last-child {
+      border-bottom: none;
+    }
     .ingredient-name { 
       font-weight: 500;
       flex: 1;
       color: #2c2418;
+      font-size: 15px;
     }
     .ingredient-amount {
       color: #b45f2b;
@@ -333,47 +367,52 @@
     @media (max-width: 500px) {
       .content { padding: 20px; }
       .recipe-title { font-size: 24px; }
-      .ingredient-amount { white-space: normal; }
+      .ingredient-amount { 
+        white-space: normal;
+        text-align: right;
+      }
+      .steps-list li { padding: 12px 14px; }
     }
   </style>
 </head>
 <body>
-
-<div class="recipe-card">
-  <div class="header-row">
-    <a href="cabinet.html" class="profile-icon">👤 Кабинет</a>
-  </div>
-
-  <div class="nav-bar">
-    <button class="random-btn" id="randomBtn">🎲 Случайный рецепт</button>
-    <div class="menu-row">
-      <a href="menu.html" class="menu-link">📅 Меню на неделю</a>
-      <a href="ingredients.html" class="menu-link">🔍 По ингредиентам</a>
-    </div>
-    <button class="another-recipe" id="anotherRecipeBtn">🔄 Другой рецепт</button>
-  </div>
-
-  <div class="recipe-container" id="recipeContainer">
-    <div class="image-section" id="imageSection">
-      <div class="food-icon" id="defaultIcon">🍳✨</div>
-      <img class="recipe-photo" id="recipePhoto" alt="Фото блюда">
+<div class="page-wrapper">
+  <div class="recipe-card">
+    <div class="header-row">
+      <a href="cabinet.html" class="profile-icon">👤 Кабинет</a>
     </div>
 
-    <div class="content">
-      <div class="category-badge" id="categoryBadge"></div>
-      <h1 class="recipe-title" id="recipeTitle"></h1>
+    <div class="nav-bar">
+      <button class="random-btn" id="randomBtn">🎲 Случайный рецепт</button>
+      <div class="menu-row">
+        <a href="menu.html" class="menu-link">📅 Меню на неделю</a>
+        <a href="ingredients.html" class="menu-link">🔍 По ингредиентам</a>
+      </div>
+      <button class="another-recipe" id="anotherRecipeBtn">🔄 Другой рецепт</button>
+    </div>
 
-      <div class="stats-row">
-        <div class="stat-badge" id="timeBadge">⏱️ —</div>
-        <div class="stat-badge" id="caloriesBadge">🔥 —</div>
+    <div class="recipe-container" id="recipeContainer">
+      <div class="image-section" id="imageSection">
+        <div class="food-icon" id="defaultIcon">🍳✨</div>
+        <img class="recipe-photo" id="recipePhoto" alt="Фото блюда">
       </div>
 
-      <div id="ingredientsContainer"></div>
-      <div id="stepsContainer"></div>
-      <div id="noteContainer"></div>
+      <div class="content">
+        <div class="category-badge" id="categoryBadge"></div>
+        <h1 class="recipe-title" id="recipeTitle"></h1>
 
-      <hr>
-      <button class="like-button" id="likeBtn"><span>❤️</span> В избранное</button>
+        <div class="stats-row">
+          <div class="stat-badge" id="timeBadge">⏱️ —</div>
+          <div class="stat-badge" id="caloriesBadge">🔥 —</div>
+        </div>
+
+        <div id="ingredientsContainer"></div>
+        <div id="stepsContainer"></div>
+        <div id="noteContainer"></div>
+
+        <hr>
+        <button class="like-button" id="likeBtn"><span>❤️</span> В избранное</button>
+      </div>
     </div>
   </div>
 </div>
@@ -461,7 +500,21 @@ async function preloadAllImages() {
   await Promise.all(promises);
 }
 
-// 🔥 ФОРМАТИРОВАНИЕ ИНГРЕДИЕНТОВ — СПРАВА КОЛИЧЕСТВО, СЛЕВА НАЗВАНИЕ
+function getUnitForIngredient(name) {
+  const lower = name.toLowerCase();
+  if (lower.includes('яйцо') || lower.includes('банан') || lower.includes('помидор') || 
+      lower.includes('лук') || lower.includes('морков') || lower.includes('картош') ||
+      lower.includes('кабачок') || lower.includes('баклажан') || lower.includes('огурец') ||
+      lower.includes('перец') || lower.includes('лавровый лист')) return 'шт';
+  if (lower.includes('зубчик')) return 'зуб.';
+  if (lower.includes('щепотк')) return 'щепотка';
+  if (lower.includes('столовая') || lower.includes('ст.л')) return 'ст.л.';
+  if (lower.includes('чайная') || lower.includes('ч.л')) return 'ч.л.';
+  if (lower.includes('банка')) return 'банка';
+  if (lower.includes('стакан')) return 'стакан';
+  return 'г';
+}
+
 function formatIngredients(ingredients) {
   if (!ingredients?.length) return '';
   
@@ -473,7 +526,7 @@ function formatIngredients(ingredients) {
       if (match) {
         quantity = match[1];
         const rest = match[2].trim();
-        const unitMatch = rest.match(/^(г|мл|шт|ст\.л|ч\.л|зуб\.|щепотка|банка)\s+(.+)$/);
+        const unitMatch = rest.match(/^(г|мл|шт|ст\.л|ч\.л|зуб\.|щепотка|банка|стакан)\s+(.+)$/);
         if (unitMatch) {
           unit = unitMatch[1];
           name = unitMatch[2];
@@ -492,10 +545,8 @@ function formatIngredients(ingredients) {
       unit = it.unit || getUnitForIngredient(name);
     }
     
-    // Очищаем название от лишних пробелов и делаем первый символ заглавным
     const nameFormatted = name.trim().charAt(0).toUpperCase() + name.trim().slice(1);
     
-    // Формируем количество с единицей измерения
     let amountText = '';
     if (quantity && unit) {
       amountText = `${quantity} ${unit}`;
@@ -511,19 +562,6 @@ function formatIngredients(ingredients) {
   });
   
   return `<div class="section-title"><span>📋</span> Ингредиенты</div><ul class="ingredients-grid">${items.join('')}</ul>`;
-}
-
-function getUnitForIngredient(name) {
-  const lower = name.toLowerCase();
-  if (lower.includes('яйцо') || lower.includes('банан') || lower.includes('помидор') || 
-      lower.includes('лук') || lower.includes('морков') || lower.includes('картош') ||
-      lower.includes('кабачок') || lower.includes('баклажан')) return 'шт';
-  if (lower.includes('зубчик')) return 'зуб.';
-  if (lower.includes('щепотк')) return 'щепотка';
-  if (lower.includes('столовая') || lower.includes('ст.л')) return 'ст.л.';
-  if (lower.includes('чайная') || lower.includes('ч.л')) return 'ч.л.';
-  if (lower.includes('банка')) return 'банка';
-  return 'г';
 }
 
 function formatSteps(steps) {
@@ -542,7 +580,6 @@ function formatSteps(steps) {
   return `<div class="section-title"><span>👩‍🍳</span> Приготовление</div><ul class="steps-list" id="stepsList">${items}</ul>`;
 }
 
-// ==================== ОТОБРАЖЕНИЕ РЕЦЕПТА ====================
 function displayRecipe(recipe, category) {
   if (!recipe) return;
   
