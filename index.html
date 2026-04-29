@@ -97,9 +97,9 @@
       gap: 10px;
     }
     .random-btn:active { transform: scale(0.97); }
-    .random-btn:disabled {
+    .random-btn.loading {
       opacity: 0.6;
-      cursor: not-allowed;
+      cursor: wait;
     }
 
     .menu-row {
@@ -427,9 +427,10 @@
 
 <script>
 // ==================== ГЛОБАЛЬНЫЕ ДАННЫЕ ====================
-let allRecipes = [];        // Массив всех рецептов из вашего JSON
+let allRecipes = [];
 let currentRecipe = null;
 let likedRecipes = JSON.parse(localStorage.getItem('likedRecipes') || '[]');
+let isLoading = true;
 
 // ==================== ЗАГРУЗКА ИЗ ВАШЕГО JSON ====================
 async function loadRecipesFromFile() {
@@ -438,7 +439,7 @@ async function loadRecipesFromFile() {
   const randomBtn = document.getElementById('randomBtn');
   
   if (loader) loader.style.display = 'block';
-  if (randomBtn) randomBtn.disabled = true;
+  if (randomBtn) randomBtn.classList.add('loading');
   
   try {
     const response = await fetch(`recipes.json?t=${Date.now()}`);
@@ -449,7 +450,6 @@ async function loadRecipesFromFile() {
     
     const data = await response.json();
     
-    // Проверяем, что данные - массив
     if (!Array.isArray(data)) {
       throw new Error('recipes.json должен содержать массив рецептов');
     }
@@ -461,10 +461,13 @@ async function loadRecipesFromFile() {
     allRecipes = data;
     
     console.log('✅ Загружено рецептов:', allRecipes.length);
-    console.log('Пример рецепта:', allRecipes[0]);
     
     if (loader) loader.style.display = 'none';
-    if (randomBtn) randomBtn.disabled = false;
+    if (randomBtn) {
+      randomBtn.classList.remove('loading');
+      randomBtn.disabled = false;
+    }
+    isLoading = false;
     return true;
     
   } catch (err) {
@@ -475,15 +478,17 @@ async function loadRecipesFromFile() {
         <strong>Что делать:</strong><br>
         1. Убедитесь, что файл <strong>recipes.json</strong> существует<br>
         2. Файл должен лежать в <strong>той же папке</strong>, что и index.html<br>
-        3. Структура: массив рецептов с полями:<br>
-        &nbsp;&nbsp;- id, title, photo, servings, time, calories<br>
-        &nbsp;&nbsp;- ingredients (массив объектов с ingredientId, quantity, unit)<br>
-        &nbsp;&nbsp;- steps (массив строк)
+        3. Проверьте структуру JSON<br>
+        <br>
+        <button onclick="location.reload()" style="margin-top:10px; padding:8px 16px; background:#f5b042; border:none; border-radius:20px; cursor:pointer;">⟳ Обновить страницу</button>
       `;
       errorDiv.style.display = 'block';
     }
     if (loader) loader.style.display = 'none';
-    if (randomBtn) randomBtn.disabled = true;
+    if (randomBtn) {
+      randomBtn.classList.remove('loading');
+    }
+    isLoading = false;
     return false;
   }
 }
@@ -509,19 +514,16 @@ function formatIngredients(ingredients, servings = 2, originalServings = 2) {
   const ratio = servings / originalServings;
   
   const items = ingredients.map(ing => {
-    const name = ing.ingredientId || 'Ингредиент';
+    let name = ing.ingredientId || 'Ингредиент';
     let quantity = ing.quantity || 0;
     
-    // Масштабируем количество
     if (typeof quantity === 'number') {
       quantity = Math.round(quantity * ratio * 10) / 10;
     }
     
     const unit = getUnitText(ing.unit);
     
-    const nameFormatted = name.charAt(0).toUpperCase() + name.slice(1);
     let amountText = '';
-    
     if (quantity && unit) {
       amountText = `${quantity} ${unit}`;
     } else if (quantity) {
@@ -532,7 +534,7 @@ function formatIngredients(ingredients, servings = 2, originalServings = 2) {
       amountText = 'по вкусу';
     }
     
-    return `<li><span class="ingredient-name">${nameFormatted}</span><span class="ingredient-amount">${amountText}</span></li>`;
+    return `<li><span class="ingredient-name">${name}</span><span class="ingredient-amount">${amountText}</span></li>`;
   });
   
   return `<div class="section-title"><span>📋</span> Ингредиенты</div><ul class="ingredients-grid">${items.join('')}</ul>`;
@@ -564,14 +566,11 @@ function displayRecipe(recipe) {
   const anotherBtn = document.getElementById('anotherRecipeBtn');
   anotherBtn.classList.add('visible');
   
-  // Определяем категорию для отображения (если есть поле category, иначе "РЕЦЕПТ")
-  const categoryText = recipe.category ? recipe.category.toUpperCase() : '🍽️ РЕЦЕПТ';
-  document.getElementById('categoryBadge').textContent = categoryText;
+  document.getElementById('categoryBadge').textContent = '🍽️ РЕЦЕПТ';
   document.getElementById('recipeTitle').textContent = recipe.title;
   document.getElementById('timeBadge').innerHTML = recipe.time ? `⏱️ ${recipe.time}` : '⏱️ —';
   document.getElementById('caloriesBadge').innerHTML = recipe.calories ? `🔥 ${recipe.calories} ккал` : '🔥 —';
   
-  // Фото
   const photoEl = document.getElementById('recipePhoto');
   const defaultIcon = document.getElementById('defaultIcon');
   
@@ -636,8 +635,18 @@ function updateLikeButton(recipe) {
 
 // ==================== ВЫБОР СЛУЧАЙНОГО РЕЦЕПТА ====================
 function selectRandomRecipe() {
+  if (isLoading) {
+    const warning = document.getElementById('warning');
+    warning.textContent = '⏳ Рецепты ещё загружаются, подождите секунду...';
+    warning.style.display = 'block';
+    setTimeout(() => {
+      warning.style.display = 'none';
+    }, 2000);
+    return;
+  }
+  
   if (!allRecipes.length) {
-    document.getElementById('warning').textContent = 'Рецепты ещё не загружены';
+    document.getElementById('warning').textContent = 'Нет загруженных рецептов';
     document.getElementById('warning').style.display = 'block';
     return;
   }
@@ -684,26 +693,21 @@ function toggleLike() {
   updateLikeButton(currentRecipe);
 }
 
-// ==================== МОДАЛЬНОЕ ОКНО ====================
-function showInfoModal() {
-  if (!allRecipes.length) {
-    alert('Рецепты ещё загружаются. Подождите немного...');
-    return;
-  }
-  
-  alert(`🍽️ Всего рецептов: ${allRecipes.length}\n\nНажмите "ОК" для случайного рецепта`);
-  selectRandomRecipe();
-}
-
 // ==================== ЗАПУСК ====================
 document.addEventListener('DOMContentLoaded', async () => {
   const loaded = await loadRecipesFromFile();
   
   if (loaded) {
     console.log(`✅ Загружено ${allRecipes.length} рецептов`);
+    // Автоматически показываем первый рецепт для теста
+    if (allRecipes.length > 0) {
+      currentRecipe = allRecipes[0];
+      displayRecipe(currentRecipe);
+      document.getElementById('anotherRecipeBtn').classList.add('visible');
+    }
   }
   
-  document.getElementById('randomBtn').onclick = showInfoModal;
+  document.getElementById('randomBtn').onclick = selectRandomRecipe;
   document.getElementById('anotherRecipeBtn').onclick = refreshRecipe;
   document.getElementById('likeBtn').onclick = toggleLike;
 });
