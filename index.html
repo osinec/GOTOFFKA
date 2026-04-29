@@ -25,7 +25,6 @@
     .recipe-card {
       max-width: 560px;
       width: 100%;
-      margin: 0 auto;
       background: white;
       border-radius: 32px;
       box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
@@ -34,17 +33,9 @@
       max-height: calc(100vh - 40px);
     }
 
-    .recipe-card::-webkit-scrollbar {
-      width: 4px;
-    }
-    .recipe-card::-webkit-scrollbar-track {
-      background: #f0e4d4;
-      border-radius: 10px;
-    }
-    .recipe-card::-webkit-scrollbar-thumb {
-      background: #f5b042;
-      border-radius: 10px;
-    }
+    .recipe-card::-webkit-scrollbar { width: 4px; }
+    .recipe-card::-webkit-scrollbar-track { background: #f0e4d4; border-radius: 10px; }
+    .recipe-card::-webkit-scrollbar-thumb { background: #f5b042; border-radius: 10px; }
 
     .header-row {
       display: flex;
@@ -97,10 +88,6 @@
       gap: 10px;
     }
     .random-btn:active { transform: scale(0.97); }
-    .random-btn.loading {
-      opacity: 0.6;
-      cursor: wait;
-    }
 
     .menu-row {
       display: flex;
@@ -180,10 +167,7 @@
       padding: 24px;
       text-align: center;
     }
-    
-    .food-icon.hidden {
-      display: none;
-    }
+    .food-icon.hidden { display: none; }
 
     .content { 
       padding: 24px;
@@ -254,9 +238,7 @@
       align-items: baseline;
       gap: 16px;
     }
-    .ingredients-grid li:last-child {
-      border-bottom: none;
-    }
+    .ingredients-grid li:last-child { border-bottom: none; }
     .ingredient-name { 
       font-weight: 500;
       flex: 1;
@@ -371,6 +353,51 @@
     .error { color: #dc2626; }
     .warning { color: #d97706; }
 
+    /* Модальное окно */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .modal.visible { display: flex; }
+    .modal-box {
+      background: white;
+      border-radius: 32px;
+      max-width: 340px;
+      width: 90%;
+      padding: 24px;
+    }
+    .modal-choice {
+      display: block;
+      width: 100%;
+      background: #fef9f0;
+      border: 1px solid #ffe1b9;
+      padding: 12px;
+      border-radius: 20px;
+      margin: 8px 0;
+      text-align: left;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: #b45f2b;
+    }
+    .modal-choice:hover { background: #fff0e2; }
+    .modal-close {
+      margin-top: 12px;
+      background: none;
+      border: none;
+      font-size: 12px;
+      width: 100%;
+      text-align: center;
+      color: #aaa;
+      cursor: pointer;
+    }
+
     @media (max-width: 500px) {
       .content { padding: 20px; }
       .recipe-title { font-size: 24px; }
@@ -396,14 +423,14 @@
     </div>
 
     <div class="recipe-container" id="recipeContainer">
-      <div class="image-section" id="imageSection">
+      <div class="image-section">
         <div class="food-icon" id="defaultIcon">🍳✨</div>
         <img class="recipe-photo" id="recipePhoto" alt="Фото блюда">
       </div>
 
       <div class="content">
-        <div class="category-badge" id="categoryBadge"></div>
-        <h1 class="recipe-title" id="recipeTitle"></h1>
+        <div class="category-badge" id="categoryBadge">🍽️ РЕЦЕПТ</div>
+        <h1 class="recipe-title" id="recipeTitle">Выберите категорию</h1>
 
         <div class="stats-row">
           <div class="stat-badge" id="timeBadge">⏱️ —</div>
@@ -425,21 +452,81 @@
 <div class="error" id="error"></div>
 <div class="warning" id="warning"></div>
 
+<!-- Модальное окно выбора категории -->
+<div class="modal" id="categoryModal">
+  <div class="modal-box">
+    <h3 style="margin-bottom: 16px;">🍽️ Категория</h3>
+    <button class="modal-choice" data-cat="breakfast">🌅 Завтрак</button>
+    <button class="modal-choice" data-cat="lunch">☀️ Обед</button>
+    <button class="modal-choice" data-cat="dinner">🌙 Ужин</button>
+    <button class="modal-choice" data-cat="soups">🍲 Супы</button>
+    <button class="modal-choice" data-cat="dessert">🍰 Десерт</button>
+    <button class="modal-close" id="modalCloseBtn">Закрыть</button>
+  </div>
+</div>
+
 <script>
 // ==================== ГЛОБАЛЬНЫЕ ДАННЫЕ ====================
 let allRecipes = [];
+let currentCategory = null;
 let currentRecipe = null;
 let likedRecipes = JSON.parse(localStorage.getItem('likedRecipes') || '[]');
-let isLoading = true;
 
-// ==================== ЗАГРУЗКА ИЗ ВАШЕГО JSON ====================
-async function loadRecipesFromFile() {
+// КАТЕГОРИИ (можно редактировать под свои рецепты)
+// Здесь можно вручную распределить рецепты по категориям на основе id или title
+const recipeCategories = {
+  // Пример: "каша_рисовая": "breakfast",
+  // "борщ": "soups",
+  // "оладьи": "breakfast",
+  // "паста": "lunch"
+};
+
+function getRecipeCategory(recipe) {
+  // Если есть явное поле category
+  if (recipe.category) return recipe.category;
+  // Если задано вручную в recipeCategories
+  if (recipeCategories[recipe.id]) return recipeCategories[recipe.id];
+  if (recipeCategories[recipe.title]) return recipeCategories[recipe.title];
+  // По умолчанию - все рецепты в "lunch" (можно изменить)
+  return "lunch";
+}
+
+// Группировка рецептов по категориям
+function groupRecipesByCategory() {
+  const grouped = {
+    breakfast: [],
+    lunch: [],
+    dinner: [],
+    soups: [],
+    dessert: []
+  };
+  
+  allRecipes.forEach(recipe => {
+    const cat = getRecipeCategory(recipe);
+    if (grouped[cat]) {
+      grouped[cat].push(recipe);
+    } else {
+      grouped.lunch.push(recipe);
+    }
+  });
+  
+  return grouped;
+}
+
+const categoryNames = {
+  breakfast: '🌅 ЗАВТРАК',
+  lunch: '☀️ ОБЕД',
+  dinner: '🌙 УЖИН',
+  soups: '🍲 СУПЫ',
+  dessert: '🍰 ДЕСЕРТЫ'
+};
+
+// ==================== ЗАГРУЗКА ИЗ JSON ====================
+async function loadRecipes() {
   const loader = document.getElementById('loader');
   const errorDiv = document.getElementById('error');
-  const randomBtn = document.getElementById('randomBtn');
   
-  if (loader) loader.style.display = 'block';
-  if (randomBtn) randomBtn.classList.add('loading');
+  loader.style.display = 'block';
   
   try {
     const response = await fetch(`recipes.json?t=${Date.now()}`);
@@ -462,66 +549,34 @@ async function loadRecipesFromFile() {
     
     console.log('✅ Загружено рецептов:', allRecipes.length);
     
-    if (loader) loader.style.display = 'none';
-    if (randomBtn) {
-      randomBtn.classList.remove('loading');
-      randomBtn.disabled = false;
-    }
-    isLoading = false;
+    loader.style.display = 'none';
     return true;
     
   } catch (err) {
     console.error('Ошибка загрузки:', err);
-    if (errorDiv) {
-      errorDiv.innerHTML = `
-        ❌ Ошибка: ${err.message}<br><br>
-        <strong>Что делать:</strong><br>
-        1. Убедитесь, что файл <strong>recipes.json</strong> существует<br>
-        2. Файл должен лежать в <strong>той же папке</strong>, что и index.html<br>
-        3. Проверьте структуру JSON<br>
-        <br>
-        <button onclick="location.reload()" style="margin-top:10px; padding:8px 16px; background:#f5b042; border:none; border-radius:20px; cursor:pointer;">⟳ Обновить страницу</button>
-      `;
-      errorDiv.style.display = 'block';
-    }
-    if (loader) loader.style.display = 'none';
-    if (randomBtn) {
-      randomBtn.classList.remove('loading');
-    }
-    isLoading = false;
+    errorDiv.innerHTML = `
+      ❌ Ошибка: ${err.message}<br><br>
+      <strong>Что делать:</strong><br>
+      1. Убедитесь, что файл <strong>recipes.json</strong> существует<br>
+      2. Файл должен лежать в <strong>той же папке</strong>, что и index.html<br>
+      3. Структура: массив рецептов с полями id, title, ingredients, steps<br>
+      <br>
+      <button onclick="location.reload()" style="margin-top:10px; padding:8px 16px; background:#f5b042; border:none; border-radius:20px; cursor:pointer;">⟳ Обновить</button>
+    `;
+    errorDiv.style.display = 'block';
+    loader.style.display = 'none';
     return false;
   }
 }
 
 // ==================== ФОРМАТИРОВАНИЕ ====================
-function getUnitText(unit) {
-  const units = {
-    'мл': 'мл',
-    'г': 'г',
-    'кг': 'кг',
-    'шт': 'шт',
-    'ст.л': 'ст.л',
-    'ч.л': 'ч.л',
-    'зуб': 'зуб.',
-    'щепотка': 'щепотка'
-  };
-  return units[unit] || unit || '';
-}
-
-function formatIngredients(ingredients, servings = 2, originalServings = 2) {
-  if (!ingredients?.length) return '';
-  
-  const ratio = servings / originalServings;
+function formatIngredients(ingredients) {
+  if (!ingredients?.length) return '<div class="section-title"><span>📋</span> Ингредиенты</div><p>Нет данных</p>';
   
   const items = ingredients.map(ing => {
-    let name = ing.ingredientId || 'Ингредиент';
-    let quantity = ing.quantity || 0;
-    
-    if (typeof quantity === 'number') {
-      quantity = Math.round(quantity * ratio * 10) / 10;
-    }
-    
-    const unit = getUnitText(ing.unit);
+    const name = ing.ingredientId || 'Ингредиент';
+    let quantity = ing.quantity || '';
+    const unit = ing.unit || '';
     
     let amountText = '';
     if (quantity && unit) {
@@ -541,7 +596,7 @@ function formatIngredients(ingredients, servings = 2, originalServings = 2) {
 }
 
 function formatSteps(steps) {
-  if (!steps?.length) return '';
+  if (!steps?.length) return '<div class="section-title"><span>👩‍🍳</span> Приготовление</div><p>Нет данных</p>';
   
   const stepIcons = ['🍯', '✨', '🥣', '🍪', '📄', '🔥', '🍵', '🧂', '🍽️', '⭐'];
   
@@ -557,16 +612,19 @@ function formatSteps(steps) {
 }
 
 // ==================== ОТОБРАЖЕНИЕ РЕЦЕПТА ====================
-function displayRecipe(recipe) {
-  if (!recipe) return;
+function displayRecipe(recipe, category) {
+  if (!recipe) {
+    console.error('Нет рецепта для отображения');
+    return;
+  }
+  
+  console.log('Отображаем рецепт:', recipe.title, 'категория:', category);
   
   const container = document.getElementById('recipeContainer');
   container.classList.add('visible');
   
-  const anotherBtn = document.getElementById('anotherRecipeBtn');
-  anotherBtn.classList.add('visible');
-  
-  document.getElementById('categoryBadge').textContent = '🍽️ РЕЦЕПТ';
+  const categoryText = categoryNames[category] || '🍽️ РЕЦЕПТ';
+  document.getElementById('categoryBadge').textContent = categoryText;
   document.getElementById('recipeTitle').textContent = recipe.title;
   document.getElementById('timeBadge').innerHTML = recipe.time ? `⏱️ ${recipe.time}` : '⏱️ —';
   document.getElementById('caloriesBadge').innerHTML = recipe.calories ? `🔥 ${recipe.calories} ккал` : '🔥 —';
@@ -583,9 +641,7 @@ function displayRecipe(recipe) {
     defaultIcon.classList.remove('hidden');
   }
   
-  const servings = recipe.servings || 2;
-  
-  document.getElementById('ingredientsContainer').innerHTML = formatIngredients(recipe.ingredients, servings, servings);
+  document.getElementById('ingredientsContainer').innerHTML = formatIngredients(recipe.ingredients);
   document.getElementById('stepsContainer').innerHTML = formatSteps(recipe.steps);
   
   if (recipe.note) {
@@ -596,6 +652,9 @@ function displayRecipe(recipe) {
   
   updateLikeButton(recipe);
   attachStepHandlers();
+  
+  // Показываем кнопку "Другой рецепт"
+  document.getElementById('anotherRecipeBtn').classList.add('visible');
 }
 
 function attachStepHandlers() {
@@ -633,38 +692,67 @@ function updateLikeButton(recipe) {
   likeBtn.style.background = isLiked ? '#f0dbdb' : '#ffe8e8';
 }
 
-// ==================== ВЫБОР СЛУЧАЙНОГО РЕЦЕПТА ====================
-function selectRandomRecipe() {
-  if (isLoading) {
+// ==================== ВЫБОР КАТЕГОРИИ И СЛУЧАЙНОГО РЕЦЕПТА ====================
+function showCategoryModal() {
+  if (!allRecipes.length) {
     const warning = document.getElementById('warning');
-    warning.textContent = '⏳ Рецепты ещё загружаются, подождите секунду...';
+    warning.textContent = '❌ Рецепты не загружены. Подождите или обновите страницу.';
     warning.style.display = 'block';
     setTimeout(() => {
       warning.style.display = 'none';
-    }, 2000);
+    }, 3000);
     return;
   }
   
-  if (!allRecipes.length) {
-    document.getElementById('warning').textContent = 'Нет загруженных рецептов';
-    document.getElementById('warning').style.display = 'block';
+  document.getElementById('categoryModal').classList.add('visible');
+}
+
+function selectCategory(category) {
+  document.getElementById('categoryModal').classList.remove('visible');
+  currentCategory = category;
+  
+  const grouped = groupRecipesByCategory();
+  const recipesInCategory = grouped[category] || [];
+  
+  if (recipesInCategory.length === 0) {
+    const warning = document.getElementById('warning');
+    warning.textContent = `В категории "${categoryNames[category]}" нет рецептов. Добавьте их вручную в настройках.`;
+    warning.style.display = 'block';
+    setTimeout(() => {
+      warning.style.display = 'none';
+    }, 3000);
     return;
   }
   
-  document.getElementById('warning').style.display = 'none';
-  document.getElementById('error').style.display = 'none';
-  
-  const randomIndex = Math.floor(Math.random() * allRecipes.length);
-  currentRecipe = allRecipes[randomIndex];
-  displayRecipe(currentRecipe);
+  const randomIndex = Math.floor(Math.random() * recipesInCategory.length);
+  currentRecipe = recipesInCategory[randomIndex];
+  displayRecipe(currentRecipe, category);
 }
 
 function refreshRecipe() {
-  selectRandomRecipe();
+  if (!currentCategory) {
+    showCategoryModal();
+    return;
+  }
+  
+  const grouped = groupRecipesByCategory();
+  const recipesInCategory = grouped[currentCategory] || [];
+  
+  if (recipesInCategory.length === 0) {
+    showCategoryModal();
+    return;
+  }
+  
+  const randomIndex = Math.floor(Math.random() * recipesInCategory.length);
+  currentRecipe = recipesInCategory[randomIndex];
+  displayRecipe(currentRecipe, currentCategory);
 }
 
 function toggleLike() {
-  if (!currentRecipe) return;
+  if (!currentRecipe) {
+    console.log('Нет текущего рецепта для лайка');
+    return;
+  }
   
   const index = likedRecipes.findIndex(r => r.id === currentRecipe.id);
   if (index >= 0) {
@@ -695,21 +783,23 @@ function toggleLike() {
 
 // ==================== ЗАПУСК ====================
 document.addEventListener('DOMContentLoaded', async () => {
-  const loaded = await loadRecipesFromFile();
+  console.log('Страница загружена, загружаем рецепты...');
+  await loadRecipes();
   
-  if (loaded) {
-    console.log(`✅ Загружено ${allRecipes.length} рецептов`);
-    // Автоматически показываем первый рецепт для теста
-    if (allRecipes.length > 0) {
-      currentRecipe = allRecipes[0];
-      displayRecipe(currentRecipe);
-      document.getElementById('anotherRecipeBtn').classList.add('visible');
-    }
-  }
-  
-  document.getElementById('randomBtn').onclick = selectRandomRecipe;
+  // Назначаем обработчики
+  document.getElementById('randomBtn').onclick = showCategoryModal;
   document.getElementById('anotherRecipeBtn').onclick = refreshRecipe;
   document.getElementById('likeBtn').onclick = toggleLike;
+  
+  // Обработчики модального окна
+  document.querySelectorAll('.modal-choice').forEach(btn => {
+    btn.onclick = () => selectCategory(btn.dataset.cat);
+  });
+  document.getElementById('modalCloseBtn').onclick = () => {
+    document.getElementById('categoryModal').classList.remove('visible');
+  };
+  
+  console.log('Обработчики кнопок установлены');
 });
 </script>
 </body>
