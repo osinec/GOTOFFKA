@@ -8,14 +8,18 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html, body {
+      height: 100%;
+      min-height: 100vh;
+    }
+
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: linear-gradient(135deg, #fdf8ed 0%, #fef3e2 100%);
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 16px;
+      padding: 20px;
     }
 
     .recipe-card {
@@ -204,6 +208,7 @@
       padding-left: 14px;
     }
 
+    /* 🔥 ИНГРЕДИЕНТЫ — СПРАВА КОЛИЧЕСТВО, СЛЕВА НАЗВАНИЕ */
     .ingredients-grid {
       background: #fefcf8;
       border-radius: 24px;
@@ -215,11 +220,12 @@
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      gap: 12px;
+      gap: 16px;
     }
     .ingredient-name { 
       font-weight: 500;
       flex: 1;
+      color: #2c2418;
     }
     .ingredient-amount {
       color: #b45f2b;
@@ -228,7 +234,9 @@
       padding: 4px 12px;
       border-radius: 40px;
       font-size: 13px;
+      text-align: right;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .steps-list {
@@ -380,7 +388,6 @@ let allRecipes = {};
 let currentCategory = null;
 let currentRecipe = null;
 let likedRecipes = JSON.parse(localStorage.getItem('likedRecipes') || '[]');
-let allImagesPreloaded = false;
 
 const categoryNames = { 
   breakfast: '🌅 ЗАВТРАК', 
@@ -415,7 +422,6 @@ async function loadRecipesFromFile() {
     
     console.log('✅ Загружено рецептов:', total);
     
-    // 🔥 ПРЕДЗАГРУЖАЕМ ВСЕ КАРТИНКИ МГНОВЕННО
     await preloadAllImages();
     
     if (loader) loader.style.display = 'none';
@@ -430,11 +436,9 @@ async function loadRecipesFromFile() {
   }
 }
 
-// 🔥 ПРЕДЗАГРУЗКА ВСЕХ ИЗОБРАЖЕНИЙ
 async function preloadAllImages() {
   const allUrls = [];
   
-  // Собираем все URL картинок из рецептов
   for (const category of Object.keys(allRecipes)) {
     for (const recipe of allRecipes[category]) {
       if (recipe.photo && recipe.photo !== '') {
@@ -443,13 +447,7 @@ async function preloadAllImages() {
     }
   }
   
-  if (allUrls.length === 0) {
-    console.log('Нет картинок для предзагрузки');
-    allImagesPreloaded = true;
-    return;
-  }
-  
-  console.log(`🖼️ Предзагружаем ${allUrls.length} изображений...`);
+  if (allUrls.length === 0) return;
   
   const promises = allUrls.map(url => {
     return new Promise((resolve) => {
@@ -461,22 +459,9 @@ async function preloadAllImages() {
   });
   
   await Promise.all(promises);
-  console.log('✅ Все изображения предзагружены');
-  allImagesPreloaded = true;
 }
 
-// ==================== ФОРМАТИРОВАНИЕ ====================
-function getUnitForIngredient(name) {
-  const lower = name.toLowerCase();
-  if (lower.includes('яйцо') || lower.includes('банан') || lower.includes('помидор') || 
-      lower.includes('лук') || lower.includes('морков') || lower.includes('картош')) return 'шт';
-  if (lower.includes('зубчик')) return 'зуб.';
-  if (lower.includes('щепотк')) return 'щепотка';
-  if (lower.includes('столовая') || lower.includes('ст.л')) return 'ст.л.';
-  if (lower.includes('чайная') || lower.includes('ч.л')) return 'ч.л.';
-  return 'г';
-}
-
+// 🔥 ФОРМАТИРОВАНИЕ ИНГРЕДИЕНТОВ — СПРАВА КОЛИЧЕСТВО, СЛЕВА НАЗВАНИЕ
 function formatIngredients(ingredients) {
   if (!ingredients?.length) return '';
   
@@ -488,7 +473,7 @@ function formatIngredients(ingredients) {
       if (match) {
         quantity = match[1];
         const rest = match[2].trim();
-        const unitMatch = rest.match(/^(г|мл|шт|ст\.л|ч\.л|зуб\.|щепотка)\s+(.+)$/);
+        const unitMatch = rest.match(/^(г|мл|шт|ст\.л|ч\.л|зуб\.|щепотка|банка)\s+(.+)$/);
         if (unitMatch) {
           unit = unitMatch[1];
           name = unitMatch[2];
@@ -507,11 +492,38 @@ function formatIngredients(ingredients) {
       unit = it.unit || getUnitForIngredient(name);
     }
     
-    const nameFormatted = name.charAt(0).toUpperCase() + name.slice(1);
-    return `<li><span class="ingredient-name">${nameFormatted}</span><span class="ingredient-amount">${quantity} ${unit}</span></li>`;
+    // Очищаем название от лишних пробелов и делаем первый символ заглавным
+    const nameFormatted = name.trim().charAt(0).toUpperCase() + name.trim().slice(1);
+    
+    // Формируем количество с единицей измерения
+    let amountText = '';
+    if (quantity && unit) {
+      amountText = `${quantity} ${unit}`;
+    } else if (quantity) {
+      amountText = quantity;
+    } else if (unit) {
+      amountText = unit;
+    } else {
+      amountText = 'по вкусу';
+    }
+    
+    return `<li><span class="ingredient-name">${nameFormatted}</span><span class="ingredient-amount">${amountText}</span></li>`;
   });
   
   return `<div class="section-title"><span>📋</span> Ингредиенты</div><ul class="ingredients-grid">${items.join('')}</ul>`;
+}
+
+function getUnitForIngredient(name) {
+  const lower = name.toLowerCase();
+  if (lower.includes('яйцо') || lower.includes('банан') || lower.includes('помидор') || 
+      lower.includes('лук') || lower.includes('морков') || lower.includes('картош') ||
+      lower.includes('кабачок') || lower.includes('баклажан')) return 'шт';
+  if (lower.includes('зубчик')) return 'зуб.';
+  if (lower.includes('щепотк')) return 'щепотка';
+  if (lower.includes('столовая') || lower.includes('ст.л')) return 'ст.л.';
+  if (lower.includes('чайная') || lower.includes('ч.л')) return 'ч.л.';
+  if (lower.includes('банка')) return 'банка';
+  return 'г';
 }
 
 function formatSteps(steps) {
@@ -530,7 +542,7 @@ function formatSteps(steps) {
   return `<div class="section-title"><span>👩‍🍳</span> Приготовление</div><ul class="steps-list" id="stepsList">${items}</ul>`;
 }
 
-// ==================== ОТОБРАЖЕНИЕ РЕЦЕПТА (МГНОВЕННО, ВСЕ КАРТИНКИ УЖЕ В КЕШЕ) ====================
+// ==================== ОТОБРАЖЕНИЕ РЕЦЕПТА ====================
 function displayRecipe(recipe, category) {
   if (!recipe) return;
   
@@ -545,7 +557,6 @@ function displayRecipe(recipe, category) {
   document.getElementById('timeBadge').innerHTML = recipe.time ? `⏱️ ${recipe.time}` : '⏱️ —';
   document.getElementById('caloriesBadge').innerHTML = recipe.calories ? `🔥 ${recipe.calories} ккал` : '🔥 —';
   
-  // Фото — показываем мгновенно (уже предзагружено)
   const photoEl = document.getElementById('recipePhoto');
   const defaultIcon = document.getElementById('defaultIcon');
   
@@ -606,7 +617,6 @@ function updateLikeButton(recipe, category) {
   likeBtn.style.background = isLiked ? '#f0dbdb' : '#ffe8e8';
 }
 
-// ==================== ВЫБОР СЛУЧАЙНОГО РЕЦЕПТА ====================
 function selectCategory(category) {
   currentCategory = category;
   
@@ -663,7 +673,6 @@ function toggleLike() {
   updateLikeButton(currentRecipe, currentCategory);
 }
 
-// ==================== МОДАЛЬНОЕ ОКНО ДЛЯ КАТЕГОРИЙ ====================
 function showCategoryModal() {
   const modal = document.createElement('div');
   modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:2000;';
@@ -690,7 +699,6 @@ function showCategoryModal() {
   modal.querySelector('.modal-close').onclick = () => modal.remove();
 }
 
-// ==================== ИНИЦИАЛИЗАЦИЯ ====================
 document.addEventListener('DOMContentLoaded', async () => {
   const loaded = await loadRecipesFromFile();
   if (!loaded) return;
