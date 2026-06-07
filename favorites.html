@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+  <title>Избранное | GoToFka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 10% 20%, #fff1e0, #ffe0c4);
+      min-height: 100vh;
+      padding: 32px 20px;
+      
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109180262', 'ym');
+
+    ym(109180262, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/109180262" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+
+    }
+
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(2px);
+      border-radius: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .favorites-header {
+      background: linear-gradient(125deg, #fa6322, #f9a43d, #ffb347);
+      padding: 40px 36px 48px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .favorites-header::before {
+      content: "❤️";
+      font-size: 220px;
+      position: absolute;
+      bottom: -40px;
+      right: -30px;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    .favorites-header::after {
+      content: "🍳";
+      font-size: 140px;
+      position: absolute;
+      top: -20px;
+      left: -30px;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 28px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .favorites-header h1 {
+      font-size: 40px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .favorites-header .sub {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 500;
+      max-width: 70%;
+    }
+
+    .control-panel {
+      padding: 24px 32px 0 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 2px dashed #f7e3cd;
+    }
+
+    .counter-badge {
+      background: #fff3e9;
+      border-radius: 100px;
+      padding: 8px 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: #e2661e;
+      font-size: 15px;
+    }
+
+    .counter-badge i {
+      font-size: 20px;
+      color: #ff7b2c;
+    }
+
+    .clear-all-btn {
+      background: #fff8f8;
+      border: 1.5px solid #ffe0c2;
+      border-radius: 60px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #d94f2b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .clear-all-btn:hover {
+      background: #ffefed;
+      border-color: #ffb185;
+    }
+
+    .recipes-grid {
+      padding: 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 28px;
+    }
+
+    .recipe-card {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 12px 22px -10px rgba(0, 0, 0, 0.08);
+      border: 1px solid #fff0e2;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .recipe-card:hover {
+      box-shadow: 0 28px 34px -12px rgba(231, 97, 33, 0.18);
+      border-color: #fed7b0;
+    }
+
+    .image-wrapper {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fdebd0, #ffd9bd);
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .recipe-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .no-image {
+      font-size: 48px;
+      color: #e67e22;
+      background: radial-gradient(circle at 30% 20%, #fff1e5, #ffe1ca);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .recipe-info {
+      padding: 22px 20px 24px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .recipe-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fcf2e8;
+      border-radius: 30px;
+      padding: 4px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #d45a1c;
+      margin-bottom: 14px;
+      width: fit-content;
+      text-transform: uppercase;
+    }
+
+    .recipe-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #2c221b;
+      margin-bottom: 14px;
+      line-height: 1.28;
+    }
+
+    .recipe-meta {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 22px;
+      font-size: 13px;
+      color: #9f7c5f;
+      flex-wrap: wrap;
+    }
+
+    .recipe-meta span {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 500;
+    }
+
+    .recipe-meta i {
+      width: 16px;
+      font-size: 14px;
+      color: #f28b44;
+    }
+
+    .recipe-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(115deg, #f38e32, #e35f15);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(115deg, #f57c28, #d9530e);
+    }
+
+    .btn-outline {
+      background: white;
+      color: #d45a1c;
+      border: 1.5px solid #ffcfab;
+    }
+
+    .btn-outline:hover {
+      background: #fff6ef;
+      border-color: #f68b44;
+    }
+
+    .btn-danger {
+      background: #fff6f4;
+      color: #d1421f;
+      border: 1.5px solid #ffcfb9;
+    }
+
+    .btn-danger:hover {
+      background: #fee9e6;
+      border-color: #f56a3e;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 70px 32px;
+      background: #fffefc;
+      border-radius: 44px;
+      margin: 20px;
+      grid-column: 1/-1;
+    }
+
+    .empty-state i {
+      font-size: 96px;
+      color: #fbcb9c;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .empty-state h3 {
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #cb6e2e, #f09442);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 14px;
+    }
+
+    .empty-state p {
+      color: #a78464;
+      margin-bottom: 32px;
+      font-size: 16px;
+    }
+
+    .footer-note {
+      padding: 24px 32px 32px 32px;
+      text-align: center;
+      border-top: 1px solid #f3e4d6;
+      color: #ab8b70;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      background: rgba(255, 250, 245, 0.8);
+    }
+
+    .footer-note a {
+      color: #e35f15;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-note a:hover {
+      text-decoration: underline;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+    }
+
+    .modal.visible {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 42px;
+      padding: 32px 28px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-content i {
+      font-size: 54px;
+      color: #e67e22;
+      margin-bottom: 18px;
+    }
+
+    .modal-content h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .modal-content p {
+      color: #9a775a;
+      margin-bottom: 28px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 14px;
+    }
+
+    .modal-buttons .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 60px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 1200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 700px) {
+      body { padding: 16px; }
+      .favorites-header { padding: 28px 20px 36px 20px; }
+      .favorites-header h1 { font-size: 30px; }
+      .favorites-header .sub { font-size: 13px; max-width: 100%; }
+      .recipes-grid { padding: 20px; gap: 20px; grid-template-columns: 1fr; }
+      .control-panel { padding: 16px 20px; flex-direction: column; align-items: stretch; }
+      .clear-all-btn { justify-content: center; }
+      .footer-note { flex-direction: column; text-align: center; }
+      .toast { white-space: normal; text-align: center; max-width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="glass-card">
+    <div class="favorites-header">
+      <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> На главную
+      </a>
+      <h1>
+        <i class="fas fa-heart" style="color:#ffecb3;"></i> Избранное
+      </h1>
+      <div class="sub">Ваши любимые рецепты, сохранённые в браузере</div>
+    </div>
+
+    <div class="control-panel">
+      <div class="counter-badge">
+        <i class="fas fa-heartbeat"></i>
+        <span id="favoritesCount">0</span> <span id="favoritesDeclension">рецептов</span>
+      </div>
+      <button id="clearAllBtn" class="clear-all-btn">
+        <i class="fas fa-trash-alt"></i> Очистить всё
+      </button>
+    </div>
+
+    <div id="recipesGrid" class="recipes-grid"></div>
+
+    <div class="footer-note">
+      <span><i class="fas fa-save"></i> Сохраняется в вашем браузере</span>
+      <a href="index.html"><i class="fas fa-home"></i> На главную</a>
+    </div>
+  </div>
+</div>
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <i class="fas fa-heart-broken"></i>
+    <h3>Убрать из избранного?</h3>
+    <p id="modalMessage">Вы уверены, что хотите удалить этот рецепт?</p>
+    <div class="modal-buttons">
+      <button id="modalCancel" class="btn btn-outline">Отмена</button>
+      <button id="modalConfirm" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Удалить</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const STORAGE_KEY = 'likedRecipes';
+
+// ─── ЗАГРУЗКА ИЗБРАННОГО ───────────────────────────────────
+function loadFavorites() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.error('Ошибка загрузки избранного:', e);
+    return [];
+  }
+}
+
+// ─── СОХРАНЕНИЕ ИЗБРАННОГО ─────────────────────────────────
+function saveFavorites(favorites) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+  updateCounter();
+}
+
+// ─── ОБНОВЛЕНИЕ СЧЁТЧИКА И СКЛОНЕНИЕ ───────────────────────
+function updateCounter() {
+  const favorites = loadFavorites();
+  const count = favorites.length;
+  const countSpan = document.getElementById('favoritesCount');
+  const declensionSpan = document.getElementById('favoritesDeclension');
+  
+  if (countSpan) countSpan.textContent = count;
+  if (declensionSpan) {
+    declensionSpan.textContent = getDeclension(count, ['рецепт', 'рецепта', 'рецептов']);
+  }
+}
+
+// ─── СКЛОНЕНИЕ СЛОВ ────────────────────────────────────────
+function getDeclension(number, titles) {
+  const cases = [2, 0, 1, 1, 1, 2];
+  return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+}
+
+// ─── ФОРМАТИРОВАНИЕ ВРЕМЕНИ ────────────────────────────────
+function formatTime(time) {
+  if (!time) return '';
+  const match = String(time).match(/\d+/);
+  return match ? match[0] + ' мин' : time;
+}
+
+// ─── ПОЛУЧЕНИЕ ПУТИ К ФОТО ─────────────────────────────────
+function getPhotoUrl(photo) {
+  if (!photo) return null;
+  let photoPath = photo.replace(/^\/?pics\//, '');
+  return `/pics/${photoPath}`;
+}
+
+// ─── ESCAPE HTML ───────────────────────────────────────────
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// ─── РЕНДЕР КАРТОЧКИ ───────────────────────────────────────
+function renderRecipeCard(recipe, index) {
+  const photoUrl = getPhotoUrl(recipe.photo);
+  const timeStr = formatTime(recipe.time);
+  const caloriesStr = recipe.calories ? `${recipe.calories}` : '';
+  const servingsStr = recipe.servings ? `${recipe.servings} порц.` : '';
+  const categoryName = recipe.categoryName || recipe.category || 'Рецепт';
+  
+  // Генерируем уникальный ID для карточки
+  const cardId = `recipe_${Date.now()}_${index}`;
+  
+  return `
+    <div class="recipe-card" data-index="${index}" data-recipe-id="${escapeHtml(recipe.id || recipe.title)}">
+      <div class="image-wrapper">
+        ${photoUrl ? 
+          `<img class="recipe-image" src="${photoUrl}" alt="${escapeHtml(recipe.title)}" loading="lazy" 
+               onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'no-image\'><i class=\'fas fa-utensils\'></i> 🍳</div>';">` 
+          : `<div class="no-image"><i class="fas fa-utensils"></i> 🍳</div>`
+        }
+      </div>
+      <div class="recipe-info">
+        <div class="recipe-category">
+          <i class="fas fa-tag"></i> ${escapeHtml(categoryName)}
+        </div>
+        <div class="recipe-title">${escapeHtml(recipe.title)}</div>
+        <div class="recipe-meta">
+          ${timeStr ? `<span><i class="far fa-clock"></i> ${timeStr}</span>` : ''}
+          ${caloriesStr ? `<span><i class="fas fa-fire-flame-curved"></i> ${caloriesStr} ккал</span>` : ''}
+          ${servingsStr ? `<span><i class="fas fa-utensils"></i> ${servingsStr}</span>` : ''}
+        </div>
+        <div class="recipe-actions">
+          <button class="btn btn-primary view-btn" data-index="${index}">
+            <i class="fas fa-eye"></i> Готовить
+          </button>
+          <button class="btn btn-danger remove-btn" data-index="${index}">
+            <i class="fas fa-trash-can"></i> Убрать
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── ОТОБРАЖЕНИЕ ВСЕХ ИЗБРАННЫХ ────────────────────────────
+function renderFavorites() {
+  const favorites = loadFavorites();
+  const grid = document.getElementById('recipesGrid');
+  
+  if (favorites.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <i class="far fa-heart"></i>
+        <h3>Ваше избранное ждёт вдохновения ✨</h3>
+        <p>Добавляйте рецепты, нажав на ❤️ на главной странице</p>
+        <a href="index.html" class="btn btn-primary">
+          <i class="fas fa-meteor"></i> Найти рецепты
+        </a>
+      </div>
+    `;
+    return;
+  }
+  
+  grid.innerHTML = favorites.map((recipe, i) => renderRecipeCard(recipe, i)).join('');
+  
+  // Добавляем обработчики на кнопки
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const index = parseInt(btn.dataset.index);
+      viewRecipe(favorites[index]);
+    });
+  });
+  
+  document.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const index = parseInt(btn.dataset.index);
+      showRemoveConfirm(favorites[index], index);
+    });
+  });
+  
+  // Добавляем обработчик на всю карточку
+  document.querySelectorAll('.recipe-card').forEach((card, i) => {
+    card.addEventListener('click', () => {
+      viewRecipe(favorites[i]);
+    });
+  });
+}
+
+// ─── ПРОСМОТР РЕЦЕПТА (С СОХРАНЕНИЕМ В sessionStorage) ─────
+function viewRecipe(recipe) {
+  if (!recipe) return;
+  
+  // Сохраняем полный рецепт в sessionStorage для восстановления на главной
+  sessionStorage.setItem('viewRecipe', JSON.stringify(recipe));
+  sessionStorage.setItem('viewRecipeCategory', recipe.category);
+  
+  // Переходим на главную страницу
+  window.location.href = 'index.html';
+}
+
+// ─── УДАЛЕНИЕ ОДНОГО РЕЦЕПТА ───────────────────────────────
+function removeFromFavorites(index) {
+  const favorites = loadFavorites();
+  const removed = favorites.splice(index, 1);
+  saveFavorites(favorites);
+  renderFavorites();
+  showToast(`❌ "${removed[0]?.title || 'Рецепт'}" удалён из избранного`, 'error');
+}
+
+// ─── ОЧИСТКА ВСЕГО ИЗБРАННОГО ──────────────────────────────
+function clearAllFavorites() {
+  const favorites = loadFavorites();
+  if (favorites.length === 0) {
+    showToast('📭 Избранное уже пусто', 'info');
+    return;
+  }
+  
+  if (confirm(`Удалить все ${favorites.length} ${getDeclension(favorites.length, ['рецепт', 'рецепта', 'рецептов'])} из избранного?`)) {
+    localStorage.removeItem(STORAGE_KEY);
+    renderFavorites();
+    updateCounter();
+    showToast('✅ Всё избранное очищено', 'success');
+  }
+}
+
+// ─── ПОКАЗ УВЕДОМЛЕНИЯ ТОСТ ────────────────────────────────
+function showToast(message, type = '') {
+  const toast = document.getElementById('toast');
+  const icon = type === 'error' ? 'fa-trash-alt' : (type === 'success' ? 'fa-check-circle' : 'fa-info-circle');
+  toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+  toast.className = 'toast show';
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+// ─── МОДАЛЬНОЕ ОКНО ────────────────────────────────────────
+let currentRemoveIndex = null;
+
+function showRemoveConfirm(recipe, index) {
+  const modal = document.getElementById('modal');
+  const modalMessage = document.getElementById('modalMessage');
+  modalMessage.innerHTML = `Удалить <strong>${escapeHtml(recipe.title)}</strong> из вашего избранного?`;
+  currentRemoveIndex = index;
+  modal.classList.add('visible');
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('visible');
+  currentRemoveIndex = null;
+}
+
+function confirmRemove() {
+  if (currentRemoveIndex !== null) {
+    removeFromFavorites(currentRemoveIndex);
+  }
+  closeModal();
+}
+
+// ─── ИНИЦИАЛИЗАЦИЯ ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Обработчики модалки
+  const modalConfirm = document.getElementById('modalConfirm');
+  const modalCancel = document.getElementById('modalCancel');
+  const modal = document.getElementById('modal');
+  
+  modalConfirm.addEventListener('click', confirmRemove);
+  modalCancel.addEventListener('click', closeModal);
+  
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+  
+  // Обработчик очистки
+  const clearBtn = document.getElementById('clearAllBtn');
+  clearBtn.addEventListener('click', clearAllFavorites);
+  
+  // Отображаем избранное
+  renderFavorites();
+  updateCounter();
+  
+  // Проверяем, есть ли рецепт для просмотра из sessionStorage
+  const viewRecipeData = sessionStorage.getItem('viewRecipe');
+  if (viewRecipeData) {
+    sessionStorage.removeItem('viewRecipe');
+    sessionStorage.removeItem('viewRecipeCategory');
+  }
+});
+</script>
+</body>
+</html>

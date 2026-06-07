@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оплата подписки | GoToFka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.22.1/dist/pocketbase.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      min-height: 100vh;
+      color: #222;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109180262', 'ym');
+
+    ym(109180262, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/109180262" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+
+    }
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 32px 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #d35400;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+    .user-badge {
+      background: #f5f5f5;
+      padding: 10px 16px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #444;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user-badge .avatar {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: #222;
+    }
+    .price-block {
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      border-radius: 20px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+    .price {
+      font-size: 48px;
+      font-weight: 700;
+      color: #222;
+      line-height: 1;
+    }
+    .price-period {
+      font-size: 16px;
+      color: #555;
+      margin-top: 4px;
+    }
+    .price-note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 8px;
+    }
+    .benefits-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin: 28px 0 16px;
+      text-align: left;
+    }
+    .benefits-list {
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .benefit-item:last-child {
+      border-bottom: none;
+    }
+    .benefit-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: #d4edda;
+      color: #155724;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .benefit-text {
+      font-size: 15px;
+      color: #444;
+      line-height: 1.4;
+    }
+    .btn {
+      width: 100%;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #4caf50, #66bb6a);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-top: 8px;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(76,175,80,0.4);
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-loading {
+      background: linear-gradient(135deg, #90a4ae, #b0bec5);
+    }
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #666;
+    }
+    .secure-badge svg {
+      width: 18px;
+      height: 18px;
+      color: #4caf50;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #e67e22;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin: 16px 0;
+      font-size: 14px;
+      display: none;
+    }
+    .error-message.show {
+      display: block;
+    }
+    @media (max-width: 480px) {
+      .card { padding: 24px 20px; }
+      .price { font-size: 40px; }
+      .benefit-text { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>📅 Подписка на 30 дней</h1>
+  <p class="subtitle">Полный доступ ко всем функциям сервиса</p>
+
+  <!-- Информация о пользователе -->
+  <div class="user-badge" id="userBadge">
+    <span class="avatar" id="userAvatar">👤</span>
+    <span id="userName">Загрузка...</span>
+  </div>
+
+  <!-- Цена -->
+  <div class="price-block">
+    <div class="price">199 ₽</div>
+    <div class="price-period">за 30 дней</div>
+  </div>
+
+  <!-- Преимущества -->
+  <div class="benefits-title">✨ Что вы получаете:</div>
+  <div class="benefits-list">
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-text"><strong>Меню на неделю</strong> — составь для себя меню на неделю</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-text"><strong>Рецепты по ингредиентам</strong> — находите блюда из того, что есть дома</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-text"><strong>Список покупок</strong> — формируй удобный список продуктов в один клик</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">✓</div>
+      <div class="benefit-text"><strong>Избранное</strong> — сохраняйте любимые рецепты</div>
+    </div>
+    <div class="benefit-item">
+  </div>
+
+  <!-- Сообщение об ошибке -->
+  <div class="error-message" id="errorMessage"></div>
+
+  <!-- Кнопка оплаты -->
+  <button class="btn" id="payBtn" onclick="createPayment()" disabled>
+    ⏳ Проверка авторизации...
+  </button>
+
+  <!-- Безопасность -->
+  <div class="secure-badge">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+    </svg>
+    <span>Безопасная оплата через ЮKassa • SSL-шифрование</span>
+  </div>
+
+  <!-- Назад -->
+  <a href="cabinet.html" class="back-link">← Вернуться в личный кабинет</a>
+</div>
+
+<script>
+  const PB_URL = 'https://gotofka.ru';
+  const pb = new PocketBase(PB_URL);
+  let currentUser = null;
+
+  // ─── ПРОВЕРКА АВТОРИЗАЦИИ ──────────────────────────────
+  async function checkAuth() {
+    const userBadge = document.getElementById('userBadge');
+    const userName = document.getElementById('userName');
+    const userAvatar = document.getElementById('userAvatar');
+    const payBtn = document.getElementById('payBtn');
+    const errorMessage = document.getElementById('errorMessage');
+
+    try {
+      // Загружаем сессию из localStorage
+      const authData = localStorage.getItem('pocketbase_auth');
+      
+      if (!authData) {
+        throw new Error('No auth data');
+      }
+      
+      const parsed = JSON.parse(authData);
+      pb.authStore.save(parsed.token, parsed.model);
+      
+      if (!pb.authStore.isValid) {
+        throw new Error('Token invalid');
+      }
+      
+      // Обновляем токен
+      await pb.collection('users').authRefresh();
+      
+      currentUser = pb.authStore.model;
+      
+      if (!currentUser || !currentUser.id) {
+        throw new Error('No user data');
+      }
+      
+      // Отображаем данные пользователя
+      const displayName = currentUser.username || currentUser.email?.split('@')[0] || 'Пользователь';
+      const firstLetter = displayName.charAt(0).toUpperCase();
+      
+      userName.textContent = displayName;
+      userAvatar.textContent = firstLetter;
+      
+      // Активируем кнопку
+      payBtn.disabled = false;
+      payBtn.textContent = '💳 Оплатить 199 ₽';
+      payBtn.classList.remove('btn-loading');
+      
+      console.log('✅ Auth OK, User ID:', currentUser.id);
+      
+    } catch (err) {
+      console.error('❌ Auth failed:', err);
+      
+      userBadge.style.background = '#fee2e2';
+      userName.textContent = 'Не авторизован';
+      userAvatar.textContent = '⚠️';
+      
+      payBtn.disabled = true;
+      payBtn.textContent = '⚠️ Войдите в аккаунт';
+      
+      errorMessage.textContent = 'Для оплаты необходимо войти в личный кабинет. Перенаправляем...';
+      errorMessage.classList.add('show');
+      
+      setTimeout(() => {
+        window.location.href = 'cabinet.html';
+      }, 3000);
+    }
+  }
+
+  // ─── СОЗДАНИЕ ПЛАТЕЖА ──────────────────────────────────
+  async function createPayment() {
+    if (!currentUser || !currentUser.id) {
+      showError('Сначала войдите в аккаунт');
+      return;
+    }
+
+    const payBtn = document.getElementById('payBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    // Блокируем кнопку
+    payBtn.disabled = true;
+    payBtn.textContent = '⏳ Создание платежа...';
+    payBtn.classList.add('btn-loading');
+    errorMessage.classList.remove('show');
+
+    try {
+      const response = await fetch('create_payment.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: currentUser.id,
+          amount: 199,
+          description: 'Подписка GoToFka на 30 дней'
+        })
+      });
+      
+      const data = await response.json();
+      console.log('Payment response:', data);
+      
+      if (data.confirmation_url) {
+        // Успех — перенаправляем на ЮKassa
+        window.location.href = data.confirmation_url;
+      } else {
+        throw new Error(data.error || 'Не удалось создать платёж');
+      }
+      
+    } catch (err) {
+      console.error('Payment error:', err);
+      showError('Ошибка: ' + err.message);
+      
+      // Разблокируем кнопку
+      payBtn.disabled = false;
+      payBtn.textContent = '💳 Оплатить 199 ₽';
+      payBtn.classList.remove('btn-loading');
+    }
+  }
+
+  // ─── ПОКАЗ ОШИБКИ ─────────────────────────────────────
+  function showError(message) {
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.textContent = '❌ ' + message;
+    errorMessage.classList.add('show');
+    
+    // Скрыть через 10 секунд
+    setTimeout(() => {
+      errorMessage.classList.remove('show');
+    }, 10000);
+  }
+
+  // ─── ЗАПУСК ПРИ ЗАГРУЗКЕ ──────────────────────────────
+  window.addEventListener('DOMContentLoaded', checkAuth);
+</script>
+
+</body>
+</html>

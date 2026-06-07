@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+  <title>Личный кабинет | GoToFka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.22.1/dist/pocketbase.umd.min.js"></script>
+  
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+    ym(109180262, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/109180262" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <!-- /Yandex.Metrika counter -->
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(145deg, #fff9f2 0%, #fef3e4 100%);
+      min-height: 100vh;
+      padding: 24px 16px;
+      position: relative;
+    }
+
+    body::before {
+      content: '🍳';
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 100px;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '👨‍🍳';
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 80px;
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-container {
+      max-width: 560px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(2px);
+      border-radius: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 30px 55px -14px rgba(0, 0, 0, 0.25);
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, #f5a65a 0%, #e86a1f 50%, #d45a1a 100%);
+      padding: 32px 32px 80px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-header::before {
+      content: '🍽️';
+      position: absolute;
+      right: -15px;
+      bottom: -25px;
+      font-size: 110px;
+      opacity: 0.1;
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+
+    .profile-header::after {
+      content: '✨';
+      position: absolute;
+      left: 20px;
+      top: 40px;
+      font-size: 50px;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      padding: 8px 22px;
+      border-radius: 60px;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 28px;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      width: fit-content;
+    }
+
+    .back-btn i { transition: transform 0.25s; font-size: 12px; }
+    .back-btn:hover { 
+      background: rgba(255, 255, 255, 0.3); 
+      transform: translateX(-6px); 
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+    .back-btn:hover i { transform: translateX(-4px); }
+
+    .profile-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .profile-header .sub {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      margin-top: -60px;
+      padding: 0 32px;
+      z-index: 3;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(145deg, #ffffff, #fef8f0);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2), 0 0 0 5px white, 0 0 0 8px rgba(255,255,255,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .avatar:hover {
+      transform: scale(1.03);
+      box-shadow: 0 22px 40px -12px rgba(0, 0, 0, 0.25), 0 0 0 5px white, 0 0 0 10px rgba(255,255,255,0.4);
+    }
+
+    .avatar i {
+      font-size: 52px;
+      background: linear-gradient(135deg, #e86a1f, #f7b05e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
+    }
+
+    .profile-content {
+      padding: 24px 32px 32px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      background: #fef7f0;
+      padding: 6px;
+      border-radius: 80px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 12px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 60px;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      color: #b86a2e;
+      font-size: 14px;
+      letter-spacing: -0.2px;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, #f39c12, #e8590c);
+      color: white;
+      box-shadow: 0 6px 14px rgba(232, 89, 12, 0.3);
+      transform: scale(1.02);
+    }
+
+    .tab:not(.active):hover {
+      background: #fff0e4;
+      transform: translateY(-1px);
+    }
+
+    form {
+      display: none;
+      animation: fadeSlideUp 0.35s ease;
+    }
+
+    form.active {
+      display: block;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 18px;
+      margin: 10px 0;
+      border: 2px solid #fee5d4;
+      border-radius: 60px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      background: white;
+      transition: all 0.25s;
+      font-weight: 500;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #f5a65a;
+      box-shadow: 0 0 0 4px rgba(245, 166, 90, 0.15);
+      transform: scale(1.01);
+    }
+
+    input::placeholder {
+      color: #c9b6a2;
+      font-weight: 400;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 22px;
+      border-radius: 60px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: none;
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(105deg, #f39c12, #e8590c);
+      color: white;
+      box-shadow: 0 6px 14px rgba(232, 89, 12, 0.3);
+    }
+
+    .btn-primary:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 10px 24px rgba(232, 89, 12, 0.4);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-secondary {
+      background: white;
+      color: #c45e27;
+      border: 2px solid #ffe0ca;
+      font-weight: 600;
+    }
+
+    .btn-secondary:hover { 
+      background: #fffaf5; 
+      border-color: #f3a45b; 
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #c45e27;
+      border: 2px solid #ffd9bf;
+      font-weight: 600;
+    }
+
+    .btn-outline:hover { 
+      background: #fffaf5; 
+      border-color: #e67e22; 
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: linear-gradient(105deg, #fff5f5, #ffe8e8);
+      color: #d94a38;
+      border: 2px solid #ffcec5;
+      font-weight: 700;
+    }
+
+    .btn-danger:hover { 
+      background: linear-gradient(105deg, #ffe0e0, #ffd4d4);
+      border-color: #d94a38;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(217, 74, 56, 0.15);
+    }
+
+    .btn-full { width: 100%; margin-top: 8px; }
+
+    .action-buttons {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .action-buttons .btn { flex: 1; }
+
+    .info-grid {
+      background: linear-gradient(105deg, #ffffff, #fefcf9);
+      border-radius: 32px;
+      margin-bottom: 28px;
+      border: 1px solid #fee8db;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid #fef0e6;
+      transition: background 0.2s;
+    }
+
+    .info-item:last-child { border-bottom: none; }
+    .info-item:hover { background: #fffdfa; }
+
+    .info-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #b86a2e;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .info-label i { width: 22px; font-size: 17px; color: #e67e22; }
+    .info-value { font-weight: 800; color: #2c241e; font-size: 14px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: 60px;
+      font-size: 12px;
+      font-weight: 700;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .badge-trial { background: linear-gradient(135deg, #e3f2fd, #bbdef5); color: #0b5e9e; }
+    .badge-vip { background: linear-gradient(135deg, #f39c12, #e8590c); color: white; box-shadow: 0 2px 8px rgba(232,89,12,0.25); }
+    .badge-expired { background: #ffefef; color: #c23d2e; border-left: 3px solid #d94a38; }
+    .badge-none { background: #fff3e6; color: #d97706; }
+
+    .settings-panel {
+      margin: 20px 0;
+      padding: 24px 22px;
+      background: linear-gradient(105deg, #fffbf7, #fff8f2);
+      border-radius: 32px;
+      border: 1px solid #fee8db;
+      display: none;
+      animation: fadeSlideUp 0.3s ease;
+    }
+
+    .subscribe-section {
+      margin: 24px 0;
+      padding: 0;
+      background: linear-gradient(135deg, #fffaf2, #fff6ec);
+      border-radius: 36px;
+      text-align: center;
+      display: none;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #ffe1ca;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .subscribe-section.active {
+      display: block;
+    }
+
+    .subscribe-header {
+      background: linear-gradient(135deg, #f39c12, #e8590c);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .subscribe-header::before {
+      content: '⭐';
+      position: absolute;
+      top: 5px;
+      right: 15px;
+      font-size: 50px;
+      opacity: 0.15;
+    }
+
+    .subscribe-header::after {
+      content: '🎁';
+      position: absolute;
+      bottom: 5px;
+      left: 15px;
+      font-size: 40px;
+      opacity: 0.1;
+    }
+
+    .subscribe-header h3 {
+      color: white;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .subscribe-header p {
+      color: rgba(255,255,255,0.9);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .subscribe-body {
+      padding: 24px 22px;
+    }
+
+    .offer-badge {
+      display: inline-block;
+      background: linear-gradient(95deg, #ff6b35, #f39c12);
+      color: white;
+      padding: 6px 18px;
+      border-radius: 60px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 10px rgba(243,156,18,0.3);
+    }
+
+    .price-showcase {
+      background: white;
+      border-radius: 28px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: 1px solid #fee0cc;
+    }
+
+    .trial-price {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .trial-price .price {
+      font-size: 48px;
+      font-weight: 800;
+      color: #e67e22;
+      line-height: 1;
+    }
+
+    .trial-price .price sup {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .trial-period {
+      font-size: 20px;
+      font-weight: 700;
+      color: #b45f2b;
+    }
+
+    .trial-days {
+      font-size: 14px;
+      color: #2e7d32;
+      font-weight: 600;
+      background: #e8f5e9;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 60px;
+      margin-top: 8px;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #ffe0ca, transparent);
+      margin: 16px 0;
+    }
+
+    .regular-price {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 12px;
+      background: #fefaf5;
+      border-radius: 20px;
+    }
+
+    .regular-price .label {
+      font-weight: 600;
+      color: #b86a2e;
+    }
+
+    .regular-price .amount {
+      font-size: 22px;
+      font-weight: 800;
+      color: #e67e22;
+    }
+
+    .regular-price .period {
+      font-size: 12px;
+      color: #a38161;
+    }
+
+    .features-mini {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 18px 0;
+    }
+
+    .feature-mini {
+      background: #fff9f0;
+      padding: 6px 14px;
+      border-radius: 60px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #b86a2e;
+      border: 1px solid #ffe0ca;
+    }
+
+    .feature-mini i {
+      margin-right: 5px;
+      font-size: 10px;
+    }
+
+    .subscribe-btn {
+      background: linear-gradient(105deg, #f39c12, #e8590c);
+      border: none;
+      padding: 16px 24px;
+      border-radius: 60px;
+      font-weight: 800;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+      box-shadow: 0 8px 20px rgba(232, 89, 12, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .subscribe-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(232, 89, 12, 0.45);
+    }
+
+    .subscribe-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .subscribe-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .small-note {
+      font-size: 11px;
+      color: #a38161;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .status-message {
+      margin: 16px 0;
+      padding: 14px 20px;
+      border-radius: 28px;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      animation: fadeSlideUp 0.25s ease;
+    }
+
+    .status-message.success { 
+      background: linear-gradient(105deg, #e6f4ea, #d4edda); 
+      color: #1e6f3f; 
+      display: flex; 
+      border-left: 5px solid #2e7d32;
+    }
+    .status-message.error { 
+      background: linear-gradient(105deg, #feeceb, #ffe0de); 
+      color: #bc3f2e; 
+      display: flex; 
+      border-left: 5px solid #d32f2f;
+    }
+
+    .email-warning-banner {
+      background: linear-gradient(105deg, #fff3cd, #ffe9bb);
+      border: 2px solid #ffe69c;
+      color: #856404;
+      padding: 14px 18px;
+      border-radius: 28px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+      animation: fadeSlideUp 0.25s ease;
+    }
+
+    .footer {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 2px dashed #f7e0ce;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a { 
+      color: #a38161; 
+      text-decoration: none; 
+      font-size: 12px; 
+      font-weight: 600; 
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #e67e22; }
+
+    .contact {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      color: #b88258;
+      font-size: 12px;
+      font-weight: 600;
+      background: #fffcf8;
+      padding: 8px 22px;
+      border-radius: 60px;
+      width: fit-content;
+      margin: 0 auto;
+      border: 1px solid #fee0cc;
+    }
+
+    .contact a { color: #e67e22; text-decoration: none; font-weight: 800; }
+
+    .link {
+      color: #e67e22;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 12px;
+      display: inline-block;
+      transition: opacity 0.2s;
+    }
+
+    .link:hover { opacity: 0.8; text-decoration: underline; }
+
+    .resend-btn {
+      display: none;
+      text-align: center;
+      margin-top: 18px;
+      padding: 14px;
+      background: #fff9f0;
+      border-radius: 60px;
+      border: 2px dashed #f5a65a;
+      font-size: 13px;
+      font-weight: 600;
+      color: #b86a2e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .resend-btn:hover:not(:disabled) {
+      background: #fff3e0;
+      border-style: solid;
+      color: #e67e22;
+      transform: translateY(-1px);
+    }
+
+    .resend-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .loader {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 520px) {
+      body { padding: 12px; }
+      .profile-header { padding: 24px 24px 70px 24px; }
+      .profile-header h1 { font-size: 26px; }
+      .avatar-wrapper { padding: 0 24px; }
+      .avatar { width: 85px; height: 85px; }
+      .avatar i { font-size: 44px; }
+      .profile-content { padding: 20px 24px 28px; }
+      .info-item { padding: 14px 16px; }
+      .info-label { font-size: 13px; }
+      .info-value { font-size: 13px; }
+      .action-buttons { flex-direction: column; gap: 12px; }
+      .tab { padding: 10px 12px; font-size: 13px; }
+      .btn { padding: 11px 18px; font-size: 13px; }
+      .trial-price .price { font-size: 38px; }
+      .trial-period { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> На главную</a>
+      <h1 id="pageTitle">Личный кабинет</h1>
+      <div class="sub">Готовьте с удовольствием</div>
+    </div>
+
+    <div class="avatar-wrapper">
+      <div class="avatar" id="avatarBtn">
+        <i class="fas fa-chef-hat"></i>
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <!-- БЛОК АУТЕНТИФИКАЦИИ -->
+      <div id="authForms">
+        <div class="tabs">
+          <div class="tab active" data-tab="login">🍕 Вход</div>
+          <div class="tab" data-tab="register">🍜 Регистрация</div>
+        </div>
+
+        <form id="loginForm" class="active">
+          <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email" />
+          <input type="password" id="loginPassword" placeholder="Пароль" required autocomplete="current-password" />
+          <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Войти</button>
+          <div id="resendVerification" class="link" style="display:none; margin-top:12px;">📧 Не пришло письмо? Отправить повторно</div>
+          <div class="link" id="forgotPasswordLink">🔐 Забыли пароль?</div>
+        </form>
+
+        <form id="registerForm">
+          <input type="text" id="regUsername" placeholder="Никнейм" required minlength="3" />
+          <input type="email" id="regEmail" placeholder="Email" required />
+          <input type="password" id="regPassword" placeholder="Пароль (мин. 6 символов)" required minlength="6" />
+          <input type="password" id="regPasswordConfirm" placeholder="Повторите пароль" required />
+          <button type="submit" class="btn btn-primary btn-full" id="registerBtn">Зарегистрироваться</button>
+          
+          <div id="regResendBtn" class="resend-btn">
+            📧 Письмо не пришло? <strong>Отправить повторно</strong>
+          </div>
+
+          <div style="font-size:11px; color:#a38161; margin-top:14px; text-align:center;">
+            Регистрируясь, вы соглашаетесь с условиями использования
+          </div>
+        </form>
+
+        <form id="resetPasswordForm" style="display:none;">
+          <h3 style="margin-bottom:18px; color:#e67e22; font-size:18px; font-weight:700;">🔐 Восстановление пароля</h3>
+          <input type="email" id="resetEmail" placeholder="Ваш email" required />
+          <button type="submit" class="btn btn-primary btn-full" id="resetPasswordBtn">Отправить ссылку</button>
+          <div class="link" id="backToLogin" style="margin-top:16px;">← Вернуться к входу</div>
+        </form>
+
+        <div id="authMessage" class="status-message" style="display:none;"></div>
+        <div id="authError" class="status-message error" style="display:none;"></div>
+      </div>
+
+      <!-- БЛОК ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ -->
+      <div id="userContent" style="display:none;">
+        <div id="emailWarningBanner" class="email-warning-banner"></div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label"><i class="fas fa-user-circle"></i> Никнейм</span>
+            <span class="info-value" id="username">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label"><i class="fas fa-envelope-open-text"></i> Электронная почта</span>
+            <span class="info-value" id="email">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label"><i class="fas fa-crown"></i> Подписка</span>
+            <span class="info-value" id="subscriptionStatus"><span class="badge badge-none">Нет подписки</span></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label"><i class="fas fa-calendar-week"></i> Осталось дней</span>
+            <span class="info-value days-left" id="daysLeft">—</span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <a href="index.html" class="btn btn-secondary"><i class="fas fa-egg"></i> Рецепты</a>
+          <a href="favorites.html" class="btn btn-secondary"><i class="fas fa-bookmark"></i> Избранное</a>
+        </div>
+
+        <div class="action-buttons">
+          <button id="changeEmailBtn" class="btn btn-outline"><i class="fas fa-at"></i> Сменить почту</button>
+          <button id="changePasswordBtn" class="btn btn-outline"><i class="fas fa-lock"></i> Сменить пароль</button>
+        </div>
+
+        <div id="changeEmailForm" class="settings-panel">
+          <input type="email" id="newEmailInput" placeholder="Новая электронная почта" />
+          <input type="password" id="passwordForEmailChange" placeholder="Текущий пароль" />
+          <button id="submitEmailChange" class="btn btn-primary btn-full">Подтвердить смену</button>
+          <div class="link" id="cancelEmailChange" style="margin-top:12px;">✕ Отменить</div>
+          <div id="resendEmailChangeLink" class="link" style="display:none; margin-top:16px;">
+            📧 Письмо не пришло? <span id="resendEmailBtn" style="cursor:pointer;">Отправить повторно</span>
+          </div>
+        </div>
+        <div id="emailChangeStatus" class="status-message" style="display:none;"></div>
+
+        <div id="passwordChangeStatus" class="status-message" style="display:none;"></div>
+
+        <!-- БЛОК ПОДПИСКИ -->
+        <div id="subscribeBlock" class="subscribe-section">
+          <div class="subscribe-header">
+            <h3>✨ Премиум доступ ✨</h3>
+            <p>Откройте мир кулинарных возможностей</p>
+          </div>
+          <div class="subscribe-body">
+            <div class="offer-badge">
+              🔥 ОГРАНИЧЕННОЕ ПРЕДЛОЖЕНИЕ 🔥
+            </div>
+            <div class="price-showcase">
+              <div class="trial-price">
+                <span class="price"><sup>₽</sup>1</span>
+                <span class="trial-period">за 14 дней</span>
+              </div>
+              <div class="trial-days">
+                ⭐ всего 7 копеек в день ⭐
+              </div>
+              <div class="divider"></div>
+              <div class="regular-price">
+                <span class="label">📅 Обычная подписка</span>
+                <div>
+                  <span class="amount">199 ₽</span>
+                  <span class="period">/ месяц</span>
+                </div>
+              </div>
+            </div>
+            <div class="features-mini">
+              <span class="feature-mini"><i class="fas fa-check"></i> Порции</span>
+              <span class="feature-mini"><i class="fas fa-check"></i> Аллергены</span>
+              <span class="feature-mini"><i class="fas fa-check"></i> Меню</span>
+              <span class="feature-mini"><i class="fas fa-check"></i> Список продуктов</span>
+              <span class="feature-mini"><i class="fas fa-check"></i> Поиск по холодильнику</span>
+            </div>
+            <button id="upgradeSubscribeBtn" class="subscribe-btn">
+              🚀 Попробовать за 1 ₽
+            </button>
+            <div class="small-note">
+              ✅ Отмена в любое время • Без скрытых списаний
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-links">
+            <a href="policy.html">Конфиденциальность</a>
+            <a href="oferta.html">Оферта</a>
+          </div>
+          <div class="contact">
+            <i class="fas fa-heart" style="color: #e67e22; font-size: 12px;"></i>
+            <a href="mailto:gotofka@yandex.ru">gotofka@yandex.ru</a>
+          </div>
+        </div>
+
+        <button id="logoutBtn" class="btn btn-danger btn-full" style="margin-top: 24px;">
+          <i class="fas fa-sign-out-alt"></i> Выход
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== КОНФИГУРАЦИЯ =====
+  const PB_URL = 'https://gotofka.ru';
+  const pb = new PocketBase(PB_URL);
+  const USERS_COLLECTION = 'users';
+
+  // Глобальные переменные
+  let passwordResetCooldown = false;
+  let emailChangeCooldown = false;
+  let lastRegisteredEmail = '';
+  let resendTimer = null;
+  let isResendCooldownActive = false;
+
+  // ===== ФУНКЦИЯ ВЫХОДА =====
+  async function logout() {
+    try {
+      // Очищаем PocketBase авторизацию
+      pb.authStore.clear();
+      
+      // Очищаем localStorage и sessionStorage
+      localStorage.removeItem('pocketbase_auth');
+      sessionStorage.removeItem('pocketbase_auth');
+      
+      // Скрываем блок пользователя и показываем форму авторизации
+      document.getElementById('userContent').style.display = 'none';
+      document.getElementById('authForms').style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Личный кабинет';
+      
+      // Сбрасываем форму входа (очищаем поля)
+      document.getElementById('loginEmail').value = '';
+      document.getElementById('loginPassword').value = '';
+      
+      // Скрываем блок с подтверждением email, если он был виден
+      const emailWarningBanner = document.getElementById('emailWarningBanner');
+      if (emailWarningBanner) emailWarningBanner.style.display = 'none';
+      
+      // Показываем сообщение об успешном выходе
+      showAuthMessage('👋 Вы вышли из аккаунта', 'success');
+      
+      // Переключаемся на вкладку входа
+      switchToTab('login');
+      
+    } catch (err) {
+      console.error('Ошибка при выходе:', err);
+      showAuthError('Произошла ошибка при выходе');
+    }
+  }
+
+  // ===== СОХРАНЕНИЕ/ВОССТАНОВЛЕНИЕ СЕССИИ =====
+  function saveAuthSession() {
+    if (!pb.authStore.isValid || !pb.authStore.model?.id) return;
+    const authData = {
+      token: pb.authStore.token,
+      model: pb.authStore.model,
+      savedAt: Date.now()
+    };
+    try {
+      localStorage.setItem('pocketbase_auth', JSON.stringify(authData));
+      sessionStorage.setItem('pocketbase_auth', JSON.stringify(authData));
+      console.log('💾 Сессия сохранена');
+    } catch (e) { console.warn('Ошибка сохранения сессии:', e); }
+  }
+
+  function restoreAuthSession() {
+    if (pb.authStore.isValid && pb.authStore.model?.id) {
+      console.log('✅ Сессия активна');
+      return true;
+    }
+    try {
+      const saved = localStorage.getItem('pocketbase_auth');
+      if (saved) {
+        const auth = JSON.parse(saved);
+        if (auth.token && auth.model?.id) {
+          pb.authStore.save(auth.token, auth.model);
+          console.log('✅ Сессия восстановлена из localStorage');
+          return true;
+        }
+      }
+    } catch (e) { console.warn('Ошибка восстановления:', e); }
+    return false;
+  }
+
+  // ===== ФУНКЦИИ ПОДПИСКИ =====
+  function getDaysLeft(user) {
+    const now = new Date();
+    
+    // Проверяем активную подписку
+    if (user.is_subscribed === true && user.subscription_end) {
+      const endDate = new Date(user.subscription_end);
+      if (endDate > now) {
+        const diff = Math.ceil((endDate - now) / 86400000);
+        return `<span style="color:#2e7d32; font-weight:700;">${diff} дн.</span>`;
+      }
+      return `<span style="color:#d32f2f; font-weight:700;">истекла</span>`;
+    }
+    
+    return `<span style="color:#d97706;">—</span>`;
+  }
+
+  function updateSubscriptionUI(user) {
+    const statusEl = document.getElementById('subscriptionStatus');
+    const block = document.getElementById('subscribeBlock');
+    const btn = document.getElementById('upgradeSubscribeBtn');
+    const now = new Date();
+    
+    // Есть активная подписка
+    if (user.is_subscribed === true && user.subscription_end && new Date(user.subscription_end) > now) {
+      if (user.subscription_type === 'trial') {
+        statusEl.innerHTML = '<span class="badge badge-trial"><i class="fas fa-clock"></i> Пробный период (14 дней за 1 ₽)</span>';
+      } else {
+        statusEl.innerHTML = '<span class="badge badge-vip"><i class="fas fa-crown"></i> VIP Подписка (199 ₽/мес)</span>';
+      }
+      block.classList.remove('active');
+      return;
+    }
+    
+    // Подписки нет или истекла
+    statusEl.innerHTML = '<span class="badge badge-none"><i class="fas fa-circle-exclamation"></i> Нет подписки</span>';
+    block.classList.add('active');
+    
+    // Меняем текст кнопки в зависимости от того, был ли триал
+    if (!user.is_trial_used && !user.is_subscribed) {
+      // Никогда не было подписки - предлагаем триал за 1₽
+      if (btn) btn.innerHTML = '🚀 Попробовать за 1 ₽';
+    } else {
+      // Триал уже использован или подписка истекла - предлагаем полную за 199₽
+      if (btn) btn.innerHTML = '💰 Купить подписку за 199 ₽';
+    }
+  }
+
+  // ===== ЗАГРУЗКА ПРОФИЛЯ =====
+  async function loadUserData() {
+    const authForms = document.getElementById('authForms');
+    const userContent = document.getElementById('userContent');
+    
+    authForms.style.display = 'none';
+    userContent.style.display = 'none';
+    
+    if (!restoreAuthSession() || !pb.authStore.isValid) {
+      authForms.style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Личный кабинет';
+      return;
+    }
+    
+    try {
+      await pb.collection(USERS_COLLECTION).authRefresh();
+      let user = pb.authStore.model;
+      
+      if (!user.verified) {
+        document.getElementById('emailWarningBanner').innerHTML = "⚠️ <strong>Требуется подтверждение email</strong><br>Проверьте почту (включая спам) и перейдите по ссылке.";
+        document.getElementById('emailWarningBanner').style.display = 'block';
+        document.getElementById('pageTitle').textContent = 'Подтвердите email';
+        userContent.style.display = 'block';
+        return;
+      }
+      
+      saveAuthSession();
+      
+      document.getElementById('username').textContent = user.username || '—';
+      document.getElementById('email').textContent = user.email || '—';
+      document.getElementById('daysLeft').innerHTML = getDaysLeft(user);
+      updateSubscriptionUI(user);
+      
+      document.getElementById('emailWarningBanner').style.display = 'none';
+      userContent.style.display = 'block';
+      document.getElementById('pageTitle').textContent = 'Мой профиль';
+      
+    } catch (err) {
+      console.error('Ошибка загрузки профиля:', err);
+      if (err.status === 401) {
+        pb.authStore.clear();
+        localStorage.removeItem('pocketbase_auth');
+        sessionStorage.removeItem('pocketbase_auth');
+        authForms.style.display = 'block';
+        document.getElementById('pageTitle').textContent = 'Личный кабинет';
+      }
+    }
+  }
+
+  // ===== ВХОД =====
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    setLoading(btn, true);
+    
+    try {
+      const authData = await pb.collection(USERS_COLLECTION).authWithPassword(email, password);
+      const user = pb.authStore.model;
+      if (!user.verified) {
+        showAuthError('📧 Почта не подтверждена. Проверьте почту и перейдите по ссылке.');
+        pb.authStore.clear();
+        document.getElementById('resendVerification').style.display = 'inline-block';
+        return;
+      }
+      saveAuthSession();
+      showAuthMessage('✅ Добро пожаловать!');
+      loadUserData();
+    } catch (err) {
+      let msg = '❌ Неверный email или пароль';
+      if (err.status === 0) msg = '❌ Нет соединения с сервером';
+      showAuthError(msg);
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+
+  // ===== РЕГИСТРАЦИЯ =====
+  document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('registerBtn');
+    const username = document.getElementById('regUsername').value.trim();
+    const email = document.getElementById('regEmail').value.trim().toLowerCase();
+    const password = document.getElementById('regPassword').value;
+    const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+    
+    if (password !== passwordConfirm) {
+      showAuthError('❌ Пароли не совпадают');
+      return;
+    }
+    if (password.length < 6) {
+      showAuthError('❌ Пароль должен содержать минимум 6 символов');
+      return;
+    }
+    if (!email.includes('@')) {
+      showAuthError('❌ Введите корректный email');
+      return;
+    }
+    
+    setLoading(btn, true);
+    document.getElementById('regResendBtn').style.display = 'none';
+    
+    try {
+      await pb.collection(USERS_COLLECTION).create({
+        username, 
+        email, 
+        password, 
+        passwordConfirm, 
+        emailVisibility: true
+      });
+      
+      lastRegisteredEmail = email;
+      
+      try {
+        await pb.collection(USERS_COLLECTION).requestVerification(email);
+        console.log('✅ Письмо отправлено');
+      } catch (mailErr) {
+        console.warn('⚠️ Ошибка отправки письма:', mailErr);
+      }
+      
+      showAuthMessage('✅ Регистрация успешна! Проверьте почту (включая спам).', 'success');
+      document.getElementById('regResendBtn').style.display = 'block';
+      
+      startResendCooldown();
+      
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regPasswordConfirm').value = '';
+      
+    } catch (err) {
+      let msg = '❌ Ошибка регистрации';
+      if (err.status === 400 && err.data?.data) {
+        if (err.data.data.email?.message) msg = `❌ ${err.data.data.email.message}`;
+        else if (err.data.data.username?.message) msg = `❌ ${err.data.data.username.message}`;
+        else if (err.data.data.password?.message) msg = `❌ ${err.data.data.password.message}`;
+      }
+      if (err.status === 0) msg = '❌ Нет соединения с сервером';
+      showAuthError(msg);
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+
+  // ===== КНОПКА ПОВТОРНОЙ ОТПРАВКИ =====
+  document.getElementById('regResendBtn').addEventListener('click', async function() {
+    if (isResendCooldownActive || !lastRegisteredEmail) return;
+    
+    isResendCooldownActive = true;
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Отправка...';
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'not-allowed';
+    
+    try {
+      await pb.collection(USERS_COLLECTION).requestVerification(lastRegisteredEmail);
+      showAuthMessage(`📧 Письмо отправлено на ${lastRegisteredEmail}`, 'success');
+    } catch (err) {
+      console.error('Resend error:', err);
+      if (err.status === 400 && err.data?.message?.includes('already verified')) {
+        showAuthError('❌ Email уже подтвержден. Попробуйте войти.');
+      } else if (err.status === 429 || err.message?.includes('rate limit')) {
+        showAuthError('⏳ Слишком много запросов. Подождите.');
+      } else {
+        showAuthError('❌ Не удалось отправить. Убедитесь, что SMTP настроен на сервере.');
+      }
+    } finally {
+      startResendCooldown();
+    }
+  });
+
+  // ===== ВОССТАНОВЛЕНИЕ ПАРОЛЯ =====
+  document.getElementById('forgotPasswordLink').addEventListener('click', () => {
+    document.querySelectorAll('#authForms form').forEach(f => f.style.display = 'none');
+    document.getElementById('resetPasswordForm').style.display = 'block';
+  });
+  
+  document.getElementById('backToLogin').addEventListener('click', () => switchToTab('login'));
+  
+  document.getElementById('resetPasswordForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (passwordResetCooldown) return;
+    const btn = document.getElementById('resetPasswordBtn');
+    const email = document.getElementById('resetEmail').value.trim();
+    if (!email.includes('@')) {
+      showAuthError('Введите корректный email');
+      return;
+    }
+    passwordResetCooldown = true;
+    setLoading(btn, true);
+    try {
+      await pb.collection(USERS_COLLECTION).requestPasswordReset(email);
+      showAuthMessage(`✅ Ссылка отправлена на ${email}. Проверьте почту и спам.`);
+      setTimeout(() => switchToTab('login'), 3000);
+    } catch (err) {
+      showAuthError('❌ Не удалось отправить ссылку');
+    } finally {
+      setLoading(btn, false);
+      setTimeout(() => passwordResetCooldown = false, 5000);
+    }
+  });
+
+  // ===== ПОВТОРНАЯ ОТПРАВКА (Вкладка Вход) =====
+  document.getElementById('resendVerification').addEventListener('click', async function() {
+    const email = document.getElementById('loginEmail').value.trim();
+    if (!email || !email.includes('@')) {
+      showAuthError('📧 Сначала введите email в форме входа');
+      return;
+    }
+    try {
+      await pb.collection(USERS_COLLECTION).requestVerification(email);
+      showAuthMessage('📧 Письмо подтверждения отправлено повторно!');
+    } catch (err) {
+      showAuthError('❌ Не удалось отправить письмо');
+    }
+  });
+
+  // ===== СМЕНА EMAIL =====
+  document.getElementById('changeEmailBtn').addEventListener('click', () => {
+    document.getElementById('changeEmailForm').style.display = 'block';
+    document.getElementById('emailChangeStatus').style.display = 'none';
+  });
+  
+  document.getElementById('cancelEmailChange').addEventListener('click', () => {
+    document.getElementById('changeEmailForm').style.display = 'none';
+    document.getElementById('newEmailInput').value = '';
+    document.getElementById('passwordForEmailChange').value = '';
+  });
+  
+  document.getElementById('submitEmailChange').addEventListener('click', async () => {
+    if (emailChangeCooldown) return;
+    emailChangeCooldown = true;
+    const newEmail = document.getElementById('newEmailInput').value.trim();
+    const password = document.getElementById('passwordForEmailChange').value.trim();
+    const statusEl = document.getElementById('emailChangeStatus');
+    const btn = document.getElementById('submitEmailChange');
+    
+    if (!newEmail || !newEmail.includes('@')) {
+      statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Введите корректный email';
+      statusEl.className = 'status-message error';
+      statusEl.style.display = 'flex';
+      emailChangeCooldown = false;
+      return;
+    }
+    if (!password) {
+      statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Введите текущий пароль';
+      statusEl.className = 'status-message error';
+      statusEl.style.display = 'flex';
+      emailChangeCooldown = false;
+      return;
+    }
+    
+    setLoading(btn, true);
+    try {
+      await pb.collection(USERS_COLLECTION).authWithPassword(pb.authStore.model.email, password);
+      await pb.collection(USERS_COLLECTION).requestEmailChange(newEmail);
+      statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Письмо отправлено на ${newEmail}. Перейдите по ссылке.`;
+      statusEl.className = 'status-message success';
+      statusEl.style.display = 'flex';
+      document.getElementById('resendEmailChangeLink').style.display = 'block';
+      document.getElementById('changeEmailForm').style.display = 'none';
+      document.getElementById('newEmailInput').value = '';
+      document.getElementById('passwordForEmailChange').value = '';
+    } catch (err) {
+      let msg = '❌ Ошибка смены email';
+      if (err.status === 400 && err.data?.oldPassword) msg = '❌ Неверный текущий пароль';
+      statusEl.innerHTML = `<i class="fas fa-times-circle"></i> ${msg}`;
+      statusEl.className = 'status-message error';
+      statusEl.style.display = 'flex';
+    } finally {
+      setLoading(btn, false);
+      setTimeout(() => emailChangeCooldown = false, 5000);
+    }
+  });
+  
+  document.getElementById('resendEmailBtn')?.addEventListener('click', async () => {
+    const newEmail = document.getElementById('newEmailInput').value.trim();
+    if (!newEmail || !newEmail.includes('@')) return;
+    try {
+      await pb.collection(USERS_COLLECTION).requestEmailChange(newEmail);
+      document.getElementById('emailChangeStatus').innerHTML = `<i class="fas fa-check-circle"></i> Письмо повторно отправлено на ${newEmail}`;
+      document.getElementById('emailChangeStatus').className = 'status-message success';
+      document.getElementById('emailChangeStatus').style.display = 'flex';
+    } catch (err) {
+      document.getElementById('emailChangeStatus').innerHTML = '<i class="fas fa-times-circle"></i> Не удалось отправить';
+      document.getElementById('emailChangeStatus').className = 'status-message error';
+      document.getElementById('emailChangeStatus').style.display = 'flex';
+    }
+  });
+
+  // ===== СМЕНА ПАРОЛЯ =====
+  document.getElementById('changePasswordBtn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('passwordChangeStatus');
+    if (!pb.authStore.model?.email) {
+      statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Не удалось определить email';
+      statusEl.className = 'status-message error';
+      statusEl.style.display = 'flex';
+      return;
+    }
+    try {
+      await pb.collection(USERS_COLLECTION).requestPasswordReset(pb.authStore.model.email);
+      statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Письмо отправлено на ${pb.authStore.model.email}. Перейдите по ссылке.`;
+      statusEl.className = 'status-message success';
+      statusEl.style.display = 'flex';
+    } catch (err) {
+      statusEl.innerHTML = '<i class="fas fa-times-circle"></i> Не удалось отправить письмо';
+      statusEl.className = 'status-message error';
+      statusEl.style.display = 'flex';
+    }
+  });
+
+  // ===== ПОДПИСКА - ОПЛАТА ЧЕРЕЗ ЮKASSA =====
+  document.getElementById('upgradeSubscribeBtn')?.addEventListener('click', async () => {
+    const userId = pb.authStore.model?.id;
+    if (!userId) {
+      alert('Ошибка: пользователь не найден');
+      return;
+    }
+    
+    const btn = document.getElementById('upgradeSubscribeBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="loader"></span> Обработка...';
+    btn.disabled = true;
+    
+    try {
+      const response = await fetch('/create_payment.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({user_id: userId})
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        window.location.href = result.confirmation_url;
+      } else {
+        alert('Ошибка: ' + (result.error || 'Не удалось создать платёж'));
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    } catch (err) {
+      alert('Ошибка соединения: ' + err.message);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+
+  // ===== НАВЕШИВАЕМ ОБРАБОТЧИК НА КНОПКУ ВЫХОДА =====
+  document.getElementById('logoutBtn')?.addEventListener('click', logout);
+
+  // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
+  function showAuthError(msg) {
+    const el = document.getElementById('authError');
+    el.innerHTML = `<i class="fas fa-times-circle"></i> ${msg}`;
+    el.style.display = 'flex';
+    setTimeout(() => el.style.display = 'none', 12000);
+  }
+
+  function showAuthMessage(msg, type = 'success') {
+    const el = document.getElementById('authMessage');
+    el.innerHTML = type === 'success' ? `<i class="fas fa-check-circle"></i> ${msg}` : `<i class="fas fa-info-circle"></i> ${msg}`;
+    el.className = `status-message ${type}`;
+    el.style.display = 'flex';
+    setTimeout(() => el.style.display = 'none', 12000);
+  }
+
+  function setLoading(btn, loading) {
+    if (loading) {
+      btn.dataset.originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="loader"></span> Загрузка...';
+      btn.disabled = true;
+    } else {
+      btn.innerHTML = btn.dataset.originalText || 'Готово';
+      btn.disabled = false;
+    }
+  }
+
+  function switchToTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelector(`.tab[data-tab="${tabName}"]`)?.classList.add('active');
+    document.querySelectorAll('#authForms form').forEach(f => {
+      f.classList.remove('active');
+      f.style.display = 'none';
+    });
+    if (tabName === 'login') {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('loginForm').classList.add('active');
+      document.getElementById('resetPasswordForm').style.display = 'none';
+    } else if (tabName === 'register') {
+      document.getElementById('registerForm').style.display = 'block';
+      document.getElementById('registerForm').classList.add('active');
+      document.getElementById('resetPasswordForm').style.display = 'none';
+    }
+    const authError = document.getElementById('authError');
+    const authMessage = document.getElementById('authMessage');
+    if (authError) authError.style.display = 'none';
+    if (authMessage) authMessage.style.display = 'none';
+  }
+
+  function startResendCooldown() {
+    if (resendTimer) clearInterval(resendTimer);
+    isResendCooldownActive = true;
+    
+    let seconds = 120;
+    
+    const btn = document.getElementById('regResendBtn');
+    if (!btn) return;
+    
+    btn.disabled = true;
+    btn.style.opacity = '0.65';
+    btn.style.cursor = 'not-allowed';
+    
+    resendTimer = setInterval(() => {
+      seconds--;
+      btn.innerHTML = `📧 Повторная отправка через <strong>${seconds}</strong> сек.`;
+      if (seconds <= 0) {
+        clearInterval(resendTimer);
+        resendTimer = null;
+        isResendCooldownActive = false;
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        btn.innerHTML = '📧 Письмо не пришло? <strong>Отправить повторно</strong>';
+      }
+    }, 1000);
+  }
+
+  // ===== ИНИЦИАЛИЗАЦИЯ =====
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => switchToTab(tab.dataset.tab));
+  });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    restoreAuthSession();
+    if (pb.authStore.isValid) {
+      loadUserData();
+    } else {
+      document.getElementById('authForms').style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html>
