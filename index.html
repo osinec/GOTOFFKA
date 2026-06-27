@@ -16,6 +16,7 @@
       font-size: 13px;
       overflow-y: auto;
       overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
     .page-wrapper { 
       display: flex; 
@@ -58,10 +59,16 @@
       align-items: center; 
       gap: 6px; 
       transition: all 0.2s; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
     }
     .profile-icon:hover { 
       background: #e8d8c4; 
       transform: translateY(-1px); 
+    }
+    .profile-icon:active {
+      transform: scale(0.95);
     }
     .nav-bar { 
       padding: 0 20px 10px; 
@@ -83,6 +90,9 @@
       align-items: center; 
       justify-content: center; 
       gap: 8px; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
     }
     .random-btn:active { 
       transform: scale(0.97); 
@@ -108,10 +118,16 @@
       gap: 6px; 
       transition: all 0.2s; 
       cursor: pointer; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
     }
     .menu-link:hover { 
       background: #fff0e2; 
       transform: translateY(-1px); 
+    }
+    .menu-link:active {
+      transform: scale(0.95);
     }
     .another-recipe { 
       background: linear-gradient(115deg, #2c3e50, #1a2a38); 
@@ -131,6 +147,9 @@
       justify-content: center; 
       gap: 8px; 
       box-shadow: 0 6px 14px rgba(0,0,0,0.15); 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
     }
     .another-recipe.visible { 
       display: flex; 
@@ -176,6 +195,14 @@
       font-weight: 700; 
       cursor: pointer; 
       transition: 0.2s; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
     }
     .servings-btn:active { 
       transform: scale(0.95); 
@@ -183,6 +210,7 @@
     .servings-btn:disabled { 
       background: #ddd; 
       cursor: not-allowed; 
+      opacity: 0.6;
     }
     .servings-count { 
       font-size: 22px; 
@@ -323,11 +351,17 @@
       transition: all 0.25s; 
       border: 1px solid #f5e6d8; 
       cursor: pointer; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
     }
     .steps-list li:hover { 
       background: #fffaf2; 
       border-color: #faddb4; 
       transform: translateX(4px); 
+    }
+    .steps-list li:active {
+      transform: scale(0.98);
     }
     .steps-list li.step-active { 
       background: linear-gradient(135deg, #fff6ea, #fffaf0); 
@@ -374,10 +408,17 @@
       width: 100%; 
       cursor: pointer; 
       transition: all 0.2s; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      min-height: 48px;
     }
     .like-button:hover { 
       background: #ffdddd; 
       transform: scale(0.98); 
+    }
+    .like-button:active {
+      transform: scale(0.95);
     }
     .like-button.liked { 
       background: #f0dbdb; 
@@ -404,16 +445,41 @@
       gap: 6px; 
       margin: 6px auto; 
       transition: all 0.2s; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      min-height: 44px;
     }
     .allergens-btn:hover { 
       background: #ffe6b3; 
       transform: translateY(-1px); 
+    }
+    .allergens-btn:active {
+      transform: scale(0.95);
     }
     .allergens-checkbox-grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr); 
       gap: 10px; 
       margin: 16px 0; 
+    }
+    .allergens-checkbox-grid label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      padding: 4px 0;
+    }
+    .allergens-checkbox-grid input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      touch-action: manipulation;
+      min-width: 20px;
+      min-height: 20px;
     }
     .loader, .error, .warning, .message { 
       display: none; 
@@ -467,6 +533,8 @@
       justify-content: center; 
       z-index: 2000; 
       animation: fadeIn 0.2s ease;
+      padding: 20px;
+      -webkit-tap-highlight-color: transparent;
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -479,10 +547,13 @@
       background: white; 
       border-radius: 32px; 
       max-width: 360px; 
-      width: 90%; 
+      width: 100%; 
       padding: 0;
       overflow: hidden;
       animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      margin: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     @keyframes slideUp {
       from { transform: translateY(30px); opacity: 0; }
@@ -693,6 +764,10 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      min-height: 56px;
     }
     .premium-upgrade-btn:active {
       transform: scale(0.97);
@@ -707,9 +782,16 @@
       text-align: center;
       padding: 14px 20px 22px;
       transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      min-height: 44px;
     }
     .modal-close-premium:hover {
       color: #e67e22;
+    }
+    .modal-close-premium:active {
+      transform: scale(0.95);
     }
     
     /* Остальные модалки */
@@ -718,7 +800,7 @@
       width: 100%; 
       background: #fef9f0; 
       border: 1px solid #ffe1b9; 
-      padding: 10px; 
+      padding: 12px 10px; 
       border-radius: 20px; 
       margin: 6px 0; 
       text-align: left; 
@@ -727,10 +809,17 @@
       font-weight: 500; 
       color: #b45f2b; 
       transition: all 0.2s; 
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      min-height: 48px;
     }
     .modal-choice:hover { 
       background: #fff0e2; 
       transform: translateX(4px); 
+    }
+    .modal-choice:active {
+      transform: scale(0.97);
     }
     .modal-close {
       margin-top: 10px;
@@ -741,7 +830,14 @@
       cursor: pointer;
       width: 100%;
       text-align: center;
-      padding: 8px;
+      padding: 10px;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      min-height: 44px;
+    }
+    .modal-close:active {
+      transform: scale(0.95);
     }
     .favorites-toast { 
       position: fixed; 
@@ -750,7 +846,7 @@
       transform: translateX(-50%) translateY(20px); 
       background: linear-gradient(135deg, #ff6b6b, #ee5a5a); 
       color: white; 
-      padding: 10px 20px; 
+      padding: 12px 20px; 
       border-radius: 60px; 
       font-size: 12px; 
       font-weight: 600; 
@@ -761,6 +857,8 @@
       display: flex; 
       gap: 8px; 
       align-items: center; 
+      max-width: 90%;
+      min-height: 48px;
     }
     .favorites-toast.show { 
       opacity: 1; 
@@ -774,8 +872,17 @@
     .close-toast { 
       cursor: pointer; 
       margin-left: 8px; 
-      font-size: 14px; 
+      font-size: 16px; 
       font-weight: bold; 
+      padding: 8px;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      touch-action: manipulation;
+      min-width: 32px;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .subscription-badge {
       background: linear-gradient(135deg, #f5b042, #f59e0b);
@@ -797,6 +904,32 @@
       .premium-header h3 { font-size: 24px; }
       .feature-text { font-size: 12px; }
       .feature-emoji { font-size: 18px; min-width: 30px; }
+      .modal-box { margin: 10px; }
+      .servings-btn { 
+        width: 44px; 
+        height: 44px; 
+        min-width: 44px;
+        min-height: 44px;
+        font-size: 22px;
+      }
+    }
+    @media (max-width: 380px) {
+      .menu-row { flex-direction: column; gap: 6px; }
+      .servings-controls { gap: 10px; }
+      .servings-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; font-size: 18px; }
+      .allergens-checkbox-grid { grid-template-columns: 1fr; }
+    }
+    @media (pointer: coarse) {
+      button, .menu-link, .profile-icon, .modal-choice, .servings-btn, .allergens-btn, .like-button {
+        min-height: 44px;
+        min-width: 44px;
+      }
+      .servings-btn {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+      }
     }
   </style>
 </head>
@@ -832,9 +965,9 @@
             <div class="servings-card" id="servingsSection" style="display: none;">
               <div class="servings-label"><span>👥 Количество персон:</span><span class="premium-lock-icon" id="servingsLockIcon" style="display: none;">👑</span></div>
               <div class="servings-controls">
-                <button class="servings-btn" id="servingsMinus">−</button>
+                <button class="servings-btn" id="servingsMinus" aria-label="Уменьшить порции">−</button>
                 <span class="servings-count" id="servingsCount">2</span>
-                <button class="servings-btn" id="servingsPlus">+</button>
+                <button class="servings-btn" id="servingsPlus" aria-label="Увеличить порции">+</button>
               </div>
             </div>
             <div id="ingredientsContainer"></div>
@@ -877,9 +1010,9 @@
     <div class="modal-box" style="padding: 20px;">
       <h3 style="margin-bottom: 10px; font-size: 16px;">🚫 Исключить аллергены</h3>
       <div class="allergens-checkbox-grid" id="allergensGrid"></div>
-      <div style="display: flex; gap: 10px; margin-top: 14px;">
-        <button id="allergensClearBtn" style="flex:1; padding:8px; border-radius:30px; border:1px solid #ddd; background:white; cursor:pointer;">Сбросить</button>
-        <button id="allergensSaveBtn" style="flex:1; padding:8px; border-radius:30px; background:#f5b042; border:none; color:white; font-weight:bold; cursor:pointer;">Сохранить</button>
+      <div style="display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;">
+        <button id="allergensClearBtn" style="flex:1; min-width: 100px; padding:12px; border-radius:30px; border:1px solid #ddd; background:white; cursor:pointer; font-weight:600; -webkit-tap-highlight-color: transparent; user-select: none; touch-action: manipulation; min-height:48px;">Сбросить</button>
+        <button id="allergensSaveBtn" style="flex:1; min-width: 100px; padding:12px; border-radius:30px; background:#f5b042; border:none; color:white; font-weight:bold; cursor:pointer; -webkit-tap-highlight-color: transparent; user-select: none; touch-action: manipulation; min-height:48px;">Сохранить</button>
       </div>
     </div>
   </div>
@@ -963,6 +1096,127 @@
       '/recipes/{cat}.json'
     ];
     
+    // ==================== СИСТЕМА ПРЕМИУМ ОКНА ====================
+    const STORAGE_KEY = 'premium_clicks_data';
+    const PREMIUM_LOCK_HOURS = 12;
+
+    function getPremiumLockData() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                const parsed = JSON.parse(data);
+                return parsed;
+            }
+        } catch (e) {
+            console.warn('Ошибка чтения данных премиум:', e);
+        }
+        return { lockedUntil: null };
+    }
+
+    function savePremiumLockData(data) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.warn('Ошибка сохранения данных премиум:', e);
+        }
+    }
+
+    function isPremiumLocked() {
+        const data = getPremiumLockData();
+        if (!data.lockedUntil) return false;
+        const lockEnd = new Date(data.lockedUntil);
+        return new Date() < lockEnd;
+    }
+
+    function lockPremiumForHours(hours = PREMIUM_LOCK_HOURS) {
+        const now = new Date();
+        const lockEnd = new Date(now.getTime() + hours * 60 * 60 * 1000);
+        savePremiumLockData({ 
+            lockedUntil: lockEnd.toISOString(),
+            lockedAt: now.toISOString()
+        });
+    }
+
+    function unlockPremium() {
+        savePremiumLockData({ lockedUntil: null });
+        console.log('🔓 Премиум блокировка снята');
+    }
+
+    // --- ГЛАВНАЯ ФУНКЦИЯ: Показать премиум окно ---
+    function showPremiumModal() {
+        console.log('showPremiumModal вызван, hasSubscription:', hasSubscription);
+        
+        if (hasSubscription) {
+            console.log('✅ У пользователя уже есть подписка');
+            return;
+        }
+        
+        if (isPremiumLocked()) {
+            const data = getPremiumLockData();
+            const lockEnd = new Date(data.lockedUntil);
+            const now = new Date();
+            const remainingMs = lockEnd - now;
+            const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+            const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+            
+            showMessage(`⏳ Премиум окно будет доступно через ${hours}ч ${minutes}мин`, 'info');
+            console.log(`🔒 Премиум окно заблокировано до ${lockEnd.toLocaleString()}`);
+            return;
+        }
+        
+        const modal = document.getElementById('premiumModal');
+        if (modal) {
+            modal.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+            console.log('👑 Премиум окно показано');
+        } else {
+            console.error('❌ Модалка premiumModal не найдена!');
+        }
+    }
+
+    function closePremiumModalWithLock() {
+        const modal = document.getElementById('premiumModal');
+        if (modal) {
+            modal.classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+        
+        lockPremiumForHours(PREMIUM_LOCK_HOURS);
+        console.log(`🔒 Премиум окно заблокировано на ${PREMIUM_LOCK_HOURS} часов`);
+        showMessage(`🔒 Премиум окно будет доступно через ${PREMIUM_LOCK_HOURS} часов`, 'info');
+    }
+
+    // ==================== ОТСЛЕЖИВАНИЕ КЛИКОВ ====================
+    let clickStats = {
+        totalClicks: 0,
+        premiumClicks: 0,
+        lastClickTime: null,
+        clickHistory: []
+    };
+
+    function trackClick(type = 'general') {
+        clickStats.totalClicks++;
+        if (type.includes('premium')) {
+            clickStats.premiumClicks++;
+        }
+        clickStats.lastClickTime = new Date().toISOString();
+        clickStats.clickHistory.push({
+            type: type,
+            time: new Date().toISOString(),
+            url: window.location.href
+        });
+        
+        try {
+            localStorage.setItem('clickStats', JSON.stringify(clickStats));
+        } catch (e) {
+            console.warn('Ошибка сохранения статистики кликов:', e);
+        }
+        
+        console.log(`🖱️ Клик #${clickStats.totalClicks}: ${type}`);
+    }
+
+    // ==================== ОСТАЛЬНЫЕ ФУНКЦИИ ====================
+    
     function formatIngredientName(ingredientId) {
       if (!ingredientId) return '';
       return ingredientId
@@ -1003,9 +1257,17 @@
       if (!el) return;
       el.textContent = msg;
       el.style.display = 'block';
-      el.style.background = type === 'error' ? '#fee' : '#dcfce7';
-      el.style.color = type === 'error' ? '#dc2626' : '#166534';
-      setTimeout(() => el.style.display = 'none', 3000);
+      if (type === 'error') {
+        el.style.background = '#fee';
+        el.style.color = '#dc2626';
+      } else if (type === 'success') {
+        el.style.background = '#dcfce7';
+        el.style.color = '#166534';
+      } else {
+        el.style.background = '#e0f2fe';
+        el.style.color = '#0369a1';
+      }
+      setTimeout(() => { el.style.display = 'none'; }, 4000);
     }
 
     function showError(msg) {
@@ -1042,6 +1304,7 @@
               hasSubscription = userData.has_premium;
               currentUser = userData;
               updateUIForSubscription();
+              updateCabinetButton();
               return hasSubscription;
             }
           }
@@ -1051,148 +1314,671 @@
           const user = await pb.collection('users').getOne(currentUser.id);
           const hasAccess = hasPremiumAccess(user);
           hasSubscription = hasAccess;
-          localStorage.setItem('userData', JSON.stringify({ id: user.id, email: user.email, has_premium: hasAccess, checkedAt: Date.now() }));
+          localStorage.setItem('userData', JSON.stringify({ 
+            id: user.id, 
+            email: user.email, 
+            has_premium: hasAccess, 
+            checkedAt: Date.now() 
+          }));
           updateUIForSubscription();
+          updateCabinetButton();
           return hasAccess;
         } else {
           hasSubscription = false;
           currentUser = null;
           updateUIForSubscription();
+          updateCabinetButton();
           return false;
         }
-      } catch (err) { console.error('Ошибка подписки:', err); hasSubscription = false; updateUIForSubscription(); return false; }
+      } catch (err) { 
+        console.error('Ошибка проверки подписки:', err); 
+        hasSubscription = false; 
+        updateUIForSubscription();
+        updateCabinetButton();
+        return false; 
+      }
     }
 
     function updateUIForSubscription() {
-      const minus = document.getElementById('servingsMinus'), plus = document.getElementById('servingsPlus'), lock = document.getElementById('servingsLockIcon');
+      const minus = document.getElementById('servingsMinus');
+      const plus = document.getElementById('servingsPlus');
+      const lock = document.getElementById('servingsLockIcon');
+      
       if (!hasSubscription) { 
-        // Кнопки визуально не блокируем, но при клике будет показываться премиум окно
-        if (minus) minus.style.opacity = '0.7';
-        if (plus) plus.style.opacity = '0.7';
+        if (minus) { minus.style.opacity = '0.7'; }
+        if (plus) { plus.style.opacity = '0.7'; }
         if (lock) lock.style.display = 'inline'; 
       } else { 
-        if (minus) minus.style.opacity = '1';
-        if (plus) plus.style.opacity = '1';
+        if (minus) { minus.style.opacity = '1'; }
+        if (plus) { plus.style.opacity = '1'; }
         if (lock) lock.style.display = 'none'; 
       }
     }
 
-    function showPremiumModal() { document.getElementById('premiumModal').classList.add('visible'); }
-    
     async function subscribeToPremium() {
-      if (!currentUser?.id) { showMessage('Сначала войдите в аккаунт', 'error'); window.location.href = 'cabinet.html'; return; }
+      if (!currentUser?.id) { 
+        showMessage('Сначала войдите в аккаунт', 'error'); 
+        window.location.href = 'cabinet.html'; 
+        return; 
+      }
       showMessage('🔄 Перенаправление на оплату...', 'info');
       setTimeout(async () => {
         try {
           const trialStart = new Date();
-          await pb.collection('users').update(currentUser.id, { is_subscribed: false, subscription_end: null, trial_start: trialStart.toISOString(), trial_paid: true });
+          await pb.collection('users').update(currentUser.id, { 
+            is_subscribed: false, 
+            subscription_end: null, 
+            trial_start: trialStart.toISOString(), 
+            trial_paid: true 
+          });
           await checkSubscription(true);
           showMessage('🎉 Пробный период активирован! 14 дней за 1 рубль. Наслаждайтесь премиум доступом!', 'success');
           document.getElementById('premiumModal').classList.remove('visible');
-          if (currentCategory) { const recipes = await loadCategory(currentCategory); if (recipes.length) showRandomRecipe(recipes); }
-        } catch (err) { showMessage('Ошибка активации', 'error'); }
+          if (currentCategory) { 
+            const recipes = await loadCategory(currentCategory); 
+            if (recipes && recipes.length) showRandomRecipe(recipes); 
+          }
+        } catch (err) { 
+          console.error('Ошибка активации:', err);
+          showMessage('Ошибка активации подписки', 'error'); 
+        }
       }, 1500);
     }
 
     function updateCabinetButton() {
       const btn = document.getElementById('cabinetBtn');
+      if (!btn) return;
+      
       if (pb.authStore.isValid && pb.authStore.model?.id) {
         let badge = hasSubscription ? '<span class="subscription-badge">⭐ PREMIUM</span>' : '';
         btn.innerHTML = `👤 Мой профиль ${badge}`;
-        btn.onclick = () => window.location.href = 'cabinet.html';
-      } else { btn.innerHTML = '👤 Кабинет'; btn.onclick = () => window.location.href = 'cabinet.html'; }
+        btn.onclick = function(e) {
+          e.preventDefault();
+          window.location.href = 'cabinet.html';
+        };
+      } else { 
+        btn.innerHTML = '👤 Кабинет'; 
+        btn.onclick = function(e) {
+          e.preventDefault();
+          window.location.href = 'cabinet.html';
+        };
+      }
     }
 
     async function loadIngredients() {
-      try { const r = await fetch(`data/ingredients.json?_=${Date.now()}`); if (!r.ok) throw new Error(); const data = await r.json(); data.ingredients.forEach(ing => { ingredientsDB[ing.id.toLowerCase()] = ing; }); renderAllergens(); } catch (err) { console.error(err); renderAllergens(); }
+      try { 
+        const r = await fetch(`data/ingredients.json?_=${Date.now()}`); 
+        if (!r.ok) throw new Error('Не удалось загрузить ингредиенты'); 
+        const data = await r.json(); 
+        if (data && data.ingredients) {
+          data.ingredients.forEach(ing => { 
+            ingredientsDB[ing.id.toLowerCase()] = ing; 
+          }); 
+        }
+        renderAllergens(); 
+      } catch (err) { 
+        console.error('Ошибка загрузки ингредиентов:', err); 
+        renderAllergens(); 
+      }
     }
-    function getRecipeAllergens(recipe) { if (!recipe?.ingredients?.length) return []; const set = new Set(); recipe.ingredients.forEach(ing => { let id = null; if (typeof ing === 'object') id = (ing.ingredientId || ing.id)?.toLowerCase(); else if (typeof ing === 'string') { for (const [key, val] of Object.entries(ingredientsDB)) { if (ing.toLowerCase().includes(val.name.toLowerCase()) || val.name.toLowerCase().includes(ing.toLowerCase())) { id = key; break; } } } if (id && ingredientsDB[id]?.allergens) ingredientsDB[id].allergens.forEach(a => set.add(a)); }); return [...set]; }
-    function filterRecipesByAllergens(recipes, exclude) { if (!exclude?.length) return recipes; return recipes.filter(r => !getRecipeAllergens(r).some(a => exclude.includes(a))); }
-    function renderAllergens() { const grid = document.getElementById('allergensGrid'); if (!grid) return; grid.innerHTML = allAllergensList.map(a => `<label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" data-allergen="${a.id}" ${selectedAllergens.includes(a.id) ? 'checked' : ''}><span>${a.name}</span></label>`).join(''); updateAllergensCount(); }
+    
+    function getRecipeAllergens(recipe) { 
+      if (!recipe?.ingredients?.length) return []; 
+      const set = new Set(); 
+      recipe.ingredients.forEach(ing => { 
+        let id = null; 
+        if (typeof ing === 'object') {
+          id = (ing.ingredientId || ing.id)?.toLowerCase(); 
+        } else if (typeof ing === 'string') { 
+          for (const [key, val] of Object.entries(ingredientsDB)) { 
+            if (ing.toLowerCase().includes(val.name.toLowerCase()) || val.name.toLowerCase().includes(ing.toLowerCase())) { 
+              id = key; 
+              break; 
+            } 
+          } 
+        } 
+        if (id && ingredientsDB[id]?.allergens) {
+          ingredientsDB[id].allergens.forEach(a => set.add(a)); 
+        }
+      }); 
+      return [...set]; 
+    }
+    
+    function filterRecipesByAllergens(recipes, exclude) { 
+      if (!exclude?.length) return recipes; 
+      return recipes.filter(r => !getRecipeAllergens(r).some(a => exclude.includes(a))); 
+    }
+    
+    function renderAllergens() { 
+      const grid = document.getElementById('allergensGrid'); 
+      if (!grid) return; 
+      grid.innerHTML = allAllergensList.map(a => 
+        `<label style="display: flex; align-items: center; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; padding: 4px 0;">
+          <input type="checkbox" data-allergen="${a.id}" ${selectedAllergens.includes(a.id) ? 'checked' : ''} style="width: 20px; height: 20px; cursor: pointer; touch-action: manipulation; min-width: 20px; min-height: 20px;">
+          <span>${a.name}</span>
+        </label>`
+      ).join(''); 
+      updateAllergensCount(); 
+    }
 
     async function loadCategory(cat) {
       if (loadedRecipes[cat]) return loadedRecipes[cat];
-      const loader = document.getElementById('loader'); if (loader) loader.style.display = 'block';
+      const loader = document.getElementById('loader'); 
+      if (loader) loader.style.display = 'block';
+      
       for (const path of RECIPES_PATHS) {
         const url = path.replace('{cat}', cat) + `?_=${Date.now()}`;
-        try { const res = await fetch(url); if (res.ok) { const data = await res.json(); if (Array.isArray(data) && data.length) { data.forEach((r, i) => { if (!r.id) r.id = `${cat}_${i}`; if (!r.ingredients) r.ingredients = []; if (!r.steps) r.steps = []; }); loadedRecipes[cat] = data; if (loader) loader.style.display = 'none'; return data; } } } catch(e) {}
+        try { 
+          const res = await fetch(url); 
+          if (res.ok) { 
+            const data = await res.json(); 
+            if (Array.isArray(data) && data.length) { 
+              data.forEach((r, i) => { 
+                if (!r.id) r.id = `${cat}_${i}`; 
+                if (!r.ingredients) r.ingredients = []; 
+                if (!r.steps) r.steps = []; 
+              }); 
+              loadedRecipes[cat] = data; 
+              if (loader) loader.style.display = 'none'; 
+              return data; 
+            } 
+          } 
+        } catch(e) { console.warn('Ошибка загрузки категории:', e); }
       }
-      if (loader) loader.style.display = 'none'; showError(`❌ Не удалось загрузить рецепты для категории "${categoryNames[cat] || cat}".`); return [];
+      if (loader) loader.style.display = 'none'; 
+      showError(`❌ Не удалось загрузить рецепты для категории "${categoryNames[cat] || cat}".`); 
+      return []; 
     }
 
-    function clearImage() { const photo = document.getElementById('recipePhoto'), icon = document.getElementById('defaultIcon'); if (photo) { photo.style.display = 'none'; photo.src = ''; } if (icon) icon.classList.remove('hidden'); }
+    function clearImage() { 
+      const photo = document.getElementById('recipePhoto'); 
+      const icon = document.getElementById('defaultIcon'); 
+      if (photo) { photo.style.display = 'none'; photo.src = ''; } 
+      if (icon) icon.classList.remove('hidden'); 
+    }
     
     function showRandomRecipe(recipes) {
-      const refreshBtn = document.getElementById('refreshBtn'), likeBtn = document.getElementById('likeBtn'), noMsg = document.getElementById('noRecipesMessage');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const likeBtn = document.getElementById('likeBtn');
+      const noMsg = document.getElementById('noRecipesMessage');
       currentlyActiveStepElement = null;
-      if (!recipes?.length) {
-        clearImage(); document.getElementById('ingredientsContainer').innerHTML = ''; document.getElementById('stepsContainer').innerHTML = ''; document.getElementById('noteContainer').innerHTML = '';
-        document.getElementById('categoryBadge').innerHTML = categoryNames[currentCategory] || 'РЕЦЕПТ'; document.getElementById('recipeTitle').innerText = 'Нет рецептов';
-        document.getElementById('timeBadge').innerHTML = '⏱️ —'; document.getElementById('caloriesBadge').innerHTML = '🔥 —'; document.getElementById('servingsSection').style.display = 'none';
-        if (noMsg) noMsg.style.display = 'block'; if (refreshBtn) refreshBtn.classList.add('visible'); if (likeBtn) likeBtn.disabled = true; currentRecipe = null; return;
+      
+      if (!recipes || !recipes.length) {
+        clearImage(); 
+        document.getElementById('ingredientsContainer').innerHTML = ''; 
+        document.getElementById('stepsContainer').innerHTML = ''; 
+        document.getElementById('noteContainer').innerHTML = '';
+        document.getElementById('categoryBadge').innerHTML = categoryNames[currentCategory] || 'РЕЦЕПТ'; 
+        document.getElementById('recipeTitle').innerText = 'Нет рецептов';
+        document.getElementById('timeBadge').innerHTML = '⏱️ —'; 
+        document.getElementById('caloriesBadge').innerHTML = '🔥 —'; 
+        document.getElementById('servingsSection').style.display = 'none';
+        if (noMsg) noMsg.style.display = 'block'; 
+        if (refreshBtn) refreshBtn.classList.add('visible'); 
+        if (likeBtn) likeBtn.disabled = true; 
+        currentRecipe = null; 
+        return;
       }
+      
       let available = [...recipes];
-      if (hasSubscription && selectedAllergens.length) { available = filterRecipesByAllergens(recipes, selectedAllergens); if (!available.length) { clearImage(); if (noMsg) noMsg.style.display = 'block'; if (refreshBtn) refreshBtn.classList.add('visible'); if (likeBtn) likeBtn.disabled = true; currentRecipe = null; return; } }
-      if (noMsg) noMsg.style.display = 'none'; if (likeBtn) likeBtn.disabled = false; currentRecipe = available[Math.floor(Math.random() * available.length)]; displayRecipe(currentRecipe);
+      if (hasSubscription && selectedAllergens.length) { 
+        available = filterRecipesByAllergens(recipes, selectedAllergens); 
+        if (!available.length) { 
+          clearImage(); 
+          if (noMsg) noMsg.style.display = 'block'; 
+          if (refreshBtn) refreshBtn.classList.add('visible'); 
+          if (likeBtn) likeBtn.disabled = true; 
+          currentRecipe = null; 
+          return; 
+        } 
+      }
+      
+      if (noMsg) noMsg.style.display = 'none'; 
+      if (likeBtn) likeBtn.disabled = false; 
+      currentRecipe = available[Math.floor(Math.random() * available.length)]; 
+      displayRecipe(currentRecipe);
     }
 
-    function getUnitForIngredient(name) { const l = name.toLowerCase(); if (l.includes('молоко')||l.includes('вода')||l.includes('масло')) return 'мл'; if (l.includes('мука')||l.includes('сахар')||l.includes('соль')) return 'г'; if (['яйцо','яйца','лаваш','лимон','яблоко','банан'].some(p=>l.includes(p))) return 'шт'; return 'г'; }
-    function parseIngredientString(str) { const parts = str.trim().split(/\s+/); if (/^\d+$/.test(parts[0])) return { quantity: parseInt(parts[0]), name: parts.slice(1).join(' ') }; return { quantity: null, name: str }; }
-    function formatIngredients(ings) { if (!ings?.length) return '<div class="section-title">📝 Ингредиенты</div><p>Нет данных</p>'; const items = ings.map(it => { let name='', quantity='', unit=''; if(typeof it === 'string'){ const p=parseIngredientString(it); name=capitalizeFirst(p.name.replace(/_/g,' ')); unit=getUnitForIngredient(name); quantity=p.quantity||'по вкусу'; } else { const raw = it.ingredientId||it.name||'—'; name=capitalizeFirst(raw.replace(/_/g,' ')); quantity=it.quantity??'по вкусу'; unit=it.unit||getUnitForIngredient(name); } const amount = quantity!=='по вкусу' ? `${quantity} ${unit}` : quantity; return `<li><span class="ingredient-name">${name}</span><span class="ingredient-amount">${amount}</span></li>`; }); return `<div class="section-title">📋 Ингредиенты</div><ul class="ingredients-grid">${items.join('')}</ul>`; }
-    function scaleIngredients(ings, from, to) { if (!ings) return []; const r = to/from; return ings.map(it => { if(typeof it === 'string'){ const parts=it.trim().split(/\s+/); if(parts.length>1 && /^\d+$/.test(parts[0])) return `${Math.round(parseInt(parts[0])*r)} ${parts.slice(1).join(' ')}`; return it; } return {...it, quantity: it.quantity!=null?Math.round(it.quantity*r):''}; }); }
+    function getUnitForIngredient(name) { 
+      const l = name.toLowerCase(); 
+      if (l.includes('молоко') || l.includes('вода') || l.includes('масло') || l.includes('сливки')) return 'мл'; 
+      if (l.includes('мука') || l.includes('сахар') || l.includes('соль') || l.includes('рис') || l.includes('крупа')) return 'г'; 
+      if (['яйцо','яйца','лаваш','лимон','яблоко','банан','апельсин','лук','чеснок','морковь','картофель','помидор','огурец'].some(p=>l.includes(p))) return 'шт'; 
+      return 'г'; 
+    }
     
+    function parseIngredientString(str) { 
+      const parts = str.trim().split(/\s+/); 
+      if (/^\d+$/.test(parts[0])) return { quantity: parseInt(parts[0]), name: parts.slice(1).join(' ') }; 
+      return { quantity: null, name: str }; 
+    }
+    
+    function formatIngredients(ings) { 
+      if (!ings || !ings.length) return '<div class="section-title">📝 Ингредиенты</div><p>Нет данных</p>'; 
+      const items = ings.map(it => { 
+        let name = '', quantity = '', unit = ''; 
+        if (typeof it === 'string') { 
+          const p = parseIngredientString(it); 
+          name = capitalizeFirst(p.name.replace(/_/g, ' ')); 
+          unit = getUnitForIngredient(name); 
+          quantity = p.quantity || 'по вкусу'; 
+        } else { 
+          const raw = it.ingredientId || it.name || '—'; 
+          name = capitalizeFirst(raw.replace(/_/g, ' ')); 
+          quantity = it.quantity ?? 'по вкусу'; 
+          unit = it.unit || getUnitForIngredient(name); 
+        } 
+        const amount = quantity !== 'по вкусу' ? `${quantity} ${unit}` : quantity; 
+        return `<li><span class="ingredient-name">${name}</span><span class="ingredient-amount">${amount}</span></li>`; 
+      }); 
+      return `<div class="section-title">📋 Ингредиенты</div><ul class="ingredients-grid">${items.join('')}</ul>`; 
+    }
+    
+    function scaleIngredients(ings, from, to) { 
+      if (!ings) return []; 
+      const r = to / from; 
+      return ings.map(it => { 
+        if (typeof it === 'string') { 
+          const parts = it.trim().split(/\s+/); 
+          if (parts.length > 1 && /^\d+$/.test(parts[0])) {
+            const newQty = Math.round(parseInt(parts[0]) * r);
+            return `${newQty} ${parts.slice(1).join(' ')}`; 
+          }
+          return it; 
+        } 
+        return { ...it, quantity: it.quantity != null ? Math.round(it.quantity * r) : '' }; 
+      }); 
+    }
+    
+    // --- ГЛАВНАЯ ФУНКЦИЯ ИЗМЕНЕНИЯ ПОРЦИЙ с премиум-проверкой ---
     function updateServingsDisplay(newS) {
-      if(!hasSubscription){ 
-        showPremiumModal(); 
+      console.log('updateServingsDisplay вызван, newS:', newS, 'hasSubscription:', hasSubscription);
+      
+      if (!hasSubscription) { 
+        trackClick('premium-servings');
+        showPremiumModal();
+        return; 
+      }
+      if (!currentRecipe) return;
+      currentServings = newS;
+      document.getElementById('servingsCount').innerText = currentServings;
+      const scaled = scaleIngredients(currentRecipe.ingredients, baseServings, currentServings);
+      document.getElementById('ingredientsContainer').innerHTML = formatIngredients(scaled);
+    }
+    
+    function attachStepHandlers() { 
+      const list = document.getElementById('stepsList'); 
+      if (!list) return; 
+      list.removeEventListener('click', stepClickHandler); 
+      list.addEventListener('click', stepClickHandler); 
+    }
+    
+    function stepClickHandler(e) { 
+      const li = e.target.closest('li'); 
+      if (!li) return; 
+      if (currentlyActiveStepElement === li) { 
+        li.classList.remove('step-active'); 
+        currentlyActiveStepElement = null; 
+      } else { 
+        if (currentlyActiveStepElement) currentlyActiveStepElement.classList.remove('step-active'); 
+        li.classList.add('step-active'); 
+        currentlyActiveStepElement = li; 
+      } 
+    }
+    
+    function displayRecipe(recipe) { 
+      const container = document.getElementById('recipeContainer');
+      const refreshBtn = document.getElementById('refreshBtn');
+      currentlyActiveStepElement = null;
+      
+      if (!recipe) { 
+        if (container) container.classList.remove('visible'); 
+        if (refreshBtn) refreshBtn.classList.remove('visible'); 
+        document.getElementById('recipeTitle').innerText = 'Выберите категорию'; 
+        return; 
+      }
+      
+      if (container) container.classList.add('visible'); 
+      if (refreshBtn) refreshBtn.classList.add('visible'); 
+      
+      document.getElementById('categoryBadge').innerHTML = categoryNames[currentCategory] || 'РЕЦЕПТ'; 
+      document.getElementById('recipeTitle').innerText = recipe.title || 'Без названия'; 
+      document.getElementById('timeBadge').innerHTML = recipe.time ? `⏱️ ${recipe.time}` : '⏱️ —'; 
+      document.getElementById('caloriesBadge').innerHTML = recipe.calories ? `🔥 ${recipe.calories} ккал` : '🔥 —'; 
+      
+      const photo = document.getElementById('recipePhoto');
+      const icon = document.getElementById('defaultIcon');
+      
+      if (recipe.photo && photo) { 
+        let path = recipe.photo; 
+        if (!path.startsWith('/') && !path.startsWith('http')) path = `/pics/${path}`; 
+        photo.src = path; 
+        photo.style.display = 'block'; 
+        if (icon) icon.classList.add('hidden'); 
+        photo.onerror = function() { 
+          this.style.display = 'none'; 
+          if (icon) icon.classList.remove('hidden'); 
+        }; 
+      } else { 
+        if (photo) photo.style.display = 'none'; 
+        if (icon) icon.classList.remove('hidden'); 
+      } 
+      
+      document.getElementById('ingredientsContainer').innerHTML = formatIngredients(recipe.ingredients); 
+      
+      const stepsHtml = recipe.steps && recipe.steps.length 
+        ? `<div class="section-title">👩‍🍳 Приготовление</div><ul class="steps-list" id="stepsList">${recipe.steps.map((s, i) => `<li><span class="step-number">${i+1}</span><span class="step-text">${s}</span></li>`).join('')}</ul>` 
+        : ''; 
+      document.getElementById('stepsContainer').innerHTML = stepsHtml; 
+      document.getElementById('noteContainer').innerHTML = recipe.note ? `<div class="note">✨ ${recipe.note}</div>` : ''; 
+      
+      const sec = document.getElementById('servingsSection'); 
+      if (recipe.servings) { 
+        sec.style.display = 'block'; 
+        baseServings = recipe.servings; 
+        currentServings = baseServings; 
+        document.getElementById('servingsCount').innerText = currentServings; 
+      } else { 
+        sec.style.display = 'none'; 
+      } 
+      
+      document.getElementById('allergensBtn').style.display = 'inline-flex'; 
+      updateLikeButton(); 
+      attachStepHandlers(); 
+    }
+    
+    function updateLikeButton() { 
+      const btn = document.getElementById('likeBtn'); 
+      if (!currentRecipe) { 
+        btn.disabled = true; 
+        btn.innerHTML = '<span>❤️</span> В избранное'; 
         return; 
       } 
-      if(!currentRecipe) return; 
-      currentServings=newS; 
-      document.getElementById('servingsCount').innerText=currentServings; 
-      const scaled=scaleIngredients(currentRecipe.ingredients, baseServings, currentServings); 
-      document.getElementById('ingredientsContainer').innerHTML=formatIngredients(scaled); 
+      btn.disabled = false; 
+      const liked = isRecipeLiked(currentRecipe); 
+      btn.classList.toggle('liked', liked); 
+      btn.innerHTML = liked ? '<span>💖</span> В избранном ✓' : '<span>❤️</span> В избранное'; 
     }
     
-    function attachStepHandlers() { const list=document.getElementById('stepsList'); if(!list) return; list.removeEventListener('click', stepClickHandler); list.addEventListener('click', stepClickHandler); }
-    function stepClickHandler(e) { const li=e.target.closest('li'); if(!li) return; if(currentlyActiveStepElement===li){ li.classList.remove('step-active'); currentlyActiveStepElement=null; }else{ if(currentlyActiveStepElement) currentlyActiveStepElement.classList.remove('step-active'); li.classList.add('step-active'); currentlyActiveStepElement=li; } }
-    function displayRecipe(recipe) { const container=document.getElementById('recipeContainer'), refreshBtn=document.getElementById('refreshBtn'); currentlyActiveStepElement=null; if(!recipe){ container?.classList.remove('visible'); refreshBtn?.classList.remove('visible'); document.getElementById('recipeTitle').innerText='Выберите категорию'; return; } container?.classList.add('visible'); refreshBtn?.classList.add('visible'); document.getElementById('categoryBadge').innerHTML=categoryNames[currentCategory]||'РЕЦЕПТ'; document.getElementById('recipeTitle').innerText=recipe.title||'Без названия'; document.getElementById('timeBadge').innerHTML=recipe.time?`⏱️ ${recipe.time}`:'⏱️ —'; document.getElementById('caloriesBadge').innerHTML=recipe.calories?`🔥 ${recipe.calories} ккал`:'🔥 —'; const photo=document.getElementById('recipePhoto'), icon=document.getElementById('defaultIcon'); if(recipe.photo&&photo){ let path=recipe.photo; if(!path.startsWith('/')&&!path.startsWith('http')) path=`/pics/${path}`; photo.src=path; photo.style.display='block'; icon?.classList.add('hidden'); photo.onerror=()=>{ photo.style.display='none'; icon?.classList.remove('hidden'); }; }else{ if(photo) photo.style.display='none'; if(icon) icon.classList.remove('hidden'); } document.getElementById('ingredientsContainer').innerHTML=formatIngredients(recipe.ingredients); const stepsHtml=recipe.steps?.length?`<div class="section-title">👩‍🍳 Приготовление</div><ul class="steps-list" id="stepsList">${recipe.steps.map((s,i)=>`<li><span class="step-number">${i+1}</span><span class="step-text">${s}</span></li>`).join('')}</ul>`:''; document.getElementById('stepsContainer').innerHTML=stepsHtml; document.getElementById('noteContainer').innerHTML=recipe.note?`<div class="note">✨ ${recipe.note}</div>`:''; const sec=document.getElementById('servingsSection'); if(recipe.servings){ sec.style.display='block'; baseServings=recipe.servings; currentServings=baseServings; document.getElementById('servingsCount').innerText=currentServings; }else sec.style.display='none'; document.getElementById('allergensBtn').style.display='inline-flex'; updateLikeButton(); attachStepHandlers(); }
-    function updateLikeButton(){ const btn=document.getElementById('likeBtn'); if(!currentRecipe){ btn.disabled=true; btn.innerHTML='<span>❤️</span> В избранное'; return; } btn.disabled=false; const liked=isRecipeLiked(currentRecipe); btn.classList.toggle('liked',liked); btn.innerHTML=liked?'<span>💖</span> В избранном ✓':'<span>❤️</span> В избранное'; }
-    function toggleLike(){ if(!currentRecipe){ showMessage('Нет активного рецепта','error'); return; } const idx=likedRecipes.findIndex(r=>r.id===currentRecipe.id); if(idx>=0){ likedRecipes.splice(idx,1); showMessage('❌ Рецепт удалён из избранного','error'); }else{ likedRecipes.push({...currentRecipe, category:currentCategory, likedAt:new Date().toISOString()}); showFavoritesToast(); showMessage('✅ Рецепт добавлен в избранное!','success'); } saveLikedRecipes(); updateLikeButton(); }
-    async function selectCategory(cat){ currentCategory=cat; document.getElementById('categoryModal').classList.remove('visible'); const recipes=await loadCategory(cat); showRandomRecipe(recipes); }
-    async function refreshRecipe(){ if(!currentCategory){ document.getElementById('categoryModal').classList.add('visible'); return; } const recipes=await loadCategory(currentCategory); showRandomRecipe(recipes); }
-    async function applyAllergenFilter(){ if(!hasSubscription){ showPremiumModal(); return; } selectedAllergens=[...document.querySelectorAll('#allergensGrid input:checked')].map(cb=>cb.dataset.allergen); localStorage.setItem('selectedAllergens',JSON.stringify(selectedAllergens)); renderAllergens(); document.getElementById('allergensModal').classList.remove('visible'); if(currentCategory){ const recipes=await loadCategory(currentCategory); showRandomRecipe(recipes); } }
-    async function clearAllergenFilter(){ if(!hasSubscription){ showPremiumModal(); return; } selectedAllergens=[]; localStorage.removeItem('selectedAllergens'); renderAllergens(); document.getElementById('allergensModal').classList.remove('visible'); if(currentCategory){ const recipes=await loadCategory(currentCategory); showRandomRecipe(recipes); } }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      document.getElementById('recipeContainer').classList.remove('visible'); document.getElementById('refreshBtn').classList.remove('visible');
-      await checkSubscription(true); updateCabinetButton(); await loadIngredients();
+    function toggleLike() { 
+      if (!currentRecipe) { 
+        showMessage('Нет активного рецепта', 'error'); 
+        return; 
+      } 
+      const idx = likedRecipes.findIndex(r => r.id === currentRecipe.id); 
+      if (idx >= 0) { 
+        likedRecipes.splice(idx, 1); 
+        showMessage('❌ Рецепт удалён из избранного', 'error'); 
+      } else { 
+        likedRecipes.push({ ...currentRecipe, category: currentCategory, likedAt: new Date().toISOString() }); 
+        showFavoritesToast(); 
+        showMessage('✅ Рецепт добавлен в избранное!', 'success'); 
+      } 
+      saveLikedRecipes(); 
+      updateLikeButton(); 
+    }
+    
+    async function selectCategory(cat) { 
+      currentCategory = cat; 
+      document.getElementById('categoryModal').classList.remove('visible'); 
+      const recipes = await loadCategory(cat); 
+      showRandomRecipe(recipes); 
+    }
+    
+    async function refreshRecipe() { 
+      if (!currentCategory) { 
+        document.getElementById('categoryModal').classList.add('visible'); 
+        return; 
+      } 
+      const recipes = await loadCategory(currentCategory); 
+      showRandomRecipe(recipes); 
+    }
+    
+    // --- ФУНКЦИЯ ПРИМЕНЕНИЯ ФИЛЬТРА с премиум-проверкой ---
+    async function applyAllergenFilter() { 
+      console.log('applyAllergenFilter вызван, hasSubscription:', hasSubscription);
       
-      // Обработчики кнопок порций с проверкой подписки
+      if (!hasSubscription) { 
+        trackClick('premium-allergens');
+        showPremiumModal();
+        return; 
+      }
+      selectedAllergens = [...document.querySelectorAll('#allergensGrid input:checked')].map(cb => cb.dataset.allergen); 
+      localStorage.setItem('selectedAllergens', JSON.stringify(selectedAllergens)); 
+      renderAllergens(); 
+      document.getElementById('allergensModal').classList.remove('visible'); 
+      if (currentCategory) { 
+        const recipes = await loadCategory(currentCategory); 
+        showRandomRecipe(recipes); 
+      } 
+    }
+    
+    // --- ФУНКЦИЯ СБРОСА ФИЛЬТРА с премиум-проверкой ---
+    async function clearAllergenFilter() { 
+      console.log('clearAllergenFilter вызван, hasSubscription:', hasSubscription);
+      
+      if (!hasSubscription) { 
+        trackClick('premium-clear-allergens');
+        showPremiumModal();
+        return; 
+      }
+      selectedAllergens = []; 
+      localStorage.removeItem('selectedAllergens'); 
+      renderAllergens(); 
+      document.getElementById('allergensModal').classList.remove('visible'); 
+      if (currentCategory) { 
+        const recipes = await loadCategory(currentCategory); 
+        showRandomRecipe(recipes); 
+      } 
+    }
+
+    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+    document.addEventListener('DOMContentLoaded', async () => {
+      console.log('🚀 DOM загружен, начинаем инициализацию...');
+      
+      const recipeContainer = document.getElementById('recipeContainer');
+      const refreshBtn = document.getElementById('refreshBtn');
+      
+      if (recipeContainer) recipeContainer.classList.remove('visible'); 
+      if (refreshBtn) refreshBtn.classList.remove('visible');
+      
+      await checkSubscription(true);
+      updateCabinetButton();
+      await loadIngredients();
+      
+      // --- Настройка обработчиков ---
       const servingsMinus = document.getElementById('servingsMinus');
       const servingsPlus = document.getElementById('servingsPlus');
+      const closeToastBtn = document.getElementById('closeToastBtn');
+      const mainBtn = document.getElementById('mainBtn');
+      const refreshBtnEl = document.getElementById('refreshBtn');
+      const likeBtn = document.getElementById('likeBtn');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+      const menuBtn = document.getElementById('menuBtn');
+      const ingredientsBtn = document.getElementById('ingredientsBtn');
+      const allergensBtn = document.getElementById('allergensBtn');
+      const premiumUpgradeBtn = document.getElementById('premiumUpgradeBtn');
+      const premiumModalClose = document.getElementById('premiumModalClose');
+      const allergensSaveBtn = document.getElementById('allergensSaveBtn');
+      const allergensClearBtn = document.getElementById('allergensClearBtn');
+      const categoryModalChoices = document.querySelectorAll('.modal-choice');
       
-      servingsMinus.onclick = () => {
-        if(!hasSubscription) { showPremiumModal(); return; }
-        if(currentServings > 1) updateServingsDisplay(currentServings - 1);
-      };
+      console.log('✅ Элементы найдены, настраиваем обработчики...');
       
-      servingsPlus.onclick = () => {
-        if(!hasSubscription) { showPremiumModal(); return; }
-        if(currentServings < 20) updateServingsDisplay(currentServings + 1);
-      };
+      // --- КНОПКИ ПОРЦИЙ ---
+      if (servingsMinus) {
+        servingsMinus.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('➖ Нажата кнопка уменьшения порций');
+          if (currentServings > 1) updateServingsDisplay(currentServings - 1);
+        });
+        console.log('✅ Обработчик для servingsMinus добавлен');
+      }
       
-      document.getElementById('closeToastBtn').onclick=()=>document.getElementById('favoritesToast').classList.remove('show');
-      document.getElementById('mainBtn').onclick=()=>document.getElementById('categoryModal').classList.add('visible');
-      document.getElementById('refreshBtn').onclick=refreshRecipe; document.getElementById('likeBtn').onclick=toggleLike;
-      document.getElementById('modalCloseBtn').onclick=()=>document.getElementById('categoryModal').classList.remove('visible');
-      document.getElementById('menuBtn').onclick=(e)=>{ e.preventDefault(); window.location.href='menu.html'; };
-      document.getElementById('ingredientsBtn').onclick=(e)=>{ e.preventDefault(); window.location.href='ingredients.html'; };
-      document.getElementById('allergensBtn').onclick=()=>hasSubscription?document.getElementById('allergensModal').classList.add('visible'):showPremiumModal();
-      document.getElementById('premiumUpgradeBtn').onclick=subscribeToPremium;
-      document.getElementById('premiumModalClose').onclick=()=>document.getElementById('premiumModal').classList.remove('visible');
-      document.getElementById('allergensSaveBtn').onclick=applyAllergenFilter;
-      document.getElementById('allergensClearBtn').onclick=clearAllergenFilter;
-      document.querySelectorAll('.modal-choice').forEach(btn=>{ btn.onclick=()=>selectCategory(btn.dataset.category); });
+      if (servingsPlus) {
+        servingsPlus.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('➕ Нажата кнопка увеличения порций');
+          if (currentServings < 20) updateServingsDisplay(currentServings + 1);
+        });
+        console.log('✅ Обработчик для servingsPlus добавлен');
+      }
+      
+      // --- ОСТАЛЬНЫЕ КНОПКИ ---
+      if (closeToastBtn) {
+        closeToastBtn.addEventListener('click', function() {
+          document.getElementById('favoritesToast').classList.remove('show');
+        });
+      }
+      
+      if (mainBtn) {
+        mainBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log('🎲 Нажата кнопка "Случайный рецепт"');
+          document.getElementById('categoryModal').classList.add('visible');
+        });
+      }
+      
+      if (refreshBtnEl) {
+        refreshBtnEl.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log('🔄 Нажата кнопка "Другой рецепт"');
+          refreshRecipe();
+        });
+      }
+      
+      if (likeBtn) {
+        likeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log('❤️ Нажата кнопка "В избранное"');
+          toggleLike();
+        });
+      }
+      
+      if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', function() {
+          document.getElementById('categoryModal').classList.remove('visible');
+        });
+      }
+      
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function(e) { 
+          e.preventDefault(); 
+          window.location.href = 'menu.html'; 
+        });
+      }
+      
+      if (ingredientsBtn) {
+        ingredientsBtn.addEventListener('click', function(e) { 
+          e.preventDefault(); 
+          window.location.href = 'ingredients.html'; 
+        });
+      }
+      
+      // --- КНОПКА АЛЛЕРГЕНОВ ---
+      if (allergensBtn) {
+        allergensBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('⚠️ Нажата кнопка "Аллергии", hasSubscription:', hasSubscription);
+          
+          if (hasSubscription) {
+            document.getElementById('allergensModal').classList.add('visible');
+          } else {
+            trackClick('premium-allergens-btn');
+            showPremiumModal();
+          }
+        });
+        console.log('✅ Обработчик для allergensBtn добавлен');
+      }
+      
+      // --- ПРЕМИУМ МОДАЛКА ---
+      if (premiumUpgradeBtn) {
+        premiumUpgradeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          trackClick('premium-upgrade');
+          subscribeToPremium();
+        });
+      }
+      
+      if (premiumModalClose) {
+        premiumModalClose.addEventListener('click', function(e) {
+          e.preventDefault();
+          trackClick('premium-close');
+          closePremiumModalWithLock();
+        });
+      }
+      
+      if (allergensSaveBtn) {
+        allergensSaveBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          applyAllergenFilter();
+        });
+      }
+      
+      if (allergensClearBtn) {
+        allergensClearBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          clearAllergenFilter();
+        });
+      }
+      
+      if (categoryModalChoices) {
+        categoryModalChoices.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            selectCategory(this.dataset.category);
+          });
+        });
+      }
+      
+      // --- Закрытие модалок по клику на фон ---
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            if (this.id === 'premiumModal') {
+              closePremiumModalWithLock();
+            } else {
+              this.classList.remove('visible');
+            }
+          }
+        });
+      });
+      
+      // --- Закрытие по Escape ---
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal.visible').forEach(modal => {
+            if (modal.id === 'premiumModal') {
+              closePremiumModalWithLock();
+            } else {
+              modal.classList.remove('visible');
+            }
+          });
+        }
+      });
+      
+      // --- ОТСЛЕЖИВАНИЕ КЛИКОВ (упрощенное) ---
+      document.addEventListener('click', function(e) {
+        const target = e.target.closest('button, a, [role="button"]');
+        if (target) {
+          const type = target.id || target.className || target.tagName;
+          trackClick(`click-${type}`);
+        }
+      });
+      
+      console.log('✅ Приложение загружено!');
+      console.log(`🔑 Подписка: ${hasSubscription ? 'Активна' : 'Неактивна'}`);
+      console.log(`👤 Пользователь: ${currentUser?.email || 'Не авторизован'}`);
+      
+      // --- Для тестирования в консоли ---
+      window.unlockPremium = unlockPremium;
+      window.showPremiumModal = showPremiumModal;
+      window.getClickStats = () => clickStats;
+      window.isPremiumLocked = isPremiumLocked;
+      window.hasSubscription = () => hasSubscription;
     });
   </script>
   
